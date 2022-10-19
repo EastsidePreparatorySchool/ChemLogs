@@ -1,33 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" style="height:100%; margin:0; padding:0; background-color:rgb(255, 255, 255); ">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChemLogs Test Info Page</title>
 </head>
-
 <body style="margin: 0; height: 100%;">
     <div style="padding-top: 2.5%; font-size: 130%; text-align: center; 
         padding-right: 15%; padding-left: 15%; padding-bottom: 2%; font-family:Arial, Helvetica, sans-serif ">
-        CHEMLOGS
-    </div>
+            CHEMLOGS
+        </div>
     <div style="height: 8px; background-image: linear-gradient(rgb(230, 230, 230), white); ">
-    </div>
-    <div style="padding-top: 5%; font-size: 130%; text-align: center; 
+        </div> 
+        <div style="padding-top: 5%; font-size: 130%; text-align: center; 
         padding-right: 15%; padding-left: 15%; padding-bottom: 30px; font-family:Arial, Helvetica, sans-serif ">
-        {% with chemicalName="Hydrogen Peroxide" %} {{chemicalName}}
-    </div>
-    <div style="padding-top: 5%; font-size: 90%; text-align: left; padding-right: 15%; 
+            {% with chemicalName="Hydrogen Peroxide" %}
+            {{chemicalName}}
+            {% endwith %} <!-- sam added this line -->
+        </div>
+        <div style="padding-top: 5%; font-size: 90%; text-align: left; padding-right: 15%; 
         padding-left: 10%; padding-bottom: 30px; font-family:Verdana, Geneva, Tahoma, sans-serif ">
-        CAS#: {{CASNum}} <br>
-    </div>
-    <div style="padding-top: 5%; font-size: 100%; text-align: left; 
+            CAS#: {{CASNum}} <br>
+            </div>
+        <div style="padding-top: 5%; font-size: 100%; text-align: left; 
             padding-right: 15%; padding-left: 10%; padding-bottom: 30px; font-family:Verdana, Geneva, Tahoma, sans-serif ">
-        <br>
-
-    </div>
+                 <br>
+    
+            </div>
 </body>
-
 </html>

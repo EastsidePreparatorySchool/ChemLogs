@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-fdg@-b6ltnc^1k%%4@$icettdotl35t!v&yqo-_x7kh)+-s$7q'
+SECRET_KEY = 'django-insecure-fdg@-b6ltnc^1k%%4@$icettdotl35t!v&yqo-_x7kh)+-s$7q' # NOTE may need to make a new secret key because i kinda leaked in onto github oops
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'ChemLogs.apps.ChemLogsConfig',
+    'chemlogs.apps.ChemLogsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

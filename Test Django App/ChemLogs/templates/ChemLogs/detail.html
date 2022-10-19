@@ -1,4 +1,4 @@
-<form action="{% url 'ChemLogs:vote' question.id %}" method="post">
+<form action="{% url 'chemlogs:vote' question.id %}" method="post">
     {% csrf_token %} <!-- the csrf_token protects against cross site request forgeries and should be used in all POST forms. see tutorial p4 for more info -->
     <fieldset>
         <legend><h1>{{ question.question_text }}</h1></legend>

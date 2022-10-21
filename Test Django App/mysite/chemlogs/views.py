@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.template import loader
 from django.urls import reverse
 
-from .models import Choice, Question
+from .models import Choice, Question, Chemical
 
 # Create your views here.
 
@@ -49,3 +49,7 @@ def vote(request, question_id):
 
 def testPage(request):
     return render(request, 'chemlogs/testPage.html')
+
+def chemical(request, chemical_id):
+    chemical = get_object_or_404(Chemical, pk=chemical_id)
+    return render(request, 'chemlogs/chemical.html', {'chemical': chemical})

@@ -47,8 +47,9 @@ def vote(request, question_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse('chemlogs:results', args=(question.id,)))
 
-def testPage(request):
-    return render(request, 'chemlogs/testPage.html')
+def testPage(request, chemical_id):
+    chemical = get_object_or_404(Chemical, pk=chemical_id)
+    return render(request, 'chemlogs/testPage.html', {'chemical': chemical})
 
 def testChem(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)

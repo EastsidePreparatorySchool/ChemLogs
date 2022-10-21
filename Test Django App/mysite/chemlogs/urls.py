@@ -8,7 +8,7 @@ urlpatterns = [
     path('<int:question_id>/', views.detail, name='detail'),
     path('<int:question_id>/results/', views.results, name='results'),
     path('<int:question_id>/vote/', views.vote, name='vote'),
-    path('testPage/', views.testPage, name='testPage'),
-    path('testChem/<int:chemical_id>/', views.testChem, name='chemical'),
+    path('testPage/<int:chemical_id>/', views.testPage, name='testPage'),
+    path('testChem/<int:chemical_id>/', views.testChem, name='testChem'),
     path('chemical/<int:chemical_id>/', views.chemical, name='chemical'), # note chemical_id is the database-given id, not cas
 ]

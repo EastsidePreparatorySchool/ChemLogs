@@ -50,6 +50,10 @@ def vote(request, question_id):
 def testPage(request):
     return render(request, 'chemlogs/testPage.html')
 
+def testChem(request, chemical_id):
+    chemical = get_object_or_404(Chemical, pk=chemical_id)
+    return render(request, 'chemlogs/testChem.html', {'chemical': chemical})
+
 def chemical(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
     return render(request, 'chemlogs/chemical.html', {'chemical': chemical})

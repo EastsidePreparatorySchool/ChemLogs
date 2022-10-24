@@ -1,3 +1,5 @@
+{% load chemlogs_extras %}
+
 <!DOCTYPE html>
 <html lang="en" style="height:100%; margin:0; padding:0; background-color:rgb(255, 255, 255); ">
 <head>
@@ -17,7 +19,7 @@
         </div> 
     <div style="padding-top: 2.5%; font-size: 12px; text-align: left; padding-right: 15%; padding-left: 5.2%; 
     padding-bottom: 0%; font-family:Arial, Helvetica, sans-serif ">
-            {{chemical.formula}}
+            {{chemical.formula|displayFormula}}
         </div>
     <div style="padding-top: 0.2%; font-size: 32px; text-align: left; padding-right: 15%; padding-left: 5%; 
     padding-bottom: 2px; font-family:Arial, Helvetica, sans-serif ">

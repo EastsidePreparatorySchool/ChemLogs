@@ -16,10 +16,11 @@ def displayFormula(raw):
             closeTag = True
             continue
         if c == '*':
-            readable += '&#8226;'
+            readable += ' &#8226; '
         else:
             readable += c
         if closeTag:
             readable += "</sub>"
             closeTag = False
     return mark_safe(readable)
+

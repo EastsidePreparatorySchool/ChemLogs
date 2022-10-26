@@ -23,4 +23,3 @@ def displayFormula(raw):
             readable += "</sub>"
             closeTag = False
     return mark_safe(readable)
-

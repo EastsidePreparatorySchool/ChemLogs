@@ -51,9 +51,9 @@ def testPage(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
     return render(request, 'chemlogs/testPage.html', {'chemical': chemical})
 
-def testPag2(request, chemical_id):
+def testPage2(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
-    return render(request, 'chemlogs/testPag2.html', {'chemical': chemical})
+    return render(request, 'chemlogs/testPage2.html', {'chemical': chemical})
 
 def testChem(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)

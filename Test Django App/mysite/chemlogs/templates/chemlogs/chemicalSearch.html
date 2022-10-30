@@ -1,0 +1,37 @@
+<!-- search for a chemical -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+</head>
+<body>
+    <!-- from https://learndjango.com/tutorials/django-search-tutorial -->
+    <h1>Search Results</h1>
+
+    {% if object_list %}
+    <ul>
+        {% for chemical in object_list %}
+        <li>
+        {{ chemical }} -- {{ chemical.computeAmount }} in stock
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No results</p>
+    {% endif %}
+
+    <form action="/chemlogs/chemicalSearch/" method="get">
+        <fieldset>
+            <legend><h2>Filters</h2></legend>
+            <input name="name" type="text" placeholder="Search by chemical name"><br>
+            <input type="checkbox" id="requireSomeInStock" name="requireSomeInStock" value="true">
+            <label for="requireSomeInStock">Only show chemicals that are in stock</label><br>
+        </fieldset>
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>

@@ -2,6 +2,8 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template import loader
 from django.urls import reverse
+from django.views.generic import ListView
+from django.db.models import Q
 
 from .models import Choice, Question, Chemical
 
@@ -62,3 +64,20 @@ def testChem(request, chemical_id):
 def chemical(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
     return render(request, 'chemlogs/chemical.html', {'chemical': chemical})
+
+class ChemicalSearch(ListView):
+    model = Chemical
+    template_name = 'chemlogs/chemicalSearch.html'
+    def get_queryset(self):
+        nameSearch = self.request.GET.get("name")
+        requireSomeInStock = self.request.GET.get("requireSomeInStock")
+
+        toDisplay = Chemical.objects.all()
+        if nameSearch:
+            toDisplay = toDisplay.filter(name__icontains=nameSearch)
+        if requireSomeInStock:
+            toDisplay = filter(ChemicalSearch.inStock, toDisplay)
+        return toDisplay
+    
+    def inStock(chemical):
+        return chemical.computeAmount() > 0

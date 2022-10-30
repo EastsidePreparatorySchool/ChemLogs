@@ -33,6 +33,13 @@ class Chemical(models.Model):
 
     def __str__(self):
         return self.name
+    
+    # returns the current amount in stock
+    def computeAmount(self):
+        amount = 0
+        for transaction in self.transaction_set.all():
+            amount += transaction.amount
+        return amount
 
 class Transaction(models.Model):
     chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)

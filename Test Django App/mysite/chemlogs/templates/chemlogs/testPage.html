@@ -47,19 +47,30 @@
                 {{chemical.safety}}
             </div>
     </div>
-    <div>
-        <button type="button" class="collapsible"> Add chemical </button>
-        <div class="content">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut 
-                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-                laboris nisi ut aliquip ex ea commodo consequat.</p>
-          </div>
+
+    <button type="button" class="collapsible" style="padding-top: 3px; padding-bottom: 3px; padding-inline: center;"> Add chemical </button>
+    <div class="content" style="display: none;">
         <input type="range" min="0" max="100" value="0" id="trSlide" style="appearance: none; 
         width: 60%; height: 5px; background-color: rgb(135, 175, 135); opacity: 0.6; 
         margin-left: 15%;">
-    </div>
+      </div>
 
-    <script scr = "testPage.py"></script>
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "none") {
+              content.style.display = "block";
+            } else {
+              content.style.display = "none";
+            }
+          });
+        }
+    </script>
 
 </body>
 </html>

@@ -1,0 +1,4 @@
+/* This is a stylesheet that all of the app's pages will use.
+ * Prepend {% load static %} to a template and link the stylesheet normally.
+ * Example in templates/chemical.html
+ */

@@ -1,4 +1,86 @@
 /* This is a stylesheet that all of the app's pages will use.
  * Prepend {% load static %} to a template and link the stylesheet normally.
  * Example in templates/chemical.html
- */
+*/
+
+
+body {
+   font-family: Arial, Helvetica, sans-serif;
+   background-color: #f2fbff;
+   padding: 3vw;
+}
+
+
+/* header bar on all pages */
+
+.header {
+   font-size: 8vw;
+   padding-right: 2.5vw;
+   padding-left: 2.5vw;
+   padding-bottom: 2vw;
+   margin-top: 1vh;
+   margin-bottom: 1.5vh;
+   font-family: Arial, Helvetica, sans-serif;
+   color: #314876;
+}
+
+.header h4 {
+   display: inline;
+}
+
+.header-bottom {
+   height: 2vh;
+   background-image: linear-gradient(rgba(150, 150, 150, 0.2), rgba(255, 255, 255, 0));
+   margin-bottom: 2vh;
+}
+
+
+/* standard text tags */
+
+h1 {
+   font-size: 8.5vw;
+   color: #103071;
+   margin-bottom: 1vh;
+   margin-top: 1vh;
+}
+
+h2 {
+   font-size: 6vw;
+   color: #103071;
+}
+
+h3 {
+   color: #1cb16c;
+   font-family: Verdana, Geneva, Tahoma, sans-serif;
+   text-transform: uppercase;
+   font-weight: medium;
+   font-size: 5vw;
+   margin-top: 2vh;
+   margin-bottom: 1vh;
+}
+
+p, td, li {
+   font-size: 4vw;
+   color: #71a7a3;
+   padding: 0vh;
+   margin: 0vh;
+}
+
+td {
+   text-align: center;
+}
+
+p strong {
+   font-size: 4vw;
+   color: #608a8e;
+}
+
+th {
+   font-size: 4vw;
+   color: #608a8e;
+}
+
+.indented {
+   padding-left: 4vw;
+   padding-right: 4vw;
+}

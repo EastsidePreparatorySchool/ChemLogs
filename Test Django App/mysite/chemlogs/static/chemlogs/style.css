@@ -59,20 +59,30 @@ h3 {
    margin-bottom: 1vh;
 }
 
-p, td, li {
+p, p a, td, td a, li, li a {
    font-size: 4vw;
    color: #71a7a3;
    padding: 0vh;
    margin: 0vh;
+   text-decoration: none;
 }
 
 td {
    text-align: center;
 }
 
+td a {
+   display: block;
+}
+
 p strong {
    font-size: 4vw;
    color: #608a8e;
+}
+
+.hoverable:hover {
+   text-decoration: underline;
+   text-decoration-color: #608a8e;
 }
 
 th {

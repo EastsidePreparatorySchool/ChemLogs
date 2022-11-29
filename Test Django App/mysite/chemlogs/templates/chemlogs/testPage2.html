@@ -44,12 +44,12 @@
             <th>Amount [units]</th>
             <th>Added or Removed</th>
         </tr>
-        {% for transaction in chemical.transaction_set.all %}
-        <tr>
-            <td>{{transaction.time}}</td>
-            <td>{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></td>
-            <td>{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</td>
-        </tr>
+        {% for transaction in chemical.getTransactions %}
+        <tr class="hoverable">
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
+        </tr></a>
         {% endfor %}
     </table>
 </body>

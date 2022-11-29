@@ -1,23 +1,31 @@
 <!-- search for a chemical -->
 
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
+    <title>Chemical Search</title>
+    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
 </head>
 <body>
+    <div class="header">
+        <h4>ChemLogs</h4>
+    </div>
+    <div class="header-bottom"></div>
+
     <!-- from https://learndjango.com/tutorials/django-search-tutorial -->
     <h1>Search Results</h1>
 
     {% if object_list %}
     <ul>
         {% for chemical in object_list %}
-        <li>
+        <li class="hoverable"><a href="/chemlogs/testPage/{{chemical.id}}/">
         {{ chemical }} -- {{ chemical.computeAmount }} in stock
-        </li>
+        </a></li>
         {% endfor %}
     </ul>
     {% else %}

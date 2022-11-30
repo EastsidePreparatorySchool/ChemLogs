@@ -1,43 +1,56 @@
 {% load chemlogs_extras %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{chemical.name}}</title>
-</head>
-<body>
-    <div style="font-size: 150%; text-align: left; padding-right: 15%; padding-left: 2.5%; 
-    margin-top: 15px; margin-bottom: 15px; font-family: Arial, Helvetica, sans-serif;">
-        <h3 style="display: inline; ">
-            CHEMLOGS </h3>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{chemical.name}}</title>
+        <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
+    
+        <style>
+            #cas-and-amount li {
+                display: inline;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div class="header">
+            <h4>ChemLogs</h4>
         </div>
-    <div style="height: 10px; background-image: linear-gradient(rgba(150, 150, 150, 0.2), rgba(255, 255, 255, 0)); ">
-        </div> 
-    <div style="padding-top: 2.5%; font-size: 12px; text-align: left; padding-right: 15%; padding-left: 5.2%; 
-    padding-bottom: 0%; font-family:Arial, Helvetica, sans-serif ">
-            {{chemical.formula|displayFormula}}
-        </div>
-    <div style="padding-top: 0.2%; font-size: 32px; text-align: left; padding-right: 15%; padding-left: 5%; 
-    font-family:Arial, Helvetica, sans-serif ">
-            {{chemical.name}}
-        </div>
-    <div style="padding-top: 1%; font-size: 90%; text-align: left; padding-right: 15%; padding-left: 5.2%; 
-    padding-bottom: 10px; font-family:Arial, Helvetica, sans-serif; letter-spacing: 1px;">
-            CAS#: {{chemical.cas}}
-        </div>
-    <div style = "border: 5px; border-color: rgba(150, 150, 150, 0.2);">
-        <div style="padding-top: 2%; font-size: 16px; text-align: left; 
-            padding-right: 15%; padding-left: 5.2%; -webkit-text-fill-color: rgb(104, 174, 104);
-            font-family:Verdana, Geneva, Tahoma, sans-serif;">
-                HAZARD ALERT
-            </div>
-        <div style="padding-top: 1%; font-size: 12px; text-align: left; 
-        padding-right: 5%; padding-left: 8%; padding-bottom: 1.5%; font-family:Arial, Helvetica, sans-serif ">
-                {{chemical.safety}}
-            </div>
-    </div>
-</body>
-</html>
+        <div class="header-bottom"></div> <!-- maybe replace this with an <hr> -->
+    
+        <p><strong>{{chemical.formula|displayFormula}}</strong></p>
+        <h1>{{chemical.name}}</h1>
+        <!--<ul id="cas-and-amount">
+            <li style="text-align: left;">{{chemical.cas}}</li>
+            <li style="text-align: right;">{{chemical.computeAmount}}[units]</li>
+        </ul>-->
+        <p style="position: absolute;">{{chemical.cas}}</p>
+        <p style="position: absolute; right: 6vw;">{{chemical.computeAmount}}[units] in stock</p>
+        <br>
+        <h3>Hazard Alert</h3>
+        <p class="indented">{{chemical.safety}}</p>
+        
+        <h3>Transaction History</h3>
+    
+        <table class="indented">
+            <tr>
+                <th>Date/Time</th>
+                <th>Amount [units]</th>
+                <th>Added or Removed</th>
+            </tr>
+            {% for transaction in chemical.getTransactions %}
+            <tr class="hoverable">
+                <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
+                <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
+                <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
+            </tr></a>
+            {% endfor %}
+        </table>
+    </body>
+    
+    </html>

@@ -9,25 +9,28 @@
     <title>ChemLogs Test Info Page</title>
 </head>
 <body style="margin: 0; height: 100%;">
-    <style>
-        @media only screen and (max-width: 450px){
-            body{
-            }
-        }
-    </style>
-    <div style="font-size: 150%; text-align: left; padding-right: 15%; padding-left: 2.5%; 
-    margin-top: 15px; margin-bottom: 15px; font-family: Arial, Helvetica, sans-serif;">
+    <div style="font-size: calc(22px + 0.5vw);
+    padding-right: 2.5vw;
+    padding-left: 2.5vw;
+    margin-top: 1.5vh;
+    margin-bottom: 1.5vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #314876;">
         <h3 style="display: inline; ">
-            CHEMLOGS </h3>
+            CHEMLOGS </h3> 
         <h5 style="display: inline;"> 
             Test </h5>
         </div>
-    <div style="height: 10px; background-image: linear-gradient(rgba(150, 150, 150, 0.2), rgba(255, 255, 255, 0)); ">
-        </div> 
-    <div style="padding-top: 2.5%; font-size: 12px; text-align: left; padding-right: 15%; padding-left: 5.2%; 
-    padding-bottom: 0%; font-family:Arial, Helvetica, sans-serif ">
-            {{chemical.formula|displayFormula}}
-        </div>
+    
+    <div style="height: 1.5vh;
+        background-image: linear-gradient(rgba(150, 150, 150, 0.2), rgba(255, 255, 255, 0));
+        "></div>
+
+        <div style="font-size: 4vw;
+        color: #608a8e; font-family: Arial, Helvetica, sans-serif">
+                {{chemical.formula|displayFormula}}
+            </div>
+
     <div style="padding-top: 0.2%; font-size: 32px; text-align: left; padding-right: 15%; padding-left: 5%; 
     font-family:Arial, Helvetica, sans-serif ">
             {{chemical.name}}
@@ -49,11 +52,12 @@
             </div>
     </div>
 
-    <button type="button" class="collapsible" style="padding-top: 3px; padding-bottom: 3px; margin-left: 5%;
-    text-align: center; outline-color: none; background-color: rgb(195, 195, 195);"> 
-        Add chemical 
+    <button type="button" id="addChem" class="collapsible" onclick="down()" style="padding-top: 3px; padding-bottom: 3px; margin-left: 5%;
+    text-align: center; outline-color: none; background-color: rgb(60, 85, 35); border-width: 0px; color: white;
+    border-radius: 1em; width: 10em; height: 2em;"> 
+        Add chemical <span id="addDropdown">&#9660;</span>
         </button>
-    <div class="content" style="display: none;">
+    <div class="content" style="display: none; padding-top: 1em;">
         <input type="range" min="0" max="100" value="0" id="trSlide" style="appearance: none; 
         width: 60%; height: 5px; background-color: rgb(135, 175, 135); opacity: 0.6; 
         margin-left: 15%;">
@@ -74,6 +78,19 @@
             }
           });
         }
+        
+        var aD = document.getElementById("addDropdown")
+
+        function down() {
+            aD = document.getElementById("addDropdown")
+            
+            if (aD.innerHTML == "&#9650;") {
+                aD.innerHTML = "&#9660;"
+            } else {
+                aD.innerHTML = "&#9650;"
+            }
+        }
+
     </script>
 
 </body>

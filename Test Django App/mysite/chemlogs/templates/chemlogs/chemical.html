@@ -1,24 +1,116 @@
+{% load chemlogs_extras %}
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{chemical.name}}</title>
+    <title>Transaction History for {{chemical.name}}</title>
     <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
-</head>
-<body>
-    <div class="header">
-        <h4>CHEMLOGS</h4>
-    </div>
-    
-    <h1>{{chemical.name}}</h1>
-    <p>{{chemical.formula}}</p>
-    <p>{{chemical.cas}}</p>
-    <p>{{chemical.safety}}</p>
 
-    <!-- list/table of transactions that link to transaction pages -->
+    <style>
+        #cas-and-amount li {
+            display: inline;
+        }
+    </style>
+</head>
+
+<body onload="modifySlider()">
+    <div class="header">
+        <h4>ChemLogs</h4>
+    </div>
+    <div class="header-bottom"></div> <!-- maybe replace this with an <hr> -->
+
+    <p style="padding-top: 1vw;"><strong>{{chemical.formula|displayFormula}}</strong></p>
+    <h1>{{chemical.name}}</h1>
+    <!--<ul id="cas-and-amount">
+        <li style="text-align: left;">{{chemical.cas}}</li>
+        <li style="text-align: right;">{{chemical.computeAmount}}[units]</li>
+    </ul>-->
+    <p style="position: absolute;">{{chemical.cas}}</p>
+    <p style="position: absolute; right: 6vw;">{{chemical.computeAmount}}[units] in stock</p>
+    <br>
+    <h3>Hazard Alert</h3>
+    <p class="indented">{{chemical.safety}}</p>
+
+    <button type="button" id="addChem" class="collapsible" onclick="down()"> 
+        Add chemical <span id="addDropdown">&#9660;</span>
+        </button>
+    <div class="content" style="display: none; padding-top: 1em;">
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" id="submit" class="content" value="Add">
+            <input onclick="negateSliderValue()" type="submit" id="submit" class="content" value="Remove">
+        </form>
+      </div>        
+    
+    <h3>Transaction History</h3>
+
+    <table class="indented">
+        <tr>
+            <th>Date/Time</th>
+            <th>Amount [units]</th>
+            <th>Added or Removed</th>
+        </tr>
+        {% for transaction in chemical.getTransactions %}
+        <tr class="hoverable">
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
+        </tr></a>
+        {% endfor %}
+    </table>
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "none") {
+              content.style.display = "block";
+            } else {
+              content.style.display = "none";
+            }
+          });
+        }
+        
+        var aD = document.getElementById("addDropdown")
+
+        function down() {
+            aD = document.getElementById("addDropdown")
+            
+            if (aD.innerHTML == "&#9650;") {
+                aD.innerHTML = "&#9660;"
+            } else {
+                aD.innerHTML = "&#9650;"
+            }
+        }
+
+        // Used on page load. Changes how the slider renders.
+        function modifySlider() {
+            slider = document.getElementById("trSlide");
+            slider.type = "range";
+            slider.min = "0";
+            slider.max = "100";
+            slider.value = "0";
+        }
+
+        // Used when "remove" is clicked. Makes slider value negative. Hopefully does not affect frontend.
+        function negateSliderValue() {
+            slider = document.getElementById("trSlide");
+            slider.min = -100; // this is not a great solution to the problem that value can't be less than min
+            slider.value = -slider.value;
+        }
+
+    </script>
+
 </body>
+
 </html>

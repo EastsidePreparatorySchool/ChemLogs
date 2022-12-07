@@ -41,10 +41,15 @@
         </button>
     <div class="content" style="display: none; padding-top: 1em;">
         <input type="range" min="0" max="100" value="0" id="trSlide">
-      </div>
-    <button type="button" id="submit" class="content" onclick="submit()"> 
-        Submit
-        </button>
+        <button type="submit" id="submit" class="content" onclick="submit()"> 
+            Submit
+            </button>
+        <form method="post">
+            {% csrf_token %}    
+            {{ form.amount.as_hidden }}
+            <input type="submit" value="Change Amount">
+        </form>
+      </div>        
     
     <h3>Transaction History</h3>
 
@@ -91,8 +96,10 @@
             }
         }
 
+        var formVal = document.getElementById("amount")
+
         function submit() {
-            
+            amount = 
         }
 
     </script>

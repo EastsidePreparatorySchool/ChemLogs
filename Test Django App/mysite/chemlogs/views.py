@@ -4,6 +4,7 @@ from django.template import loader
 from django.urls import reverse
 from django.views.generic import ListView
 from django.db.models import Q
+import datetime
 
 from .models import Chemical, Transaction
 from .forms import TransactionEditForm
@@ -56,14 +57,12 @@ def testPage(request, chemical_id):
 def testPage2(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
     if request.method == 'POST':
-        form = TransactionCreateForm(request.POST)
+        form = TransactionCreateForm(request.POST, auto_id='%s')
         if form.is_valid():
-            t = Transaction()
-            t.amount = form.cleaned_data['amount']
-            t.save()
+            chemical.transaction_set.create(amount=form.cleaned_data['trSlide'], time=datetime.datetime.now())
             # some kind of confirmation ("you have added/removed this much")
     else:
-        form = TransactionCreateForm()
+        form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
     return render(request, 'chemlogs/testPage2.html', {'chemical': chemical, 'form': form})
 
 def testChem(request, chemical_id):

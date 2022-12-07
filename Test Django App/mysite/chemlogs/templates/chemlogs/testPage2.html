@@ -18,7 +18,7 @@
     </style>
 </head>
 
-<body>
+<body onload="modifySlider()">
     <div class="header">
         <h4>ChemLogs</h4>
     </div>
@@ -40,14 +40,11 @@
         Add chemical <span id="addDropdown">&#9660;</span>
         </button>
     <div class="content" style="display: none; padding-top: 1em;">
-        <input type="range" min="0" max="100" value="0" id="trSlide">
-        <button type="submit" id="submit" class="content" onclick="submit()"> 
-            Submit
-            </button>
         <form method="post">
-            {% csrf_token %}    
-            {{ form.amount.as_hidden }}
-            <input type="submit" value="Change Amount">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" id="submit" class="content" value="Add">
+            <input onclick="negateSliderValue()" type="submit" id="submit" class="content" value="Remove">
         </form>
       </div>        
     
@@ -96,10 +93,20 @@
             }
         }
 
-        var formVal = document.getElementById("amount")
+        // Used on page load. Changes how the slider renders.
+        function modifySlider() {
+            slider = document.getElementById("trSlide");
+            slider.type = "range";
+            slider.min = "0";
+            slider.max = "100";
+            slider.value = "0";
+        }
 
-        function submit() {
-            amount = 
+        // Used when "remove" is clicked. Makes slider value negative. Hopefully does not affect frontend.
+        function negateSliderValue() {
+            slider = document.getElementById("trSlide");
+            slider.min = -100; // this is not a great solution to the problem that value can't be less than min
+            slider.value = -slider.value;
         }
 
     </script>

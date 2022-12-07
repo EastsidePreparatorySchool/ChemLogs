@@ -24,7 +24,7 @@
     </div>
     <div class="header-bottom"></div> <!-- maybe replace this with an <hr> -->
 
-    <p><strong>{{chemical.formula|displayFormula}}</strong></p>
+    <p style="padding-top: 1vw;"><strong>{{chemical.formula|displayFormula}}</strong></p>
     <h1>{{chemical.name}}</h1>
     <!--<ul id="cas-and-amount">
         <li style="text-align: left;">{{chemical.cas}}</li>
@@ -35,6 +35,16 @@
     <br>
     <h3>Hazard Alert</h3>
     <p class="indented">{{chemical.safety}}</p>
+
+    <button type="button" id="addChem" class="collapsible" onclick="down()"> 
+        Add chemical <span id="addDropdown">&#9660;</span>
+        </button>
+    <div class="content" style="display: none; padding-top: 1em;">
+        <input type="range" min="0" max="100" value="0" id="trSlide">
+      </div>
+    <button type="button" id="submit" class="content" onclick="submit()"> 
+        Submit
+        </button>
     
     <h3>Transaction History</h3>
 
@@ -52,6 +62,41 @@
         </tr></a>
         {% endfor %}
     </table>
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "none") {
+              content.style.display = "block";
+            } else {
+              content.style.display = "none";
+            }
+          });
+        }
+        
+        var aD = document.getElementById("addDropdown")
+
+        function down() {
+            aD = document.getElementById("addDropdown")
+            
+            if (aD.innerHTML == "&#9650;") {
+                aD.innerHTML = "&#9660;"
+            } else {
+                aD.innerHTML = "&#9650;"
+            }
+        }
+
+        function submit() {
+            
+        }
+
+    </script>
+
 </body>
 
 </html>

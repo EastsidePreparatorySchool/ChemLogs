@@ -7,6 +7,7 @@ from django.db.models import Q
 
 from .models import Chemical, Transaction
 from .forms import TransactionEditForm
+from .forms import TransactionCreateForm
 
 
 # def index(request):
@@ -54,7 +55,16 @@ def testPage(request, chemical_id):
 
 def testPage2(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
-    return render(request, 'chemlogs/testPage2.html', {'chemical': chemical})
+    if request.method == 'POST':
+        form = TransactionCreateForm(request.POST)
+        if form.is_valid():
+            t = Transaction()
+            t.amount = form.cleaned_data['amount']
+            t.save()
+            # some kind of confirmation ("you have added/removed this much")
+    else:
+        form = TransactionCreateForm()
+    return render(request, 'chemlogs/testPage2.html', {'chemical': chemical, 'form': form})
 
 def testChem(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)

@@ -15,9 +15,9 @@ body {
 
 .header {
    font-size: calc(22px + 0.5vw);
-    padding-right: 2.5vw;
-    padding-left: 2.5vw;
-    margin-top: 1.5vh;
+    padding-right: 2vw;
+    padding-left: 1.5vw;
+    margin-top: 1vw;
     margin-bottom: 1.5vh;
     font-family: Arial, Helvetica, sans-serif;
     color: #314876;
@@ -29,6 +29,7 @@ body {
 
 .header-bottom {
    height: 1.5vh;
+   margin-bottom: (8px + 0.1vw);
    background-image: linear-gradient(rgba(150, 150, 150, 0.2), rgba(255, 255, 255, 0));
 }
 
@@ -38,8 +39,8 @@ body {
 h1 {
    font-size: 8.5vw;
    color: #103071;
-   margin-bottom: 1vh;
-   margin-top: 1vh;
+   margin-bottom: 0.5vh;
+   margin-top: 0.1vh;
 }
 
 h2 {
@@ -52,9 +53,9 @@ h3 {
    font-family: Verdana, Geneva, Tahoma, sans-serif;
    text-transform: uppercase;
    font-weight: medium;
-   font-size: 5vw;
-   margin-top: 2vh;
-   margin-bottom: 1vh;
+   font-size: 20px + 0.1vw;
+   margin-top: 3vw;
+   margin-bottom: 1vw;
 }
 
 p, p a, td, td a, li, li a {
@@ -91,4 +92,30 @@ th {
 .indented {
    padding-left: 4vw;
    padding-right: 4vw;
+   padding-bottom: 2vw;
+}
+
+/* chemical entry dropdown attributes */
+#addChem {
+   padding-top: 3px; 
+   padding-bottom: 3px; 
+   margin-left: 5%;
+   text-align: center; 
+   outline-color: none; 
+   background-color: #608a8e;
+   color: #ffffff; 
+   border-width: 0px; 
+   border-radius: 1em; 
+   width: 10em; 
+   height: 2em;
+}
+
+#trSlide {
+   appearance: none; 
+   width: 60%; 
+   height: 5px; 
+   color: #ffffff;
+   background-color: #608a8e; 
+   opacity: 0.6; 
+   margin-left: 15%;
 }

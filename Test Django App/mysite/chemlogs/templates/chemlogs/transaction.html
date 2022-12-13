@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{transaction.chemical.name}} Transaction {{transaction.id}}</title>
+    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
+</head>
+<body>
+    <div class="header">
+        <h4>CHEMLOGS</h4>
+    </div>
+    <div class="header-bottom"></div>
+    
+    <!--<form action="/chemlogs/transaction/{{transaction.id}}/" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend><h2>Modify Transaction</h2></legend>
+            <p>Chemical: {{transaction.chemical.name}}</p>
+            <p>Date: {{transaction.time.date}}</p>
+            <p>Time: {{transaction.time.time}}</p>
+            <label for="amount">Amount {% if transaction.amount > 0 %}added{% else %}removed{% endif %}: </label>
+            <input id="amount" name="amount" type="text" value="{{transaction.getAbsoluteAmount}}">
+        </fieldset>
+        <input type="submit" value="Change">
+    </form>-->
+
+    <form method="post">
+        {% csrf_token %}
+        <legend><h2>Modify Transaction</h2></legend>
+        <p><strong>If this transaction was recorded incorrectly, fix it here.</strong></p>
+        <p>Chemical: {{transaction.chemical.name}}</p>
+        <p>Date: {{transaction.time.date}}</p>
+        <p>Time: {{transaction.time.time}}</p>
+
+        {{ form.as_p }}
+        <input type="submit" value="Change Amount">
+    </form>
+    <p class="hoverable"><a href="/chemlogs/chemical/{{transaction.chemical.id}}/">Return to Chemical Page</a></p>
+</body>
+</html>

@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chemical Search</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/style/style.css' %}">
 </head>
 <body>
     <div class="header">
@@ -35,7 +35,8 @@
     <form action="/chemlogs/chemicalSearch/" method="get">
         <fieldset>
             <legend><h2>Filters</h2></legend>
-            <input name="name" type="text" placeholder="Search by chemical name"><br>
+            <input name="name" type="text" placeholder="Search by chemical name or formula"
+                style="width: 70vw;"><br>
             <input type="checkbox" id="requireSomeInStock" name="requireSomeInStock" value="true">
             <label for="requireSomeInStock">Only show chemicals that are in stock</label><br>
         </fieldset>

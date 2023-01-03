@@ -61,7 +61,7 @@ class ChemicalSearch(ListView):
         if nameSearch:
             # have to correct for formatting and want to filter by place but it works
             # https://docs.djangoproject.com/en/4.1/topics/db/queries/#complex-lookups-with-q
-            # used the above for the OR query, since filter can't handle it
+            # used the above for the OR query, since filter() can't handle it
             toDisplay = toDisplay.filter(Q(name__icontains=nameSearch) | 
                 Q(formula__icontains=nameSearch))
         if requireSomeInStock:

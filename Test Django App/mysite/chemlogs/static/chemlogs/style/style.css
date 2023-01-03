@@ -21,6 +21,7 @@ body {
     margin-bottom: 1.5vh;
     font-family: Arial, Helvetica, sans-serif;
     color: #314876;
+    display: inline;
 }
 
 .header h4 {

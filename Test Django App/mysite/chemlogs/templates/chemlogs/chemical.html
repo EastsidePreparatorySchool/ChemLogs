@@ -33,6 +33,15 @@
     <p style="position: absolute;">{{chemical.cas}}</p>
     <p style="position: absolute; right: 6vw;">{{chemical.computeAmount}}[units] in stock</p>
     <br>
+    <!-- the following 3 displayed attributes should probably be included 
+        with the specific bottle dropdowns if we end up doing that instead of
+        at the top, but since we're doing a bottle per page rn they're here;
+        I dont think the threshold needs to be displayed - if the notif page 
+        works they can just check that-->
+    <p><strong>Storage Location: {{chemical.loc}}</strong></p>
+    <p><strong>Chemical State: {{chemical.state}}</strong></p>
+    <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>
+    <br>
     <h3>Hazard Alert</h3>
     <p class="indented">{{chemical.safety}}</p>
 
@@ -61,7 +70,7 @@
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
-        </tr></a>
+        </tr></a> <!-- where's the open <a> for this?-->
         {% endfor %}
     </table>
 

@@ -37,17 +37,6 @@ class Chemical(models.Model):
 
     def __str__(self):
         return self.name
-    
-    # returns the current amount in stock
-    def computeAmount(self):
-        amount = 0
-        for transaction in self.transaction_set.all():
-            amount += transaction.amount
-        return amount
-    
-    # returns transactions, sorted by recency
-    def getTransactions(self):
-        return self.transaction_set.all().order_by('-time')
 
 # used by Chemical and Bottle
 class ChemicalState(models.Model):
@@ -62,6 +51,13 @@ class ChemicalState(models.Model):
     min_thresh = models.IntegerField()
     chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
 
+    # returns the current amount in stock
+    def computeAmount(self):
+        amount = 0
+        for transaction in self.chemical.bottletransaction_set.all():
+            amount += transaction.amount
+        return amount
+
 # represents a container of a chemical
 class Bottle(models.Model):
     LOC_CHOICES = [
@@ -74,6 +70,17 @@ class Bottle(models.Model):
     contents = models.ForeignKey(ChemicalState, on_delete=models.CASCADE)
     molarity = models.FloatField(null=True, blank=True) # often not applicable
     id = models.CharField(max_length=2, primary_key=True) # composed of capital letters. may need len=3
+    
+    # returns transactions, sorted by recency
+    def getTransactions(self):
+        return self.transaction_set.all().order_by('-time')
+    
+    # returns the current amount in this bottle
+    def computeAmount(self):
+        amount = 0
+        for transaction in self.transaction_set.all():
+            amount += transaction.amount
+        return amount
 
 class Transaction(models.Model):
     bottle = models.ForeignKey(Bottle, on_delete=models.CASCADE)

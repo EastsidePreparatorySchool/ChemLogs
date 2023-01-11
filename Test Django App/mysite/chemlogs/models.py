@@ -49,10 +49,37 @@ class Chemical(models.Model):
     def getTransactions(self):
         return self.transaction_set.all().order_by('-time')
 
-class Transaction(models.Model):
+# used by Chemical and Bottle
+class ChemicalState(models.Model):
+    STATE_CHOICES = [
+        ("S", "Solid"),
+        ("L", "Liquid"),
+        ("G", "Gas"), # may not be necessary
+        ("AQ", "Aqueous")
+    ]
+    state = models.CharField(max_length=2, choices=STATE_CHOICES, default="S")
+    type = models.CharField(max_length=40)
+    min_thresh = models.IntegerField()
     chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
+
+# represents a container of a chemical
+class Bottle(models.Model):
+    LOC_CHOICES = [
+        ("US", "Upper School"),
+        ("MS", "Middle School"),
+        ("TALI", "TALI")
+    ]
+    loc = models.CharField(max_length=4, choices=LOC_CHOICES, default="US") # where it is stored
+    initial_value = models.IntegerField() # full bottle size, in mL or g of contents
+    contents = models.ForeignKey(ChemicalState, on_delete=models.CASCADE)
+    molarity = models.FloatField(null=True, blank=True) # often not applicable
+    id = models.CharField(max_length=2, primary_key=True) # composed of capital letters. may need len=3
+
+class Transaction(models.Model):
+    bottle = models.ForeignKey(Bottle, on_delete=models.CASCADE)
     amount = models.IntegerField() # amount in chemical's unit. negative if removing
     time = models.DateTimeField()
+    new = models.BooleanField(default=False) # whether this is the initial transaction "filling" a new bottle for the first time
     # maybe also keep track of the user who made the transaction
     
     # return absolute value of amount field, i.e. how much was taken or how much was added

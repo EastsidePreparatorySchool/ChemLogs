@@ -65,16 +65,12 @@
             <th>Amount [units]</th>
             <th>Added or Removed</th>
         </tr>
-        <!-- these for loops need to be formatted (see discord for sketch) -->
-        {% for bottle in chemical.bottle_set.all %}
-        <h3>Bottle {{bottle.id}}</h3>
-        {% for transaction in bottle.getTransactions %}
+        {% for transaction in chemical.getTransactions %}
         <tr class="hoverable">
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
-        </tr><!--</a>  where's the open <a> for this?-->
-        {% endfor %}
+        </tr></a> <!-- where's the open <a> for this?-->
         {% endfor %}
     </table>
 

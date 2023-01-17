@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 import datetime
 
-from .models import Chemical, Transaction
+from .models import Chemical, Transaction, Container
 from .forms import TransactionEditForm
 from .forms import TransactionCreateForm
 
@@ -18,14 +18,7 @@ def testPage(request, chemical_id):
 # main page for a chemical
 def chemical(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
-    if request.method == 'POST':
-        form = TransactionCreateForm(request.POST, auto_id='%s')
-        if form.is_valid():
-            chemical.transaction_set.create(amount=form.cleaned_data['trSlide'], time=datetime.datetime.now())
-            # some kind of confirmation ("you have added/removed this much")
-    else:
-        form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
-    return render(request, 'chemlogs/chemical.html', {'chemical': chemical, 'form': form})
+    return render(request, 'chemlogs/chemical.html', {'chemical': chemical})
 
 def testChem(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
@@ -43,6 +36,17 @@ def transaction(request, transaction_id):
     else:
         form = TransactionEditForm(initial={'amount': transaction.amount})
     return render(request, 'chemlogs/transaction.html', {'transaction': transaction, 'form': form})
+
+def container(request, container_id):
+    container = get_object_or_404(Container, pk=container_id)
+    if request.method == 'POST':
+        form = TransactionCreateForm(request.POST, auto_id='%s')
+        if form.is_valid():
+            container.transaction_set.create(amount=form.cleaned_data['trSlide'], time=datetime.datetime.now())
+            # some kind of confirmation ("you have added/removed this much")
+    else:
+        form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
+    return render(request, 'chemlogs/container.html', {'container': container, 'form': form})
 
 # unimplemented
 def history(request):

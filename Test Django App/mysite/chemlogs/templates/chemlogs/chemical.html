@@ -18,7 +18,7 @@
     </style>
 </head>
 
-<body onload="modifySlider()">
+<body>
     <div class="header">
         <h4>ChemLogs</h4>
     </div>
@@ -31,20 +31,27 @@
         <li style="text-align: right;">{{chemical.computeAmount}}[units]</li>
     </ul>-->
     <p style="position: absolute;">{{chemical.cas}}</p>
-    <p style="position: absolute; right: 6vw;">{{chemical.computeAmount}}[units] in stock</p>
     <br>
     <!-- the following 3 displayed attributes should probably be included 
         with the specific bottle dropdowns if we end up doing that instead of
         at the top, but since we're doing a bottle per page rn they're here;
         I dont think the threshold needs to be displayed - if the notif page 
         works they can just check that-->
+    <!-- they have been moved to container.html
     <p><strong>Storage Location: {{chemical.loc}}</strong></p>
     <p><strong>Chemical State: {{chemical.state}}</strong></p>
-    <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>
+    <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>-->
     <br>
     <h3>Hazard Alert</h3>
     <p class="indented">{{chemical.safety}}</p>
-
+    
+    <!-- this block needs to be formatted (see discord for sketch) -->
+    {% for state in chemical.chemicalstate_set.all %}
+    <h2>{{state.getInfo|capfirst}}</h2>
+    <p>{{state.computeAmount|floatformat:2}}g in stock</p>
+    {% for container in state.container_set.all %}
+    <h3 class="hoverable"><a href="/chemlogs/container/{{container.id}}">Container {{container.getHeader}}</a></h3>
+    <!-- we don't necessarily need the add transaction button on this page
     <button type="button" id="addChem" class="collapsible" onclick="down()"> 
         Add chemical <span id="addDropdown">&#9660;</span>
         </button>
@@ -55,75 +62,24 @@
             <input type="submit" id="submit" class="content" value="Add">
             <input onclick="negateSliderValue()" type="submit" id="submit" class="content" value="Remove">
         </form>
-      </div>        
-    
-    <h3>Transaction History</h3>
-
+    </div>-->
+    <p>Transaction History</p>
     <table class="indented">
         <tr>
             <th>Date/Time</th>
             <th>Amount [units]</th>
             <th>Added or Removed</th>
         </tr>
-        <!-- these for loops need to be formatted (see discord for sketch) -->
-        {% for bottle in chemical.bottle_set.all %}
-        <h3>Bottle {{bottle.id}}</h3>
-        {% for transaction in bottle.getTransactions %}
+        {% for transaction in container.getTransactions %}
         <tr class="hoverable">
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
-        </tr><!--</a>  where's the open <a> for this?-->
-        {% endfor %}
+        </tr>
         {% endfor %}
     </table>
-
-    <script>
-        var coll = document.getElementsByClassName("collapsible");
-        var i;
-
-        for (i = 0; i < coll.length; i++) {
-          coll[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.display === "none") {
-              content.style.display = "block";
-            } else {
-              content.style.display = "none";
-            }
-          });
-        }
-        
-        var aD = document.getElementById("addDropdown")
-
-        function down() {
-            aD = document.getElementById("addDropdown")
-            
-            if (aD.innerHTML == "&#9650;") {
-                aD.innerHTML = "&#9660;"
-            } else {
-                aD.innerHTML = "&#9650;"
-            }
-        }
-
-        // Used on page load. Changes how the slider renders.
-        function modifySlider() {
-            slider = document.getElementById("trSlide");
-            slider.type = "range";
-            slider.min = "0";
-            slider.max = "100";
-            slider.value = "0";
-        }
-
-        // Used when "remove" is clicked. Makes slider value negative. Hopefully does not affect frontend.
-        function negateSliderValue() {
-            slider = document.getElementById("trSlide");
-            slider.min = -100; // this is not a great solution to the problem that value can't be less than min
-            slider.value = -slider.value;
-        }
-
-    </script>
-
+    {% endfor %}
+    {% endfor %}
 </body>
 
 </html>

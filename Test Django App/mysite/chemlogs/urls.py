@@ -9,5 +9,6 @@ urlpatterns = [
     path('testChem/<int:chemical_id>/', views.testChem, name='testChem'),
     path('chemicalSearch/', views.ChemicalSearch.as_view(), name='chemicalSearch'),
     path('transaction/<int:transaction_id>/', views.transaction, name='transaction'),
+    path('container/<str:container_id>/', views.container, name='container'),
     path('history/', views.history, name='history') # unimplemented
 ]

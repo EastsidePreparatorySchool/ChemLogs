@@ -31,11 +31,19 @@
     <div class="content" style="display: none; padding-top: 1em;">
         <form method="post">
             {% csrf_token %}
-            {{ form }}
-            <input type="submit" id="submit" class="content" value="Add">
-            <input onclick="negateSliderValue()" type="submit" id="submit" class="content" value="Remove">
+            {{ transact_form }}
+            <input type="submit" id="submit" name="transact_add" class="content" value="Add">
+            <input type="submit" id="submit" name="transact_remove" class="content" value="Remove">
         </form>
     </div>
+
+    <br><br>
+    <p>Something looks off? Override the current volume/mass.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ override_form }}
+        <input type="submit" id="submit" name="override" value="Reset">
+    </form>
 
     <h3>Transaction History</h3>
     <table class="indented">
@@ -44,11 +52,11 @@
             <th>Amount [g/mL]</th>
             <th>Added or Removed</th>
         </tr>
-        {% for transaction in container.getTransactions %}
+        {% for transaction in container.getTransactionsToDisplay %}
         <tr class="hoverable">
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}</a></td>
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
         </tr>
         {% endfor %}
     </table>
@@ -88,13 +96,6 @@
             slider.min = "0";
             slider.max = "100";
             slider.value = "0";
-        }
-
-        // Used when "remove" is clicked. Makes slider value negative. Hopefully does not affect frontend.
-        function negateSliderValue() {
-            slider = document.getElementById("trSlide");
-            slider.min = -100; // this is not a great solution to the problem that value can't be less than min
-            slider.value = -slider.value;
         }
 
     </script>

@@ -7,8 +7,7 @@ from django.db.models import Q
 import datetime
 
 from .models import Chemical, Transaction, Container
-from .forms import TransactionEditForm
-from .forms import TransactionCreateForm
+from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm
 
 # unused
 def testPage(request, chemical_id):
@@ -27,26 +26,44 @@ def testChem(request, chemical_id):
 # view and modify a transaction
 def transaction(request, transaction_id):
     transaction = get_object_or_404(Transaction, pk=transaction_id)
+    edit_form = None
     if request.method == 'POST':
-        form = TransactionEditForm(request.POST)
-        if form.is_valid():
-            transaction.amount = form.cleaned_data['amount']
+        edit_form = TransactionEditForm(request.POST)
+        if edit_form.is_valid():
+            transaction.amount = edit_form.cleaned_data['amount']
+            transaction.type = edit_form.cleaned_data['type']
             transaction.save()
             # there should be a confirmation "are you sure?"
-    else:
-        form = TransactionEditForm(initial={'amount': transaction.amount})
-    return render(request, 'chemlogs/transaction.html', {'transaction': transaction, 'form': form})
+    if not edit_form:
+        edit_form = TransactionEditForm(initial={'amount': transaction.amount, 'type': transaction.type})
+    return render(request, 'chemlogs/transaction.html', {'transaction': transaction, 'edit_form': edit_form})
 
 def container(request, container_id):
     container = get_object_or_404(Container, pk=container_id)
+    transact_form = None
+    override_form = None
     if request.method == 'POST':
-        form = TransactionCreateForm(request.POST, auto_id='%s')
-        if form.is_valid():
-            container.transaction_set.create(amount=form.cleaned_data['trSlide'], time=datetime.datetime.now())
-            # some kind of confirmation ("you have added/removed this much")
-    else:
-        form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
-    return render(request, 'chemlogs/container.html', {'container': container, 'form': form})
+        if "transact_add" in request.POST:
+            transact_form = TransactionCreateForm(request.POST, auto_id='%s')
+            if transact_form.is_valid():
+                container.transaction_set.create(amount=transact_form.cleaned_data['trSlide'], time=datetime.datetime.now(), type="T")
+                # some kind of confirmation ("you have added/removed this much")
+        elif "transact_remove" in request.POST:
+            transact_form = TransactionCreateForm(request.POST, auto_id='%s')
+            if transact_form.is_valid():
+                value = 0 - transact_form.cleaned_data['trSlide']
+                container.transaction_set.create(amount=value, time=datetime.datetime.now(), type="T")
+                # add confirmation
+        elif "override" in request.POST:
+            override_form = ContainerOverrideForm(request.POST, auto_id='%s')
+            if override_form.is_valid():
+                container.transaction_set.create(amount=override_form.cleaned_data['override_value'], time=datetime.datetime.now(), type="R")
+                # add confirmation
+    if not transact_form:
+        transact_form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
+    if not override_form:
+        override_form = ContainerOverrideForm()
+    return render(request, 'chemlogs/container.html', {'container': container, 'transact_form': transact_form, 'override_form': override_form})
 
 # unimplemented
 def history(request):

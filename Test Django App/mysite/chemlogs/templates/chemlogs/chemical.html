@@ -70,7 +70,7 @@
             <th>Amount [units]</th>
             <th>Added or Removed</th>
         </tr>
-        {% for transaction in container.getTransactions %}
+        {% for transaction in container.getTransactionsToDisplay %}
         <tr class="hoverable">
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>

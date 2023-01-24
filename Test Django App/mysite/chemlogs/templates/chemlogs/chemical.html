@@ -49,6 +49,10 @@
     {% for state in chemical.chemicalstate_set.all %}
     <h2>{{state.getInfo|capfirst}}</h2>
     <p>{{state.computeAmount|floatformat:2}}g in stock</p>
+    <button type="button" id="addChem" class="collapsible" onclick="down()"> 
+        Add chemical <span id="addDropdown">&#9660;</span>
+        </button>
+    <div class="content" display="none">
     {% for container in state.container_set.all %}
     <h3 class="hoverable"><a href="/chemlogs/container/{{container.id}}">Container {{container.getHeader}}</a></h3>
     <!-- we don't necessarily need the add transaction button on this page
@@ -64,7 +68,7 @@
         </form>
     </div>-->
     <p>Transaction History</p>
-    <table class="indented">
+        <table class="indented">
         <tr>
             <th>Date/Time</th>
             <th>Amount [units]</th>
@@ -79,7 +83,9 @@
         {% endfor %}
     </table>
     {% endfor %}
+    </div>
     {% endfor %}
-</body>
 
+    <script src="chemScript.js">  </script>
+</body>
 </html>

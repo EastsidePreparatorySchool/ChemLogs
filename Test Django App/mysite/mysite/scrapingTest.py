@@ -5,37 +5,59 @@ https://levelup.gitconnected.com/scrap-data-from-website-and-pdf-document-for-dj
 import requests
 from bs4 import BeautifulSoup
 url1 = "https://www.flinnsci.com/sds_431-lauric-acid/sds_431/"
-def Aroura_Great(url, keyword, tag_, class_):
+def Aroura_Great(url, keyword, tag_ = None, class_ = None):
     headers =  {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
     
     r = requests.get(url, headers=headers)
     c = r.content
     soup = BeautifulSoup(c, "html.parser")
+
+    # if (tag_ == None):
+    #     if (str(c).__contains__("<title>")):
+    #         c_important = "".join(str(c).split("<title>")[1:])
+    #         c_lines = c_important.split("\n")
+    #         for line in c_lines:
+    #             print("\n")
+    #             print(line)
+    #     return
+
     if (class_ == None):
-        tables = soup.find_all(tag_)
+        items = soup.find_all(tag_)
     else:
-        tables = soup.find_all(tag_, {"class": class_}) # this includes the 'safety' info
-    Exclusion_Counter = 0
-    for d in tables:
-        divs = d.find_all("div")
+        items = soup.find_all(tag_, {"class": class_}) # this includes the 'safety' info
+
+    # how many things are not included
+    exclusion_counter = 0
+    inclusion_counter = 0
+
+    # for each item with the tag
+    for it in items:
+        divs = it.find_all(tag_)
         for div in divs:
-            # print(type(div))
+            print(type(div))
+            # change it back to it if bad
             if (str(div).__contains__(keyword)):
                 # print(div)
-                newStr = Toaster_Cool_and_Cadence(div)
+                Toaster_Cool_and_Cadence(div)
+                # print(it)
+                inclusion_counter +=1
             else:
-                Exclusion_Counter += 1 
-    print(Exclusion_Counter)
+                exclusion_counter += 1
+                inclusion_counter += 1
+    print(exclusion_counter)
+    print(inclusion_counter)
+    print(inclusion_counter-exclusion_counter)
 
 def Toaster_Cool_and_Cadence(to_filter):
     split_div = str(to_filter).split("\n")
+    # print(str(to_filter))
     for line in split_div:
         line_final = str("")
         by_end = line.split(">")
         for l in by_end:
             line_final = line_final + l.split("<")[0]
 
-    print(line_final)
+        print(line_final)
     # print(split_div[1].strip())
     print('\n\n')
         
@@ -64,5 +86,5 @@ def Cadence_Amazing():
 
 
 # Aroura_Great(url1, "fifth", "div", "sds-document_section-content")
-Aroura_Great(url1, "table", "div", "sds-document_section-content")
+Aroura_Great(url1, "fifth")
 

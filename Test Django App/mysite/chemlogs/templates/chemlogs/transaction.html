@@ -32,11 +32,11 @@
         {% csrf_token %}
         <legend><h2>Modify Transaction</h2></legend>
         <p><strong>If this transaction was recorded incorrectly, fix it here.</strong></p>
-        <p>Chemical: {{transaction.chemical.name}}</p>
+        <p>Chemical: {{transaction.container.contents.chemical.name}}</p>
         <p>Date: {{transaction.time.date}}</p>
         <p>Time: {{transaction.time.time}}</p>
 
-        {{ form.as_p }}
+        {{ edit_form.as_p }}
         <input type="submit" value="Change Amount">
     </form>
     <p class="hoverable"><a href="/chemlogs/container/{{transaction.container.id}}/">Return to Container Page</a></p>

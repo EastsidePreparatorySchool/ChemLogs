@@ -92,11 +92,18 @@ class Container(models.Model):
     def getTransactions(self):
         return self.transaction_set.all().order_by('-time')
     
+    # returns transactions, excluding any that are not supposed to be visible (e.g., type new)
+    def getTransactionsToDisplay(self):
+        return self.getTransactions().exclude(type="N").exclude(type="I")
+    
     # returns the current mass, in grams, of the contents of this bottle
     def computeAmount(self):
         amount = 0
-        for transaction in self.transaction_set.all():
-            amount += transaction.amount
+        for transaction in self.transaction_set.all().order_by('time'):
+            if transaction.type in {"T", "N"}:
+                amount += transaction.amount
+            elif transaction.type == "R":
+                amount = transaction.amount
         if self.molarity:
             # convert from mL to g
             amount *= self.molarity / 1000
@@ -104,10 +111,17 @@ class Container(models.Model):
         return amount
 
 class Transaction(models.Model):
+    TYPE_CHOICES = [
+        ("T", "TRANSACT"), # normal transaction
+        ("N", "NEW"), # auto-generated "transaction" when a new bottle is added to inventory
+        ("R", "RESET"), # override previous transactions; set new current amount
+        ("I", "IGNORED") # basically deleted, except it can be restored
+    ]
+
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default="T") 
     container = models.ForeignKey(Container, on_delete=models.CASCADE)
     amount = models.IntegerField() # amount in chemical's unit. negative if removing
     time = models.DateTimeField()
-    new = models.BooleanField(default=False) # whether this is the initial transaction "filling" a new bottle for the first time
     # maybe also keep track of the user who made the transaction
     
     # return absolute value of amount field, i.e. how much was taken or how much was added

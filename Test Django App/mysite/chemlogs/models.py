@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import models
 from django.utils import timezone
 
@@ -33,7 +31,6 @@ class Chemical(models.Model):
     # init_vol = models.CharField(max_length=10) # initial max volume, used as cap & for user reference
     # min_thresh = models.CharField(max_length=10) # threshold for warning; user set
     safety = models.TextField()
-    barcode = models.BinaryField() # might need this, not sure
     # unit = models.TextChoices() # removing til i figure out how choices work. choices will be mg, mL, bottles, etc -- whatever is the unit of transaction
 
     def __str__(self):
@@ -51,6 +48,7 @@ class ChemicalState(models.Model):
     type = models.CharField(max_length=40, null=True, blank=True) # ex: strips, powder
     min_thresh = models.IntegerField(null=True, blank=True)
     chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
+    # note: chemical and (type or state) should together be able to uniquely identify a chemicalstate
 
     # returns the current amount in stock
     def computeAmount(self):

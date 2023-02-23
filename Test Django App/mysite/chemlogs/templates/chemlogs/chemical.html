@@ -41,6 +41,14 @@
     <p><strong>Storage Location: {{chemical.loc}}</strong></p>
     <p><strong>Chemical State: {{chemical.state}}</strong></p>
     <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>-->
+    
+    <form method="POST">
+        <p>New container</p>
+        {% csrf_token %}
+        {{ container_create_form }}
+        <input type="submit" id="submit" name="new" value="Create">
+    </form>
+
     <br>
     <h3>Hazard Alert</h3>
     <p class="indented">{{chemical.safety}}</p>

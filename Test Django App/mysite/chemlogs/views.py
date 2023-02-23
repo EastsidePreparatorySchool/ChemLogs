@@ -4,10 +4,11 @@ from django.template import loader
 from django.urls import reverse
 from django.views.generic import ListView
 from django.db.models import Q
-import datetime
-
+from django.utils import timezone
 from .models import Chemical, Transaction, Container
-from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm
+from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm
+import itertools
+
 
 # unused
 def testPage(request, chemical_id):
@@ -17,7 +18,72 @@ def testPage(request, chemical_id):
 # main page for a chemical
 def chemical(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
-    return render(request, 'chemlogs/chemical.html', {'chemical': chemical})
+    container_create_form = None
+    if request.method == 'POST':
+        container_create_form = ContainerCreateForm(request.POST)
+        if container_create_form.is_valid():
+            if container_create_form.cleaned_data['contents'] == "N":
+                # create a new state for this new container
+                chemical_state = chemical.chemicalstate_set.create(
+                    state=container_create_form.cleaned_data['state'],
+                    type=container_create_form.cleaned_data['type'],
+                    min_thresh=container_create_form.cleaned_data['min_thresh']
+                )
+                # TODO: what if user tries to make a state that's equivalent to a preexisting state
+            else:
+                # find chemicalstate from form's 'contents' field, which stores either state or type.
+                # state_list will either be empty or have 1 entry which is the chemicalstate
+                # try to find chemicalstate from state
+                state_list = chemical.chemicalstate_set.filter(
+                    state=container_create_form.cleaned_data['contents']
+                )
+                if len(state_list) == 0: # can you just say !chemical_state?
+                    # override state_list, finding from type
+                    state_list = chemical.chemicalstate_set.filter(
+                        type=container_create_form.cleaned_data['contents']
+                    )
+                chemical_state = state_list[0]
+
+            # give the bottle an id.
+            # look through AA, AB, ..., AZ, BA, ..., ZZ until you find an unused id
+            start = ord("A")
+            alphabet_length = 26
+            end = start + alphabet_length
+            letters_ascii = range(start, end)
+            for i, j in itertools.product(letters_ascii, letters_ascii): # this avoids nested for loops
+                potential_id = chr(i) + chr(j)
+                if len(Container.objects.filter(id=potential_id)) == 0:
+                    container_id = potential_id
+                    break
+                print(potential_id)
+            
+            new_container = chemical_state.container_set.create(
+                initial_value=container_create_form.cleaned_data['initial_value'],
+                contents=container_create_form.cleaned_data['contents'],
+                loc=container_create_form.cleaned_data['loc'],
+                id=container_id
+            )
+            if container_create_form.cleaned_data['molarity']:
+                new_container.molarity = container_create_form.cleaned_data['molarity']
+                new_container.save() # i think that's necessary but haven't tested without it
+            # create an N transaction
+            new_container.transaction_set.create(
+                type="N",
+                amount=container_create_form.cleaned_data['initial_value'],
+                time=timezone.now()
+            )
+    if not container_create_form:
+        ContainerCreateForm.contents_choices = [
+            ("N", "Add New")
+        ]
+        for state in chemical.chemicalstate_set.all():
+            if not state.type:
+                to_append = state.state
+            else:
+                to_append = state.type
+            ContainerCreateForm.contents_choices.append((to_append, to_append))
+        container_create_form = ContainerCreateForm()
+    return render(request, 'chemlogs/chemical.html', {'chemical': chemical, 'container_create_form': container_create_form})
 
 def testChem(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
@@ -46,18 +112,18 @@ def container(request, container_id):
         if "transact_add" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
             if transact_form.is_valid():
-                container.transaction_set.create(amount=transact_form.cleaned_data['trSlide'], time=datetime.datetime.now(), type="T")
+                container.transaction_set.create(amount=transact_form.cleaned_data['trSlide'], time=timezone.now(), type="T")
                 # some kind of confirmation ("you have added/removed this much")
         elif "transact_remove" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
             if transact_form.is_valid():
                 value = 0 - transact_form.cleaned_data['trSlide']
-                container.transaction_set.create(amount=value, time=datetime.datetime.now(), type="T")
+                container.transaction_set.create(amount=value, time=timezone.now(), type="T")
                 # add confirmation
         elif "override" in request.POST:
             override_form = ContainerOverrideForm(request.POST, auto_id='%s')
             if override_form.is_valid():
-                container.transaction_set.create(amount=override_form.cleaned_data['override_value'], time=datetime.datetime.now(), type="R")
+                container.transaction_set.create(amount=override_form.cleaned_data['override_value'], time=timezone.now(), type="R")
                 # add confirmation
     if not transact_form:
         transact_form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"

@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.generic import ListView
 from django.db.models import Q
 from django.utils import timezone
-from .models import Chemical, Transaction, Container
+from .models import Chemical, Transaction, TransactionEdit, Container
 from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm
 import itertools
 
@@ -96,8 +96,20 @@ def transaction(request, transaction_id):
     if request.method == 'POST':
         edit_form = TransactionEditForm(request.POST)
         if edit_form.is_valid():
-            transaction.amount = edit_form.cleaned_data['amount']
-            transaction.type = edit_form.cleaned_data['type']
+            new_amount = edit_form.cleaned_data['amount']
+            new_type = edit_form.cleaned_data['type']
+            # record the change
+            edit = transaction.transactionedit_set.create(
+                date=timezone.now(),
+                old_amount=transaction.amount,
+                new_amount=new_amount,
+                old_type=transaction.type,
+                new_type=new_type
+            )
+
+            # make the change
+            transaction.amount = new_amount
+            transaction.type = new_type
             transaction.save()
             # there should be a confirmation "are you sure?"
     if not edit_form:
@@ -132,9 +144,26 @@ def container(request, container_id):
     return render(request, 'chemlogs/container.html', {'container': container, 'transact_form': transact_form, 'override_form': override_form})
 
 # unimplemented
-def history(request):
-    pass
-    # will make this overall history page later
+def history(request): # everything about this method is bad, rethink it
+    # actions needs to be transactions and transactionedits, sorted chronologically
+    actions = Transaction.objects.all() + TransactionEdit.objects.all()
+    # TODO sort actions by time
+    # turn the elements of "actions" into strings for easy display
+    for action in actions:
+        temp = ""
+        temp += "Date: " + action.date
+        temp += "\nChemical: " + action.container.contents.chemical
+        temp += "\nState: " + action.container.contents.getInfo()
+        temp += "\nContainer: " + action.container.getHeader()
+        if isinstance(action, Transaction):
+            temp += "\nAmount: " + action.amount
+            if action.type == "N":
+                temp += "\nNew Container Created"
+            elif action.type == "R":
+                temp += "\nAmount Reset"
+            else:
+                pass
+    return render(request, 'chemlogs/history.html', {'actions': actions})
 
 # search for chemicals
 class ChemicalSearch(ListView):

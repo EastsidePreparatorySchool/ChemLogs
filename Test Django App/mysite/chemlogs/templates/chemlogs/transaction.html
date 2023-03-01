@@ -32,7 +32,7 @@
         {% csrf_token %}
         <legend><h2>Modify Transaction</h2></legend>
         <p>Chemical: {{transaction.container.contents.chemical.name}} ({{transaction.container.contents.getInfo}})</p>
-        <p>Container: {{transaction.container.id}}</p>
+        <p>Container: {{transaction.container.getHeader}}</p>
         <p>Date: {{transaction.time.date}}</p>
         <p>Time: {{transaction.time.time}}</p>
         <br>

@@ -125,3 +125,12 @@ class Transaction(models.Model):
     # return absolute value of amount field, i.e. how much was taken or how much was added
     def getAbsoluteAmount(self):
         return abs(self.amount)
+
+class TransactionEdit(models.Model): # table of historical user actions to modify a transaction
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+    # what is was changed from and to
+    old_amount = models.IntegerField()
+    new_amount = models.IntegerField()
+    old_type = models.CharField(max_length=1, choices=Transaction.TYPE_CHOICES)
+    new_type = models.CharField(max_length=1, choices=Transaction.TYPE_CHOICES)

@@ -27,7 +27,7 @@ class ContainerCreateForm(forms.Form):
 
     initial_value = forms.IntegerField(label="Bottle Size")
     contents = forms.ChoiceField(choices=get_contents_choices, label="Chemical State")
-    molarity = forms.IntegerField(label="Molarity (M), if applicable", required=False)
+    molarity = forms.FloatField(label="Molarity (M), if applicable", required=False)
     loc = forms.ChoiceField(choices=Container.LOC_CHOICES)
     # these *should ideally* only appear if contents is selected as "new state":
     state = forms.ChoiceField(label="Physical State", choices=ChemicalState.STATE_CHOICES, required=False)

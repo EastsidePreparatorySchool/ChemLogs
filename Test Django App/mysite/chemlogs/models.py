@@ -116,7 +116,7 @@ class Transaction(models.Model):
         ("I", "IGNORED") # basically deleted, except it can be restored
     ]
 
-    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default="T") 
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default="T")
     container = models.ForeignKey(Container, on_delete=models.CASCADE)
     amount = models.IntegerField() # amount in chemical's unit. negative if removing
     time = models.DateTimeField()
@@ -126,6 +126,7 @@ class Transaction(models.Model):
     def getAbsoluteAmount(self):
         return abs(self.amount)
 
+# this might not be necessary
 class TransactionEdit(models.Model): # table of historical user actions to modify a transaction
     transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
     date = models.DateTimeField()

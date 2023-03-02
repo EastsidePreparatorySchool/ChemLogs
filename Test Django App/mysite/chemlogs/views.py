@@ -50,12 +50,19 @@ def chemical(request, chemical_id):
             alphabet_length = 26
             end = start + alphabet_length
             letters_ascii = range(start, end)
+            bad_ids = [ # no container should have an id from this list
+                # confusion with aqueous
+                "AQ",
+                # confusion with location
+                "MS", "US",
+                # confusion with chemical formula
+                "HF", "HI", "KH", "KF", "KI"
+            ]
             for i, j in itertools.product(letters_ascii, letters_ascii): # this avoids nested for loops
                 potential_id = chr(i) + chr(j)
-                if len(Container.objects.filter(id=potential_id)) == 0:
+                if len(Container.objects.filter(id=potential_id)) == 0 and potential_id not in bad_ids:
                     container_id = potential_id
                     break
-                print(potential_id)
             
             new_container = chemical_state.container_set.create(
                 initial_value=container_create_form.cleaned_data['initial_value'],
@@ -144,26 +151,8 @@ def container(request, container_id):
     return render(request, 'chemlogs/container.html', {'container': container, 'transact_form': transact_form, 'override_form': override_form})
 
 # unimplemented
-def history(request): # everything about this method is bad, rethink it
-    # actions needs to be transactions and transactionedits, sorted chronologically
-    actions = Transaction.objects.all() + TransactionEdit.objects.all()
-    # TODO sort actions by time
-    # turn the elements of "actions" into strings for easy display
-    for action in actions:
-        temp = ""
-        temp += "Date: " + action.date
-        temp += "\nChemical: " + action.container.contents.chemical
-        temp += "\nState: " + action.container.contents.getInfo()
-        temp += "\nContainer: " + action.container.getHeader()
-        if isinstance(action, Transaction):
-            temp += "\nAmount: " + action.amount
-            if action.type == "N":
-                temp += "\nNew Container Created"
-            elif action.type == "R":
-                temp += "\nAmount Reset"
-            else:
-                pass
-    return render(request, 'chemlogs/history.html', {'actions': actions})
+def history(request):
+    return render(request, 'chemlogs/history.html', {'actions': Transaction.objects.exclude(type="I").order_by('-time')})
 
 # search for chemicals
 class ChemicalSearch(ListView):

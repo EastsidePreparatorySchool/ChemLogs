@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 url1 = "https://www.flinnsci.com/sds_431-lauric-acid/sds_431/"
 def Aroura_Great(url, keyword, tag_ = None, class_ = None):
+    global inclusion_counter
     headers =  {'User-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'}
     
     r = requests.get(url, headers=headers)
@@ -34,7 +35,7 @@ def Aroura_Great(url, keyword, tag_ = None, class_ = None):
     for it in items:
         divs = it.find_all(tag_)
         for div in divs:
-            print(type(div))
+            #print(type(div))
             # change it back to it if bad
             if (str(div).__contains__(keyword)):
                 # print(div)
@@ -49,13 +50,20 @@ def Aroura_Great(url, keyword, tag_ = None, class_ = None):
     print(inclusion_counter-exclusion_counter)
 
 def Toaster_Cool_and_Cadence(to_filter):
+    global inclusion_counter
+    #split_div.remove("<class 'bs4.element.Tag'>")
     split_div = str(to_filter).split("\n")
+    
     # print(str(to_filter))
     for line in split_div:
+        #if line == "<class 'bs4.element.Tag'>":
+           # line.replace("<class 'bs4.element.Tag'>", "")
+           # inclusion_counter +=1
         line_final = str("")
         by_end = line.split(">")
         for l in by_end:
             line_final = line_final + l.split("<")[0]
+       # line_final.replace("<class 'bs4.element.Tag'>", "")
 
         print(line_final)
     # print(split_div[1].strip())
@@ -86,5 +94,5 @@ def Cadence_Amazing():
 
 
 # Aroura_Great(url1, "fifth", "div", "sds-document_section-content")
-Aroura_Great(url1, "fifth")
+Aroura_Great(url1, "Hazard")
 

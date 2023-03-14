@@ -53,7 +53,14 @@ def Toaster_Cool_and_Cadence(to_filter):
     global inclusion_counter
     #split_div.remove("<class 'bs4.element.Tag'>")
     split_div = str(to_filter).split("\n")
-    
+    split_div.pop()
+    number = len(split_div)
+    real_number = number -1
+    for i in range(real_number):
+        split_div.pop(0)
+    print(number)
+    #res = [split_div[i] for i in range(len(split_div)) if i == split_div.index(split_div[i])]
+    #[res.append(x) for x in split_div if x not in res]
     # print(str(to_filter))
     for line in split_div:
         #if line == "<class 'bs4.element.Tag'>":
@@ -94,5 +101,5 @@ def Cadence_Amazing():
 
 
 # Aroura_Great(url1, "fifth", "div", "sds-document_section-content")
-Aroura_Great(url1, "Hazard")
+Aroura_Great(url1, "SECTION 16")
 

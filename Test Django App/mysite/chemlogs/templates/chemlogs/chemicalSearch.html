@@ -1,4 +1,4 @@
-<!-- search for a chemical -->
+<!-- Search for a chemical. Also displays overall transaction history -->
 
 {% load static %}
 
@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chemical Search</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/css/style.css' %}">
 </head>
 <body>
     <div class="header">
@@ -18,11 +18,15 @@
     <div class="header-bottom"></div>
 
     <!-- from https://learndjango.com/tutorials/django-search-tutorial -->
-    <h1>Search Results</h1>
-
-    {% if object_list %}
+    <h3>Chemical Search</h3>
+    {% if filtered %}
+    <p>Results:</p>
+    {% else %}
+    <p>All chemicals:</p>
+    {% endif %}
+    {% if shown_chemicals %}
     <ul>
-        {% for chemical in object_list %}
+        {% for chemical in shown_chemicals %}
         <li class="hoverable"><a href="/chemlogs/chemical/{{chemical.id}}/">
         {{ chemical }} -- {{ chemical.computeAmount }} in stock
         </a></li>
@@ -41,6 +45,26 @@
             <label for="requireSomeInStock">Only show chemicals that are in stock</label><br>
         </fieldset>
         <input type="submit" value="Search">
-    </form>
+    </form><br>
+
+    <h3>Overall Transaction History</h3>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Chemical</th><!-- includes state -->
+            <th>Container</th><!-- full header -->
+            <th>Amount</th>
+            <th>Type</th><!-- like add/remove, reset, or create container -->
+        </tr>
+        {% for action in actions %}
+        <tr>
+            <td><a href="/chemlogs/transaction/{{action.id}}">{{action.time.month}}/{{action.time.day}}</a></td> <!-- don't show time of day -->
+            <td><a href="/chemlogs/transaction/{{action.id}}">{{action.container.contents.chemical}} ({{action.container.contents.getInfo}})</a></td>
+            <td><a href="/chemlogs/transaction/{{action.id}}">{{action.container.getHeader}}</a></td>
+            <td><a href="/chemlogs/transaction/{{action.id}}">{{action.amount}}</a></td>
+            <td><a href="/chemlogs/transaction/{{action.id}}">{{action.get_type_display}}</a></td><!-- this gets the verbose name of action.type -->
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>

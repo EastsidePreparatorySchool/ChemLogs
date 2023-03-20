@@ -15,17 +15,24 @@ body {
 
 .header {
    font-size: calc(22px + 0.5vw);
-    padding-right: 2vw;
-    padding-left: 1.5vw;
-    margin-top: 1vw;
-    margin-bottom: 1.5vh;
-    font-family: Arial, Helvetica, sans-serif;
-    color: #314876;
-    display: inline;
+   padding-right: 2vw;
+   padding-left: 1.5vw;
+   margin-top: 1vw;
+   margin-bottom: 1.5vh;
+   font-family: Arial, Helvetica, sans-serif;
+   color: #314876;
+   display: inline;
 }
 
 .header h4 {
    display: inline;
+}
+
+.header img {
+   position: absolute;
+   right: 3vw;
+   top: 3vw;
+   width: 10vw;
 }
 
 .header-bottom {

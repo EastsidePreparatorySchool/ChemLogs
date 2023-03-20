@@ -152,12 +152,20 @@ def container(request, container_id):
 
 # unimplemented
 def history(request):
-    return render(request, 'chemlogs/history.html', {'actions': Transaction.objects.exclude(type="I").order_by('-time')})
+    #return render(request, 'chemlogs/history.html', {'actions': Transaction.objects.exclude(type="I").order_by('-time')})
+    pass
 
 # search for chemicals
 class ChemicalSearch(ListView):
     model = Chemical
     template_name = 'chemlogs/chemicalSearch.html'
+
+    def get_context_data(self):
+        shown_chemicals = self.get_queryset()
+        filtered = len(shown_chemicals) < len(Chemical.objects.all()) # whether some chemicals are excluded in search
+        actions = Transaction.objects.exclude(type="I").order_by('-time')
+        return {'shown_chemicals': shown_chemicals, 'filtered': filtered, 'actions': actions}
+
     def get_queryset(self):
         nameSearch = self.request.GET.get("name")
         requireSomeInStock = self.request.GET.get("requireSomeInStock")

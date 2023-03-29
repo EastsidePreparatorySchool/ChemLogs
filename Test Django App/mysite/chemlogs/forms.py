@@ -33,3 +33,7 @@ class ContainerCreateForm(forms.Form):
     state = forms.ChoiceField(label="Physical State", choices=ChemicalState.STATE_CHOICES, required=False)
     type = forms.CharField(label="Type", max_length=40, required=False)
     min_thresh = forms.IntegerField(label="Alert Threshold", required=False)
+
+class ChemicalCreateForm(forms.Form):
+    cas = forms.CharField(label="CAS") 
+    safety = forms.CharField(label="Safety Link", required=False)

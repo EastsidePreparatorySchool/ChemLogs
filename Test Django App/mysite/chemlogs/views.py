@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 from django.utils import timezone
 from .models import Chemical, Transaction, TransactionEdit, Container
-from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm
+from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm
 import itertools
 
 
@@ -162,9 +162,16 @@ class ChemicalSearch(ListView):
 
     def get_context_data(self):
         shown_chemicals = self.get_queryset()
-        filtered = len(shown_chemicals) < len(Chemical.objects.all()) # whether some chemicals are excluded in search
+        is_filtered = len(shown_chemicals) < len(Chemical.objects.all()) # whether some chemicals are excluded in search
         actions = Transaction.objects.exclude(type="I").order_by('-time')
-        return {'shown_chemicals': shown_chemicals, 'filtered': filtered, 'actions': actions}
+        if self.request.method == 'POST':
+            chemical_create_form = ChemicalCreateForm(self.request.POST)
+            if chemical_create_form.is_valid():
+                new_chemical = Chemical.objects.create(name=" ", cas=chemical_create_form.cleaned_data['cas'])
+                new_chemical.save()
+        else:
+            chemical_create_form = ChemicalCreateForm()
+        return {'shown_chemicals': shown_chemicals, 'filtered': is_filtered, 'actions': actions, 'chemical_create_form': chemical_create_form}
 
     def get_queryset(self):
         nameSearch = self.request.GET.get("name")
@@ -179,7 +186,7 @@ class ChemicalSearch(ListView):
                 Q(formula__icontains=nameSearch))
         if requireSomeInStock:
             toDisplay = filter(ChemicalSearch.inStock, toDisplay)
-        return toDisplay
+        return toDisplay[:7]
     
     def inStock(chemical):
         return chemical.computeAmount() > 0

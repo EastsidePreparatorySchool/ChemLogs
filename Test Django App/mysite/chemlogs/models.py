@@ -35,6 +35,9 @@ class Chemical(models.Model):
 
     def __str__(self):
         return self.name
+    
+    # def is_valid():
+        
 
 # used by Chemical and Container
 class ChemicalState(models.Model):

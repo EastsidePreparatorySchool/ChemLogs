@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chemical Search</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/style/style.css' %}">
 </head>
 <body>
     <div class="header">
@@ -22,7 +22,7 @@
     {% if filtered %}
     <p>Results:</p>
     {% else %}
-    <p>All chemicals:</p>
+    <p> Top results:</p>
     {% endif %}
     {% if shown_chemicals %}
     <ul>
@@ -46,6 +46,13 @@
         </fieldset>
         <input type="submit" value="Search">
     </form><br>
+
+    <h3>New Chemical</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ chemical_create_form.as_p }}
+        <input type="submit" id="submit" name="new_chemical" value="Create">
+    </form>
 
     <h3>Overall Transaction History</h3>
     <table>

@@ -46,7 +46,7 @@
     <form method="POST">
         <p>New container</p>
         {% csrf_token %}
-        {{ container_create_form }}
+        {{ container_create_form.as_p }}
         <input type="submit" id="submit" name="new" value="Create">
     </form>
 

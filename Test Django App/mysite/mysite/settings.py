@@ -117,6 +117,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+# this is for the static-clearing command, python manage.py collectstatic --noinput --clear
+STATIC_ROOT = 'mysite/chemlogs/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

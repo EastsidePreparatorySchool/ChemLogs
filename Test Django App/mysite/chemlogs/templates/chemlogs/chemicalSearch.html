@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chemical Search</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
 </head>
 <body>
     <div class="header">
@@ -18,7 +18,21 @@
     <div class="header-bottom"></div>
 
     <!-- from https://learndjango.com/tutorials/django-search-tutorial -->
-    <h3>Chemical Search</h3>
+    <h2>Chemical Search</h2>
+
+    <button type="button" id="addChem" class="collapsible">
+        <span>New Chemical</span>
+    </button>
+    <div class="content" style="display: block; padding-top: 1em; text-align:left">
+    <form method="POST">
+        {% csrf_token %}
+        {{ chemical_create_form.as_p }}
+        <input type="submit" id="submit" name="new_chemical" value="Create">
+    </form></div>
+    
+    <br><br>
+
+
     {% if filtered %}
     <p>Results:</p>
     {% else %}
@@ -47,13 +61,6 @@
         <input type="submit" value="Search">
     </form><br>
 
-    <h3>New Chemical</h3>
-    <form method="POST">
-        {% csrf_token %}
-        {{ chemical_create_form.as_p }}
-        <input type="submit" id="submit" name="new_chemical" value="Create">
-    </form>
-
     <h3>Overall Transaction History</h3>
     <table>
         <tr>
@@ -74,4 +81,7 @@
         {% endfor %}
     </table>
 </body>
+
+<script src="{% static 'chemlogs/chemScript.js' %}"></script>
+
 </html>

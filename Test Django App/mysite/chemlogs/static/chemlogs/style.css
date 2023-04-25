@@ -59,7 +59,7 @@ h2 {
 
 h3 {
    color: #1cb16c;
-   font-family: Verdana, Geneva, Tahoma, sans-serif;
+   font-family: Verdana, Tahoma, sans-serif;
    text-transform: uppercase;
    font-weight: medium;
    font-size: 20px + 0.1vw;
@@ -131,4 +131,25 @@ th {
 
 #name {
    width: 70vw
+}
+
+.input {
+   background-color: #314876;
+   color: #ffffff;
+   transition-duration: 0.5s;
+   font-size: 10;
+}
+
+.input:hover {
+   background-color: #103071;
+}
+
+.button {
+   display: flex;
+}
+
+.content{
+   max-height: 0;
+   overflow: hidden;
+   transition: max-height 0.2s ease-out;
 }

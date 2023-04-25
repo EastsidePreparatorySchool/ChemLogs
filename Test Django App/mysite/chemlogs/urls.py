@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import views, updater
 
 app_name = 'chemlogs'
 urlpatterns = [

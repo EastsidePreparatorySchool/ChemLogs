@@ -152,3 +152,7 @@ class TransactionEdit(models.Model): # table of historical user actions to modif
     new_amount = models.IntegerField()
     old_type = models.CharField(max_length=1, choices=Transaction.TYPE_CHOICES)
     new_type = models.CharField(max_length=1, choices=Transaction.TYPE_CHOICES)
+
+# class User(models.Model): # don't need this because there's an automatic User model
+#     email = models.EmailField() # email address
+#     password = models.CharField()

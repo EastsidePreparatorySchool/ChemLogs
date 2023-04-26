@@ -190,3 +190,6 @@ class ChemicalSearch(ListView):
     
     def inStock(chemical):
         return chemical.computeAmount() > 0
+
+def login(request):
+    pass

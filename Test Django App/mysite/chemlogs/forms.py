@@ -37,3 +37,7 @@ class ContainerCreateForm(forms.Form):
 class ChemicalCreateForm(forms.Form):
     cas = forms.CharField(label="CAS") 
     safety = forms.CharField(label="Safety Link", required=False)
+
+class SignInForm(forms.Form): # can also be used to create a user (sign up)
+    email = forms.EmailField(label="Email")
+    password = forms.PasswordInput()

@@ -50,7 +50,8 @@
     <p>No results</p>
     {% endif %}
 
-    <form action="/chemlogs/chemicalSearch/" method="get">
+    <form action="/chemlogs/chemicalSearch/" method="GET">
+        {% csrf_token %}
         <fieldset>
             <legend><h2>Filters</h2></legend>
             <input name="name" type="text" placeholder="Search by chemical name or formula"

@@ -47,17 +47,26 @@
         <p>New container</p>
         {% csrf_token %}
         {{ container_create_form.as_p }}
-        <input type="submit" id="submit" name="new" value="Create">
+        <input type="submit" id="submit" name="new_container" value="Create">
+    </form>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" id="submit" name="delete_chemical" value="Remove this chemical">
     </form>
 
     <br>
-    <h3>Hazard Alert</h3>
-    <p class="indented">{{chemical.safety}}</p>
+    <h3>Hazard Alert</h3> <!-- it no longer makes sense for this to be its own section -->
+    <p class="indented"><a href="{{chemical.safety}}">{{chemical.safety}}</a></p>
     
     <!-- this block needs to be formatted (see discord for sketch) -->
     {% for state in chemical.chemicalstate_set.all %}
     <h2>{{state.getInfo|capfirst}}</h2>
     <p>{{state.computeAmount|floatformat:2}}g in stock</p>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" id="submit" name="delete_state_{{state.id}}" value="Remove this state">
+    </form>
     <button type="button" id="addChem" class="collapsible" onclick="down()"> 
         Add chemical <span id="addDropdown">&#9660;</span>
         </button>
@@ -82,12 +91,14 @@
             <th>Date/Time</th>
             <th>Amount [units]</th>
             <th>Added or Removed</th>
+            <th>User</th>
         </tr>
         {% for transaction in container.getTransactionsToDisplay %}
         <tr class="hoverable">
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.user}}</a></td>
         </tr>
         {% endfor %}
     </table>

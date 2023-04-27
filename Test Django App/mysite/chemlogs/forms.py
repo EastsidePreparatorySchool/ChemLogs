@@ -35,9 +35,11 @@ class ContainerCreateForm(forms.Form):
     min_thresh = forms.IntegerField(label="Alert Threshold", required=False)
 
 class ChemicalCreateForm(forms.Form):
+    name = forms.CharField(label="Chemical Name")
     cas = forms.CharField(label="CAS") 
     safety = forms.CharField(label="Safety Link", required=False)
+    formula = forms.CharField(label="Formula")
 
-class SignInForm(forms.Form): # can also be used to create a user (sign up)
+class SignInForm(forms.Form): # can also be used to create a user (sign up) (is this used?)
     email = forms.EmailField(label="Email")
     password = forms.PasswordInput()

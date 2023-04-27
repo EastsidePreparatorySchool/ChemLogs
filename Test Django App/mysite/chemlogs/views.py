@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import loader
 from django.urls import reverse
 from django.views.generic import ListView
@@ -19,7 +19,7 @@ def testPage(request, chemical_id):
 def chemical(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
     container_create_form = None
-    if request.method == 'POST':
+    if request.method == 'POST' and 'new_container' in request.POST:
         container_create_form = ContainerCreateForm(request.POST)
         if container_create_form.is_valid():
             if container_create_form.cleaned_data['contents'] == "N":
@@ -77,8 +77,18 @@ def chemical(request, chemical_id):
             new_container.transaction_set.create(
                 type="N",
                 amount=container_create_form.cleaned_data['initial_value'],
-                time=timezone.now()
+                time=timezone.now(),
+                user=request.user
             )
+    if request.method == 'POST' and 'delete_chemical' in request.POST:
+        # TODO: ask for confirmation
+        chemical.delete()
+        return redirect('/chemlogs/chemicalSearch/')
+    for state in chemical.chemicalstate_set.all():
+        possible_name = 'delete_state_' + str(state.id)
+        if request.method == 'POST' and possible_name in request.POST:
+            # TODO: ask for confirmation
+            state.delete()
     if not container_create_form:
         ContainerCreateForm.contents_choices = [
             ("N", "Add New")
@@ -105,13 +115,14 @@ def transaction(request, transaction_id):
         if edit_form.is_valid():
             new_amount = edit_form.cleaned_data['amount']
             new_type = edit_form.cleaned_data['type']
-            # record the change
+            # record the change (or don't i guess)
             edit = transaction.transactionedit_set.create(
                 date=timezone.now(),
                 old_amount=transaction.amount,
                 new_amount=new_amount,
                 old_type=transaction.type,
-                new_type=new_type
+                new_type=new_type,
+                user=request.user
             )
 
             # make the change
@@ -131,18 +142,30 @@ def container(request, container_id):
         if "transact_add" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
             if transact_form.is_valid():
-                container.transaction_set.create(amount=transact_form.cleaned_data['trSlide'], time=timezone.now(), type="T")
+                container.transaction_set.create(
+                    amount=transact_form.cleaned_data['trSlide'],
+                    time=timezone.now(),
+                    type="T",
+                    user=request.user)
                 # some kind of confirmation ("you have added/removed this much")
         elif "transact_remove" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
             if transact_form.is_valid():
                 value = 0 - transact_form.cleaned_data['trSlide']
-                container.transaction_set.create(amount=value, time=timezone.now(), type="T")
+                container.transaction_set.create(
+                    amount=value,
+                    time=timezone.now(),
+                    type="T",
+                    user=request.user)
                 # add confirmation
         elif "override" in request.POST:
             override_form = ContainerOverrideForm(request.POST, auto_id='%s')
             if override_form.is_valid():
-                container.transaction_set.create(amount=override_form.cleaned_data['override_value'], time=timezone.now(), type="R")
+                container.transaction_set.create(
+                    amount=override_form.cleaned_data['override_value'],
+                    time=timezone.now(),
+                    type="R",
+                    user=request.user)
                 # add confirmation
     if not transact_form:
         transact_form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
@@ -160,17 +183,25 @@ class ChemicalSearch(ListView):
     model = Chemical
     template_name = 'chemlogs/chemicalSearch.html'
 
-    def get_context_data(self):
+    def get(self, request):
+        chemical_create_form = ChemicalCreateForm()
+        return render(request, self.template_name, self.get_context_data(chemical_create_form))
+    
+    def post(self, request):
+        chemical_create_form = ChemicalCreateForm(self.request.POST)
+        if chemical_create_form.is_valid():
+            new_chemical = Chemical.objects.create(
+                name=chemical_create_form.cleaned_data['name'],
+                cas=chemical_create_form.cleaned_data['cas'],
+                safety=chemical_create_form.cleaned_data['safety'],
+                formula=chemical_create_form.cleaned_data['formula'])
+            new_chemical.save()
+        return render(request, self.template_name, self.get_context_data(chemical_create_form))
+
+    def get_context_data(self, chemical_create_form):
         shown_chemicals = self.get_queryset()
         is_filtered = len(shown_chemicals) < len(Chemical.objects.all()) # whether some chemicals are excluded in search
         actions = Transaction.objects.exclude(type="I").order_by('-time')
-        if self.request.method == 'POST':
-            chemical_create_form = ChemicalCreateForm(self.request.POST)
-            if chemical_create_form.is_valid():
-                new_chemical = Chemical.objects.create(name=" ", cas=chemical_create_form.cleaned_data['cas'])
-                new_chemical.save()
-        else:
-            chemical_create_form = ChemicalCreateForm()
         return {'shown_chemicals': shown_chemicals, 'filtered': is_filtered, 'actions': actions, 'chemical_create_form': chemical_create_form}
 
     def get_queryset(self):
@@ -190,6 +221,3 @@ class ChemicalSearch(ListView):
     
     def inStock(chemical):
         return chemical.computeAmount() > 0
-
-def login(request):
-    pass

@@ -32,17 +32,16 @@
     
     <br><br>
 
-
-    {% if filtered %}
+    {% if shown_chemicals %}
+    {% if all_shown %}
     <p>Results:</p>
     {% else %}
     <p> Top results:</p>
     {% endif %}
-    {% if shown_chemicals %}
     <ul>
         {% for chemical in shown_chemicals %}
         <li class="hoverable"><a href="/chemlogs/chemical/{{chemical.id}}/">
-        {{ chemical }} -- {{ chemical.computeAmount }} in stock
+        {{ chemical }}
         </a></li>
         {% endfor %}
     </ul>

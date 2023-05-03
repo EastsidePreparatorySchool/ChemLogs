@@ -80,15 +80,34 @@ def chemical(request, chemical_id):
                 time=timezone.now(),
                 user=request.user
             )
+    warn_delete_chemical = False
     if request.method == 'POST' and 'delete_chemical' in request.POST:
         # TODO: ask for confirmation
+        if chemical.chemicalstate_set.count() > 0:
+            # cause message to appear that you can't delete this chemical bc there is associated data
+            warn_delete_chemical = True
+            # TODO: on reload, scroll back to previous scroll position
+        else:
+            chemical.delete()
+            return redirect('/chemlogs/chemicalSearch/')
+    if request.method == 'POST' and 'delete_chemical_anyway' in request.POST:
         chemical.delete()
         return redirect('/chemlogs/chemicalSearch/')
-    for state in chemical.chemicalstate_set.all():
-        possible_name = 'delete_state_' + str(state.id)
-        if request.method == 'POST' and possible_name in request.POST:
-            # TODO: ask for confirmation
-            state.delete()
+    state_to_delete = None # the id of the state the user is trying to delete and getting warned about
+    if request.method == 'POST':
+        for state in chemical.chemicalstate_set.all():
+            possible_name = 'delete_state_' + str(state.id)
+            if possible_name in request.POST:
+                if state.container_set.count() > 0:
+                    # show message that you can't delete this state bc there is associated data
+                    state_to_delete = state.id
+                    # TODO: on reload, scroll back to previous scroll position
+                    # this may help https://stackoverflow.com/questions/9377951/how-to-remember-scroll-position-and-scroll-back
+                else:
+                    state.delete()
+            possible_name = 'delete_state_anyway_' + str(state.id)
+            if possible_name in request.POST:
+                state.delete()
     if not container_create_form:
         ContainerCreateForm.contents_choices = [
             ("N", "Add New")
@@ -100,7 +119,9 @@ def chemical(request, chemical_id):
                 to_append = state.type
             ContainerCreateForm.contents_choices.append((to_append, to_append))
         container_create_form = ContainerCreateForm()
-    return render(request, 'chemlogs/chemical.html', {'chemical': chemical, 'container_create_form': container_create_form})
+    return render(request, 'chemlogs/chemical.html',
+                  {'chemical': chemical, 'container_create_form': container_create_form,
+                   'state_to_delete': state_to_delete, 'warn_delete_chemical': warn_delete_chemical})
 
 def testChem(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
@@ -182,6 +203,7 @@ def history(request):
 class ChemicalSearch(ListView):
     model = Chemical
     template_name = 'chemlogs/chemicalSearch.html'
+    len_results_displayed = 7 # don't display more results than this
 
     def get(self, request):
         chemical_create_form = ChemicalCreateForm()
@@ -200,9 +222,9 @@ class ChemicalSearch(ListView):
 
     def get_context_data(self, chemical_create_form):
         shown_chemicals = self.get_queryset()
-        is_filtered = len(shown_chemicals) < len(Chemical.objects.all()) # whether some chemicals are excluded in search
+        all_shown = len(shown_chemicals) <= ChemicalSearch.len_results_displayed # whether there aren't any hidden matching chemicals
         actions = Transaction.objects.exclude(type="I").order_by('-time')
-        return {'shown_chemicals': shown_chemicals, 'filtered': is_filtered, 'actions': actions, 'chemical_create_form': chemical_create_form}
+        return {'shown_chemicals': shown_chemicals, 'all_shown': all_shown, 'actions': actions, 'chemical_create_form': chemical_create_form}
 
     def get_queryset(self):
         nameSearch = self.request.GET.get("name")
@@ -216,8 +238,11 @@ class ChemicalSearch(ListView):
             toDisplay = toDisplay.filter(Q(name__icontains=nameSearch) | 
                 Q(formula__icontains=nameSearch))
         if requireSomeInStock:
-            toDisplay = filter(ChemicalSearch.inStock, toDisplay)
-        return toDisplay[:7]
+            toDisplay = [chemical for chemical in toDisplay if ChemicalSearch.inStock(chemical)]
+        return toDisplay[:ChemicalSearch.len_results_displayed]
     
     def inStock(chemical):
-        return chemical.computeAmount() > 0
+        for state in chemical.chemicalstate_set.all():
+            if state.computeAmount() > 0:
+                return True
+        return False

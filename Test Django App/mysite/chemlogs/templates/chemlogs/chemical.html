@@ -20,8 +20,7 @@
 
 <body>
     <div class="header">
-        <h4>ChemLogs</h4>
-        <a href="/chemlogs/chemicalSearch"><img src="{% static 'chemlogs/images/home.jpg' %}"></a>
+        <a href="/chemlogs/chemicalSearch"><h4>ChemLogs</h4></a>
     </div>
     <div class="header-bottom"></div> <!-- maybe replace this with an <hr> -->
 
@@ -31,7 +30,7 @@
         <li style="text-align: left;">{{chemical.cas}}</li>
         <li style="text-align: right;">{{chemical.computeAmount}}[units]</li>
     </ul>-->
-    <p style="position: absolute;">{{chemical.cas}}</p>
+    <p style="position: absolute;">CAS: {{chemical.cas}}</p>
     <br>
     <!-- the following 3 displayed attributes should probably be included 
         with the specific bottle dropdowns if we end up doing that instead of
@@ -43,12 +42,15 @@
     <p><strong>Chemical State: {{chemical.state}}</strong></p>
     <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>-->
     
+    <button type="button" id="addChem" class="collapsible">
+        <span>New Container</span>
+    </button>
+    <div class="content" style="display: block; padding-top: 1em; text-align:left">
     <form method="POST">
-        <p>New container</p>
         {% csrf_token %}
         {{ container_create_form.as_p }}
         <input type="submit" id="submit" name="new_container" value="Create">
-    </form>
+    </form></div>
 
     <form method="POST">
         {% csrf_token %}

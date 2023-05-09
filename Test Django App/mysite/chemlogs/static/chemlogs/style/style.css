@@ -26,6 +26,7 @@ body {
 
 .header h4 {
    display: inline;
+   color: #314876;
 }
 
 .header img {
@@ -103,6 +104,10 @@ th {
    padding-right: 4vw;
    padding-bottom: 2vw;
 }
+
+a:link, a:visited, a:hover, a:active{
+   text-decoration: none;
+ }
 
 /* chemical entry dropdown attributes */
 #addChem {

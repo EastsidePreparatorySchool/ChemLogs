@@ -82,11 +82,9 @@ def chemical(request, chemical_id):
             )
     warn_delete_chemical = False
     if request.method == 'POST' and 'delete_chemical' in request.POST:
-        # TODO: ask for confirmation
         if chemical.chemicalstate_set.count() > 0:
             # cause message to appear that you can't delete this chemical bc there is associated data
             warn_delete_chemical = True
-            # TODO: on reload, scroll back to previous scroll position
         else:
             chemical.delete()
             return redirect('/chemlogs/chemicalSearch/')
@@ -101,8 +99,6 @@ def chemical(request, chemical_id):
                 if state.container_set.count() > 0:
                     # show message that you can't delete this state bc there is associated data
                     state_to_delete = state.id
-                    # TODO: on reload, scroll back to previous scroll position
-                    # this may help https://stackoverflow.com/questions/9377951/how-to-remember-scroll-position-and-scroll-back
                 else:
                     state.delete()
             possible_name = 'delete_state_anyway_' + str(state.id)

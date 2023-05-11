@@ -58,6 +58,7 @@
         {% if warn_delete_chemical %} <!-- this appears after the "Remove" button is pressed -->
         <p>There is data associated with this chemical. Are you sure you want to delete "{{chemical}}" and all its data?</p>
         <input type="submit" id="submit" name="delete_chemical_anyway" value="Delete anyway">
+        <input type="submit" id"submit" name="do_nothing" value="Cancel">
         {% endif %}
     </form>
 
@@ -75,6 +76,7 @@
         {% if state_to_delete == state.id %} <!-- this appears below a "delete state" button, after that button was pressed -->
         <p>There is data associated with this state. Are you sure you want to delete "{{state.getInfo}}" and all its data?</p>
         <input type="submit" id="submit" name="delete_state_anyway_{{state.id}}" value="Delete anyway">
+        <input type="submit" id"submit" name="do_nothing" value="Cancel">
         {% endif %}
     </form>
     <button type="button" id="addChem" class="collapsible" onclick="down()"> 
@@ -117,5 +119,18 @@
     {% endfor %}
 
     <script src="{% static 'chemlogs/chemScript.js' %}">  </script>
+
+    <!-- from from https://stackoverflow.com/questions/9377951/how-to-remember-scroll-position-and-scroll-back -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        if (localStorage.getItem("chemlogs-quote-scroll") != null) {
+            $(window).scrollTop(localStorage.getItem("chemlogs-quote-scroll"));
+        }
+        $(window).on("scroll", function() {
+            localStorage.setItem("chemlogs-quote-scroll", $(window).scrollTop());
+        });
+    });
+    </script>
 </body>
 </html>

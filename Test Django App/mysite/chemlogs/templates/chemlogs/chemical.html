@@ -109,6 +109,7 @@
     
     {% for container in state.container_set.all %}
     <h3 class="hoverable"><a href="/chemlogs/container/{{container.id}}">Container {{container.getHeader}}</a></h3>
+    <p>Current amount: {{container.getDisplayableAmount}}</p>
     <!-- we don't necessarily need the add transaction button on this page
     <button type="button" id="addChem" class="collapsible" onclick="down()"> 
         Add chemical <span id="addDropdown">&#9660;</span>

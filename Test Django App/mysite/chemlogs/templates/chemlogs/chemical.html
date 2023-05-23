@@ -42,6 +42,7 @@
     <p><strong>Chemical State: {{chemical.state}}</strong></p>
     <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>-->
     
+
     <button type="button" id="addChem" class="collapsible">
         <span>New Container</span>
     </button>
@@ -51,6 +52,16 @@
         {{ container_create_form.as_p }}
         <input type="submit" id="submit" name="new_container" value="Create">
     </form></div>
+    {% if new_container_id %}
+    <!-- tell the user the new container's id -->
+    <form method="POST">
+        {% csrf_token %}
+    <p>You have made a new container. Its id is {{new_container_id}}. Please mark it physically
+        with this id.</p>
+    <input type="submit" id"submit" name="do_nothing" value="Understood">
+    <br>
+    </form>
+    {% endif %}
 
     <form method="POST">
         {% csrf_token %}
@@ -61,10 +72,20 @@
         <input type="submit" id"submit" name="do_nothing" value="Cancel">
         {% endif %}
     </form>
-
     <br>
-    <h3>Hazard Alert</h3> <!-- it no longer makes sense for this to be its own section -->
-    <p class="indented"><a href="{{chemical.safety}}">{{chemical.safety}}</a></p>
+
+    <!-- sam attempted to make a collapsible. feel free to change if broken -->
+    <button type="button" id="editChem" class="collapsible">
+        <span>Edit Chemical</span>
+    </button>
+    <div class="content" style="display: block; padding-top: 1em; text-align: left">
+    <form method="POST">
+        {% csrf_token %}
+        {{ chemical_edit_form.as_p }}
+        <input type="submit" id="submit" name="edit_chemical" value="Save">
+    </form></div>
+
+    <p><strong><a href="{{chemical.safety}}">Hazard Alert</a></strong></p>
     
     <!-- this block needs to be formatted (see discord for sketch) -->
     {% for state in chemical.chemicalstate_set.all %}
@@ -79,10 +100,13 @@
         <input type="submit" id"submit" name="do_nothing" value="Cancel">
         {% endif %}
     </form>
+
+    <!-- we don't need this if there's no transaction creation on this page
     <button type="button" id="addChem" class="collapsible" onclick="down()"> 
         Add chemical <span id="addDropdown">&#9660;</span>
-        </button>
-    <div class="content" display="none">
+    </button>
+    -->
+    
     {% for container in state.container_set.all %}
     <h3 class="hoverable"><a href="/chemlogs/container/{{container.id}}">Container {{container.getHeader}}</a></h3>
     <!-- we don't necessarily need the add transaction button on this page
@@ -97,11 +121,14 @@
             <input onclick="negateSliderValue()" type="submit" id="submit" class="content" value="Remove">
         </form>
     </div>-->
-    <p>Transaction History</p>
-        <table class="indented">
+    {% if container.noDisplayableTransactions %}
+    <p>No transactions to display</p>
+    {% else %}
+    <p>Transaction history:</p>
+    <table class="indented">
         <tr>
             <th>Date/Time</th>
-            <th>Amount [units]</th>
+            <th>Amount</th>
             <th>Added or Removed</th>
             <th>User</th>
         </tr>
@@ -114,9 +141,9 @@
         </tr>
         {% endfor %}
     </table>
-    {% endfor %}
-    </div>
-    {% endfor %}
+    {% endif %}
+    {% endfor %} <!-- close container loop -->
+    {% endfor %} <!-- close state loop -->
 
     <script src="{% static 'chemlogs/chemScript.js' %}">  </script>
 

@@ -39,6 +39,7 @@ class ChemicalCreateForm(forms.Form):
     cas = forms.CharField(label="CAS") 
     safety = forms.CharField(label="Safety Link", required=False)
     formula = forms.CharField(label="Formula")
+    molar_mass = forms.FloatField(label="Molar Mass", required=False)
 
 class SignInForm(forms.Form): # can also be used to create a user (sign up) (is this used?)
     email = forms.EmailField(label="Email")

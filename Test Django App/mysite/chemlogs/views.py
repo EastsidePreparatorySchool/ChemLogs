@@ -19,6 +19,8 @@ def testPage(request, chemical_id):
 def chemical(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
     container_create_form = None
+    chemical_edit_form = None
+    new_container_id = None
     if request.method == 'POST' and 'new_container' in request.POST:
         container_create_form = ContainerCreateForm(request.POST)
         if container_create_form.is_valid():
@@ -80,6 +82,7 @@ def chemical(request, chemical_id):
                 time=timezone.now(),
                 user=request.user
             )
+            new_container_id = new_container.id
     warn_delete_chemical = False
     if request.method == 'POST' and 'delete_chemical' in request.POST:
         if chemical.chemicalstate_set.count() > 0:
@@ -91,6 +94,17 @@ def chemical(request, chemical_id):
     if request.method == 'POST' and 'delete_chemical_anyway' in request.POST:
         chemical.delete()
         return redirect('/chemlogs/chemicalSearch/')
+    if request.method == 'POST' and 'edit_chemical' in request.POST:
+        chemical_edit_form = ChemicalCreateForm(request.POST)
+        if chemical_edit_form.is_valid():
+            chemical.name=chemical_edit_form.cleaned_data['name']
+            chemical.cas=chemical_edit_form.cleaned_data['cas']
+            if chemical_edit_form.cleaned_data['safety']:
+                chemical.safety=chemical_edit_form.cleaned_data['safety']
+            chemical.formula=chemical_edit_form.cleaned_data['formula']
+            if chemical_edit_form.cleaned_data['molar_mass']:
+                chemical.molar_mass=chemical_edit_form.cleaned_data['molar_mass']
+            chemical.save() # is this line necessary?
     state_to_delete = None # the id of the state the user is trying to delete and getting warned about
     if request.method == 'POST':
         for state in chemical.chemicalstate_set.all():
@@ -115,9 +129,20 @@ def chemical(request, chemical_id):
                 to_append = state.type
             ContainerCreateForm.contents_choices.append((to_append, to_append))
         container_create_form = ContainerCreateForm()
+    if not chemical_edit_form:
+        # reusing chemical create form to edit chemical. form is autopopulated with existing data.
+        chemical_edit_form = ChemicalCreateForm(initial={
+            'name': chemical.name,
+            'cas': chemical.cas,
+            'safety': chemical.safety,
+            'formula': chemical.formula,
+            'molar_mass': chemical.molar_mass
+        })
+
     return render(request, 'chemlogs/chemical.html',
                   {'chemical': chemical, 'container_create_form': container_create_form,
-                   'state_to_delete': state_to_delete, 'warn_delete_chemical': warn_delete_chemical})
+                   'state_to_delete': state_to_delete, 'warn_delete_chemical': warn_delete_chemical,
+                   'chemical_edit_form': chemical_edit_form, 'new_container_id': new_container_id})
 
 def testChem(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
@@ -190,11 +215,6 @@ def container(request, container_id):
         override_form = ContainerOverrideForm()
     return render(request, 'chemlogs/container.html', {'container': container, 'transact_form': transact_form, 'override_form': override_form})
 
-# unimplemented
-def history(request):
-    #return render(request, 'chemlogs/history.html', {'actions': Transaction.objects.exclude(type="I").order_by('-time')})
-    pass
-
 # search for chemicals
 class ChemicalSearch(ListView):
     model = Chemical
@@ -212,7 +232,8 @@ class ChemicalSearch(ListView):
                 name=chemical_create_form.cleaned_data['name'],
                 cas=chemical_create_form.cleaned_data['cas'],
                 safety=chemical_create_form.cleaned_data['safety'],
-                formula=chemical_create_form.cleaned_data['formula'])
+                formula=chemical_create_form.cleaned_data['formula'],
+                molar_mass=chemical_create_form.cleaned_data['molar_mass'])
             new_chemical.save()
         return render(request, self.template_name, self.get_context_data(chemical_create_form))
 

@@ -11,6 +11,7 @@
     <title>Chemical Search</title>
     <link rel="stylesheet" href="{% static 'chemlogs/style/style.css' %}">
 </head>
+
 <body>
     <div class="header">
         <a href="/chemlogs/chemicalSearch"><h4>ChemLogs</h4></a>
@@ -18,10 +19,9 @@
     <div class="header-bottom"></div>
 
     <!-- from https://learndjango.com/tutorials/django-search-tutorial -->
-    <h2>Chemical Search</h2>
 
     <button type="button" id="addChem" class="collapsible">
-        <span>New Chemical</span>
+        <span>Add New Chemical</span>
     </button>
     <div class="content" style="display: block; padding-top: 1em; text-align:left">
     <form method="POST">
@@ -29,8 +29,18 @@
         {{ chemical_create_form.as_p }}
         <input type="submit" id="submit" name="new_chemical" value="Create">
     </form></div>
-    
-    <br><br>
+
+    <form action="/chemlogs/chemicalSearch/" method="GET">
+        {% csrf_token %}
+        <fieldset>
+            <legend><h2>Filters</h2></legend>
+            <input name="name" type="text" placeholder="Search by chemical name or formula"
+                style="width: 70vw;"><br>
+            <input type="checkbox" id="requireSomeInStock" name="requireSomeInStock" value="true">
+            <label for="requireSomeInStock">Only show chemicals that are in stock</label><br>
+        </fieldset>
+        <input type="submit" value="Search">
+    </form><br>
 
     {% if shown_chemicals %}
     {% if all_shown %}
@@ -48,18 +58,6 @@
     {% else %}
     <p>No results</p>
     {% endif %}
-
-    <form action="/chemlogs/chemicalSearch/" method="GET">
-        {% csrf_token %}
-        <fieldset>
-            <legend><h2>Filters</h2></legend>
-            <input name="name" type="text" placeholder="Search by chemical name or formula"
-                style="width: 70vw;"><br>
-            <input type="checkbox" id="requireSomeInStock" name="requireSomeInStock" value="true">
-            <label for="requireSomeInStock">Only show chemicals that are in stock</label><br>
-        </fieldset>
-        <input type="submit" value="Search">
-    </form><br>
 
     <h3>Overall Transaction History</h3>
     <table>

@@ -47,6 +47,9 @@
     </form>
 
     <h3>Transaction History</h3>
+    {% if container.noDisplayableTransactions %}
+    <p>No transactions to display</p>
+    {% else %}
     <table class="indented">
         <tr>
             <th>Date/Time</th>
@@ -61,6 +64,7 @@
         </tr>
         {% endfor %}
     </table>
+    {% endif %}
 
     <script src="{% static 'chemlogs/chemScript.js' %}"> </script>
 

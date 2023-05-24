@@ -278,3 +278,14 @@ label {
 #transaction, #chemicalPage {
    margin: 6vw;
 }
+
+#modifyTransaction p select {
+   background-color: #608a8e;
+   color: #ffffff;
+   padding-left: 1.5vw;
+   padding-bottom: 1vw;
+   font-size: 10;
+   border: none;
+   border-radius: 2vw;
+   width: 60vw;
+}

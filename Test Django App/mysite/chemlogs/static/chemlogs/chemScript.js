@@ -19,17 +19,18 @@ for (i = 0; i < coll.length; i++) {
 }
 
 // Used on page load. Changes how the slider renders.
-function modifySlider() {
+function modifySlider(max) {
     slider = document.getElementById("trSlide");
     slider.type = "range";
     slider.min = "0";
-    slider.max = "100";
+    slider.max = max;
     slider.value = "0";
+    slider.style = "margin: 0vw;"
 }
 
 // Used when "remove" is clicked. Makes slider value negative. Hopefully does not affect frontend.
-function negateSliderValue() {
+/*function negateSliderValue() {  i believe this is unused
     slider = document.getElementById("trSlide");
     slider.min = -100; // this is not a great solution to the problem that value can't be less than min
     slider.value = -slider.value;
-}
+}*/

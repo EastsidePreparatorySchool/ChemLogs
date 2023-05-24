@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction History for {{chemical.name}}</title>
     <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'chemlogs/images/icon.png' %}">
 
     <style>
         #cas-and-amount li {
@@ -20,7 +21,7 @@
 
 <body>
     <div class="header">
-        <a href="/chemlogs/chemicalSearch"><img src="/static/chemlogs/images/icon.png">
+        <a href="/chemlogs/chemicalSearch"><img src="{% static 'chemlogs/images/icon.png' %}">
             <h4>ChemLogs</h4></a>
     </div> 
     <div class="header-bottom"></div>
@@ -130,7 +131,7 @@
     <table class="indented">
         <tr>
             <th>Date/Time</th>
-            <th>Amount</th>
+            <th>Amount ({{container.getUnits}})</th>
             <th>Added or Removed</th>
             <th>User</th>
         </tr>

@@ -47,9 +47,9 @@
     <div id="results">
     {% if shown_chemicals %}
     {% if all_shown %}
-    <p id="resultTxt">Results:</p>
+    <h4 id="resultTxt">Search Results:</h4>
     {% else %}
-    <p> Top results:</p>
+    <h4 id="resultTxt"> Top search results:</h4>
     {% endif %}
     <ul>
         {% for chemical in shown_chemicals %}
@@ -63,6 +63,7 @@
     {% endif %}
     </div>
 
+    <div id="transactTbl">
     <h3>Overall Transaction History</h3>
     <table>
         <tr>
@@ -81,7 +82,8 @@
             <td><a href="/chemlogs/transaction/{{action.id}}">{{action.get_type_display}}</a></td><!-- this gets the verbose name of action.type -->
         </tr>
         {% endfor %}
-    </table>
+    </table></div>
+
 </body>
 
 <script src="{% static 'chemlogs/chemScript.js' %}"></script>

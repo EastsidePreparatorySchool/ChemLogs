@@ -26,31 +26,28 @@
     <button type="button" id="addChem" class="collapsible">
         Add New Chemical
         </button>
-    <div class="content">
+    <div class="content" id="addContent">
     <form method="POST">
         {% csrf_token %}
         {{ chemical_create_form.as_p }}
         <input type="submit" id="submit" name="new_chemical" value="Create">
     </form></div></div>
 
+    <div id="searchDiv">
     <form action="/chemlogs/chemicalSearch/" method="GET">
         {% csrf_token %}
-        <fieldset>
-            <legend><h2>Filters</h2></legend>
-            <div style="display: float;">
-
-            </div>
-            <input name="name" type="text" id="searchbar" placeholder="Search by chemical name or formula">
-            <input type="image" id="search" src="/static/chemlogs/images/search.png">
-            <br>
+            <input name="name" type="text" id="searchbar" placeholder=" Search by chemical name or formula">
+            <input type="image" id="search" src="/static/chemlogs/images/search.png"
+            style="height: 5vw;">
+            <br> </div>
             <input type="checkbox" id="requireSomeInStock" name="requireSomeInStock" value="true">
             <label for="requireSomeInStock">Only show chemicals that are in stock</label><br>
-        </fieldset>
     </form><br>
 
+    <div id="results">
     {% if shown_chemicals %}
     {% if all_shown %}
-    <p>Results:</p>
+    <p id="resultTxt">Results:</p>
     {% else %}
     <p> Top results:</p>
     {% endif %}
@@ -64,6 +61,7 @@
     {% else %}
     <p>No results</p>
     {% endif %}
+    </div>
 
     <h3>Overall Transaction History</h3>
     <table>

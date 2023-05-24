@@ -61,12 +61,23 @@ h3 {
    margin-bottom: 1vw;
 }
 
-p, p a, td, td a, li, li a {
+p, p a, td, td a {
    font-size: 4vw;
-   color: #71a7a3;
+   color: #608a8e;
    padding: 0vh;
    margin: 0vh;
    text-decoration: none;
+   list-style-type: none;
+}
+
+li, li a {
+   font-size: 4vw;
+   color: #608a8e;
+   padding: 0vw;
+   margin: 0vw;
+   margin-left: -3vw;
+   text-decoration: none;
+   list-style-type: none;
 }
 
 td {
@@ -104,20 +115,27 @@ a:link, a:visited, a:hover, a:active{
 
 /* chemical entry dropdown attributes */
 #addChem {
-   text-align: center; 
+   text-align: center;
+   font-size: 1em;
    outline-color: none; 
    margin: 3vw;
    padding-bottom: -2vw;
    background-color: #608a8e;
    color: #ffffff; 
    border-width: 0px; 
-   border-radius: 3vw; 
+   border-radius: 2vw; 
    width: 15em; 
-   height: 3em;
+   height: 2.5em;
 }
 
 #addChem:hover {
    background-color: #4b6d72;
+}
+
+#addContent {
+   margin: 5vw;
+   margin-top: -10px;
+   text-align: center;
 }
 
 #trSlide {
@@ -128,10 +146,6 @@ a:link, a:visited, a:hover, a:active{
    background-color: #608a8e; 
    opacity: 0.6; 
    margin-left: 15%;
-}
-
-#name {
-   width: 70vw
 }
 
 #submit {
@@ -149,16 +163,43 @@ a:link, a:visited, a:hover, a:active{
    background-color: #456a6d;
 }
 
+#searchDiv {
+   text-align: center;
+   margin: ;
+}
+
 #searchbar {
    width: 70vw;
+   height: 6vw;
+   background-color: #f2fbff;
    border: none;
-   border-bottom: #314876;
+   border-bottom: 10vw #314876;
 }
 
 #search {
-   width: 2vw; 
+   width: 4vw; 
+   height: 9vw;
+   margin-bottom: -4px;
+}
+
+#requireSomeInStock {
+   margin-left: 10vw;
    height: 3vw;
-   background-color: #1cb16c;
+}
+
+label {
+   font-size: 3vw;
+}
+
+#resultTxt {
+   margin-bottom: -2vw;
+}
+
+#results {
+   padding: 6vw;
+   margin: 6vw;
+   background-color: #cededd;
+   border-radius: 3vw;
 }
 
 .button {
@@ -169,7 +210,7 @@ a:link, a:visited, a:hover, a:active{
 .content{
    display: block; 
    margin: 1vw;
-   padding-left: 12vw;
+   padding-left: 10vw;
    text-align:left;
    background-color: #ffffff;
    max-height: 0;

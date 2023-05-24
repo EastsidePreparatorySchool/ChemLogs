@@ -237,3 +237,15 @@ label {
    margin-top: 8vw;
    font-size: 3.5vw;
 }
+
+#login {
+   display: block; 
+   text-align: center;
+   padding: 2vw;
+}
+
+#login #submit{
+   display: block; 
+   text-align: right;
+   padding: 2vw;
+}

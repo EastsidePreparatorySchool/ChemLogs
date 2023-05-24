@@ -7,15 +7,15 @@
 
 <head>
     <title>ChemLogs Login</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
 </head>
 
-<div style="display: block; text-align: center;">
+<div id="login">
   <h2>ChemLogs</h2>
   <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">Log In</button>
+  <button type="submit" id="submit">Log In</button>
 </form>
 </div>
 

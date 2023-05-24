@@ -174,6 +174,7 @@ def transaction(request, transaction_id):
             # there should be a confirmation "are you sure?"
     if not edit_form:
         edit_form = TransactionEditForm(initial={'amount': transaction.amount, 'type': transaction.type})
+        edit_form.fields['amount'].label += ' (' + transaction.container.getUnits() + ')'
     return render(request, 'chemlogs/transaction.html', {'transaction': transaction, 'edit_form': edit_form})
 
 def container(request, container_id):
@@ -254,7 +255,7 @@ class ChemicalSearch(ListView):
             # https://docs.djangoproject.com/en/4.1/topics/db/queries/#complex-lookups-with-q
             # used the above for the OR query, since filter() can't handle it
             toDisplay = toDisplay.filter(Q(name__icontains=nameSearch) | 
-                Q(formula__icontains=nameSearch))
+                Q(formula__icontains=nameSearch) | Q(cas__icontains=nameSearch))
         if requireSomeInStock:
             toDisplay = [chemical for chemical in toDisplay if ChemicalSearch.inStock(chemical)]
         return toDisplay[:ChemicalSearch.len_results_displayed]

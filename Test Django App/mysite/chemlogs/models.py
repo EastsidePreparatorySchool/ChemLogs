@@ -140,12 +140,13 @@ class Container(models.Model):
     
     # return amount in g, with units. if aqueous, also add amount in mL, in parentheses.
     # if amount is specified, it is used instead of self.computeRawAmount.
+    # amounts are rounded to two decimal places.
     def getDisplayableAmount(self, amount=None):
         if not amount:
             amount = self.computeRawAmount()
-        display = str(self.computeAmount(amount)) + 'g'
+        display = str(round(self.computeAmount(amount), 2)) + 'g'
         if self.molarity:
-            display = str(amount) + 'mL (' + display + ')'
+            display = str(round(amount, 2)) + 'mL (' + display + ')'
         return display
     
     def getInitialDisplayableAmount(self):

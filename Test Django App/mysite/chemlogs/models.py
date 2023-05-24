@@ -110,7 +110,7 @@ class Container(models.Model):
     def noDisplayableTransactions(self):
         return len(self.getTransactionsToDisplay()) == 0
     
-    # returns g or mL, whichever is more appropriate. this method is probably not necessary.
+    # returns g or mL, whichever is more appropriate
     def getUnits(self):
         if self.molarity:
             return 'mL'
@@ -141,7 +141,6 @@ class Container(models.Model):
     # return amount in g, with units. if aqueous, also add amount in mL, in parentheses.
     # if amount is specified, it is used instead of self.computeRawAmount.
     def getDisplayableAmount(self, amount=None):
-        print('sdfsd')
         if not amount:
             amount = self.computeRawAmount()
         display = str(self.computeAmount(amount)) + 'g'

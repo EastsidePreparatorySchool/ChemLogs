@@ -6,42 +6,37 @@
 body {
    font-family: Arial, Helvetica, sans-serif;
    background-color: #f2fbff;
-   padding: 3vw;
 }
 
 /* header bar on all pages */
 
 .header {
    font-size: calc(22px + 0.5vw);
-   padding-right: 2vw;
-   padding-bottom: 1.5vw;
-   margin-top: 1vw;
-   margin-bottom: 1.5vw;
+   margin-top: 2vw;
+   padding: 2vw;
    font-family: Arial, Helvetica, sans-serif;
    color: #314876;
-   display: inline;
+   display: float;
 }
 
 .header h4 {
    display: inline;
    color: #314876;
+   margin-left: -5px;
 }
 
 .header img {
-   position: absolute;
-   right: 3vw;
+   left: 3vw;
    top: 3vw;
-   width: 10vw;
+   height: 20px;
 }
 
 .header-bottom {
-   height: 1.5vh;
+   height: 3vw;
    width: 100vw;
-   margin-top: (8px + 0.1vw);
+   margin: 1vw;
    background-image: linear-gradient(rgba(150, 150, 150, 0.2), rgba(255, 255, 255, 0));
 }
-
-
 /* standard text tags */
 
 h1 {
@@ -109,17 +104,20 @@ a:link, a:visited, a:hover, a:active{
 
 /* chemical entry dropdown attributes */
 #addChem {
-   padding-top: 3px; 
-   padding-bottom: 3px; 
-   margin-left: 5%;
    text-align: center; 
    outline-color: none; 
+   margin: 3vw;
+   padding-bottom: -2vw;
    background-color: #608a8e;
    color: #ffffff; 
    border-width: 0px; 
-   border-radius: 1em; 
-   width: 10em; 
-   height: 2em;
+   border-radius: 3vw; 
+   width: 15em; 
+   height: 3em;
+}
+
+#addChem:hover {
+   background-color: #4b6d72;
 }
 
 #trSlide {
@@ -136,22 +134,44 @@ a:link, a:visited, a:hover, a:active{
    width: 70vw
 }
 
-.input {
-   background-color: #314876;
+#submit {
+   background-color: #608a8e;
    color: #ffffff;
+   padding-left: 1.5vw;
+   padding-bottom: 1vw;
    transition-duration: 0.5s;
    font-size: 10;
+   border: none;
+   border-radius: 2vw;
 }
 
-.input:hover {
-   background-color: #103071;
+#submit:hover {
+   background-color: #456a6d;
+}
+
+#searchbar {
+   width: 70vw;
+   border: none;
+   border-bottom: #314876;
+}
+
+#search {
+   width: 2vw; 
+   height: 3vw;
+   background-color: #1cb16c;
 }
 
 .button {
    display: flex;
+   
 }
 
 .content{
+   display: block; 
+   margin: 1vw;
+   padding-left: 12vw;
+   text-align:left;
+   background-color: #ffffff;
    max-height: 0;
    overflow: hidden;
    transition: max-height 0.2s ease-out;

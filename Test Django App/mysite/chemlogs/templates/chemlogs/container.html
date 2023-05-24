@@ -7,13 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Container {{container.id}}</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
 </head>
 <body onload="modifySlider()">
     <div class="header">
-        <h4>ChemLogs</h4>
-        <a href="/chemlogs/chemicalSearch"><img src="{% static 'chemlogs/images/home.jpg' %}"></a>
-    </div>
+        <a href="/chemlogs/chemicalSearch"><img src="/static/chemlogs/images/icon.png">
+            <h4>ChemLogs</h4></a>
+    </div> 
     <div class="header-bottom"></div>
 
     <h3>{{container.contents.chemical}} {{container.getHeader}}</h3>
@@ -26,15 +26,16 @@
     <p><strong>Initial Amount: {{container.initial_value}}</strong></p>
     <br>
 
-    <button type="button" id="addChem" class="collapsible" onclick="down()"> 
-        Add chemical <span id="addDropdown">&#9660;</span>
+    <button type="button" id="addChem" class="collapsible"> 
+        Add chemical 
         </button>
-    <div class="content" style="display: none; padding-top: 1em;">
-        <form method="post">
+    <div class="content" style="display: block; padding-top: 1em;">
+        <form method="POST">
             {% csrf_token %}
             {{ transact_form }}
-            <input type="submit" id="submit" name="transact_add" class="content" value="Add">
-            <input type="submit" id="submit" name="transact_remove" class="content" value="Remove">
+            <br><br>
+            <input type="submit" id="submit" name="transact_add" value="Add"> 
+            <input type="submit" id="submit" name="transact_remove" value="Remove">
         </form>
     </div>
 

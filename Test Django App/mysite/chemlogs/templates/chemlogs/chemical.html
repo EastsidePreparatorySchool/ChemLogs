@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction History for {{chemical.name}}</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
 
     <style>
         #cas-and-amount li {
@@ -20,9 +20,10 @@
 
 <body>
     <div class="header">
-        <a href="/chemlogs/chemicalSearch"><h4>ChemLogs</h4></a>
-    </div>
-    <div class="header-bottom"></div> <!-- maybe replace this with an <hr> -->
+        <a href="/chemlogs/chemicalSearch"><img src="/static/chemlogs/images/icon.png">
+            <h4>ChemLogs</h4></a>
+    </div> 
+    <div class="header-bottom"></div>
 
     <p style="padding-top: 1vw;"><strong>{{chemical.formula|displayFormula}}</strong></p>
     <h1>{{chemical.name}}</h1>
@@ -58,7 +59,7 @@
         {% csrf_token %}
     <p>You have made a new container. Its id is {{new_container_id}}. Please mark it physically
         with this id.</p>
-    <input type="submit" id"submit" name="do_nothing" value="Understood">
+    <input type="submit" id="submit" name="do_nothing" value="Understood">
     <br>
     </form>
     {% endif %}

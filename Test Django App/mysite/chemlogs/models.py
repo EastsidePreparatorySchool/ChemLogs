@@ -110,19 +110,46 @@ class Container(models.Model):
     def noDisplayableTransactions(self):
         return len(self.getTransactionsToDisplay()) == 0
     
-    # returns the current mass, in grams, of the contents of this bottle
-    def computeAmount(self):
+    # returns g or mL, whichever is more appropriate
+    def getUnits(self):
+        if self.molarity:
+            return 'mL'
+        else:
+            return 'g'
+    
+    # returns current amount, in either mL or g (whichever is more fitting)
+    def computeRawAmount(self):
         amount = 0
         for transaction in self.transaction_set.all().order_by('time'):
             if transaction.type in {"T", "N"}:
                 amount += transaction.amount
             elif transaction.type == "R":
                 amount = transaction.amount
+        return amount
+    
+    # returns the current mass, in grams, of the contents of this bottle.
+    # if amount is specified, that raw amount is used instead.
+    def computeAmount(self, amount=None):
+        if not amount:
+            amount = self.computeRawAmount()
         if self.molarity:
             # convert from mL to g
             amount *= self.molarity / 1000
             amount *= self.contents.chemical.molar_mass
         return amount
+    
+    # return amount in g, with units. if aqueous, also add amount in mL, in parentheses.
+    # if amount is specified, it is used instead of self.computeRawAmount.
+    def getDisplayableAmount(self, amount=None):
+        if not amount:
+            amount = self.computeRawAmount()
+        display = str(self.computeAmount(amount)) + 'g'
+        if self.molarity:
+            display = str(amount) + 'mL (' + display + ')'
+        return display
+    
+    def getInitialDisplayableAmount(self):
+        return self.getDisplayableAmount(self.initial_value)
 
 class Transaction(models.Model):
     TYPE_CHOICES = [

@@ -213,6 +213,7 @@ def container(request, container_id):
         transact_form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
     if not override_form:
         override_form = ContainerOverrideForm()
+        override_form.fields['override_value'].label += ' (' + container.getUnits() + ')'
     return render(request, 'chemlogs/container.html', {'container': container, 'transact_form': transact_form, 'override_form': override_form})
 
 # search for chemicals

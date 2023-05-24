@@ -59,12 +59,14 @@
             <th>Date/Time</th>
             <th>Amount ({{container.getUnits}})</th>
             <th>Added or Removed</th>
+            <th>User</th>
         </tr>
         {% for transaction in container.getTransactionsToDisplay %}
         <tr class="hoverable">
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.user}}</a></td>
         </tr>
         {% endfor %}
     </table>

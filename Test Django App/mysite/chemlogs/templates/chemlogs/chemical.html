@@ -26,8 +26,8 @@
     </div>
     <div class="header-bottom"></div>
 
-    <p style="padding-top: 1vw;"><strong>{{chemical.formula|displayFormula}}&emsp;{{chemical.cas}}&emsp;<a href="{{chemical.safety}}">SDS</a></strong></p>
-    <h1>{{chemical.name}}</h1>
+    <p style="margin: 4vw; margin-bottom: 0vw;"><strong>{{chemical.formula|displayFormula}}&emsp;{{chemical.cas}}&emsp;<a href="{{chemical.safety}}">SDS</a></strong></p>
+    <h1 style="margin: 4vw; margin-top: 1vw; margin-bottom: -8vw;">{{chemical.name}}</h1>
     <!--<ul id="cas-and-amount">
         <li style="text-align: left;">{{chemical.cas}}</li>
         <li style="text-align: right;">{{chemical.computeAmount}}[units]</li>
@@ -44,10 +44,38 @@
     <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>-->
     
     <div id="chemicalPage">
-    <button type="button" id="addChem" class="collapsible">
+    
+    <div style="display: flex;">
+    
+    <div style="display: inline;">
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" id="del" name="delete_chemical" value="Remove this chemical">
+        {% if warn_delete_chemical %} <!-- this appears after the "Remove" button is pressed -->
+        <p>There is data associated with this chemical. Are you sure you want to delete "{{chemical}}" and all its data?</p>
+        <input type="submit" id="del" name="delete_chemical_anyway" value="Delete anyway">
+        <input type="submit" id="submit" name="do_nothing" value="Cancel">
+        {% endif %}
+    </form> </div>
+
+    <div style="display: inline;">
+    <!-- sam attempted to make a collapsible. feel free to change if broken -->
+    <button type="button" id="editChem" class="collapsible" 
+        style="width: fit-content; height: fit-content; font-size: 4vw; margin-top: -1vw;">
+        <span>Edit Chemical</span>
+    </button>
+    <div class="content" style="display: block; padding: 1vw; text-align: left;
+        ">
+    <form method="POST">
+        {% csrf_token %}
+        {{ chemical_edit_form.as_p }}
+        <input type="submit" id="submit" name="edit_chemical" value="Save">
+    </form></div></div></div>
+
+    <button type="button" id="addChem" class="collapsible" style="margin-top: 0vw;">
         <span>New Container</span>
     </button>
-    <div class="content" style="display: block; padding-top: 1em; text-align:left">
+    <div class="content" style="display: block; padding-left: -4vw; text-align:left, margin-top=-2vw">
     <form method="POST">
         {% csrf_token %}
         {{ container_create_form.as_p }}
@@ -60,31 +88,8 @@
     <p>You have made a new container. Its id is {{new_container_id}}. Please mark it physically
         with this id.</p>
     <input type="submit" id="submit" name="do_nothing" value="Understood">
-    <br>
     </form>
     {% endif %}
-
-    <form method="POST">
-        {% csrf_token %}
-        <input type="submit" id="submit" name="delete_chemical" value="Remove this chemical">
-        {% if warn_delete_chemical %} <!-- this appears after the "Remove" button is pressed -->
-        <p>There is data associated with this chemical. Are you sure you want to delete "{{chemical}}" and all its data?</p>
-        <input type="submit" id="submit" name="delete_chemical_anyway" value="Delete anyway">
-        <input type="submit" id="submit" name="do_nothing" value="Cancel">
-        {% endif %}
-    </form>
-    <br>
-
-    <!-- sam attempted to make a collapsible. feel free to change if broken -->
-    <button type="button" id="editChem" class="collapsible">
-        <span>Edit Chemical</span>
-    </button>
-    <div class="content" style="display: block; padding-top: 1em; text-align: left">
-    <form method="POST">
-        {% csrf_token %}
-        {{ chemical_edit_form.as_p }}
-        <input type="submit" id="submit" name="edit_chemical" value="Save">
-    </form></div>
     
     <!-- this block needs to be formatted (see discord for sketch) -->
     {% for state in chemical.chemicalstate_set.all %}

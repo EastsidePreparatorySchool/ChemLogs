@@ -43,7 +43,7 @@
     <p><strong>Chemical State: {{chemical.state}}</strong></p>
     <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>-->
     
-
+    <div id="chemicalPage">
     <button type="button" id="addChem" class="collapsible">
         <span>New Container</span>
     </button>
@@ -146,6 +146,8 @@
     {% endif %}
     {% endfor %} <!-- close container loop -->
     {% endfor %} <!-- close state loop -->
+    
+    </div>
 
     <script src="{% static 'chemlogs/chemScript.js' %}">  </script>
 

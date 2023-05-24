@@ -30,6 +30,7 @@
         <input type="submit" value="Change">
     </form>-->
 
+    <div id="transaction">
     <form method="POST">
         {% csrf_token %}
         <legend><h2>Modify Transaction</h2></legend>
@@ -44,5 +45,6 @@
         <input type="submit" value="Save Changes">
     </form>
     <p class="hoverable"><a href="/chemlogs/container/{{transaction.container.id}}/">Return to Container Page</a></p>
+    </div>
 </body>
 </html>

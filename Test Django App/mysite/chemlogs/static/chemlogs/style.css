@@ -150,9 +150,10 @@ a:link, a:visited, a:hover, a:active{
 }
 
 #addContent {
-   margin: 5vw;
    margin-top: -10px;
-   text-align: center;
+   margin-left: 6vw;
+   text-align: left;
+   border: none;
 }
 
 #trSlide {
@@ -254,6 +255,11 @@ label {
 
 #login #submit{
    display: block; 
-   text-align: right;
+   margin: 2vw;
+   margin-left: 60vw;
    padding: 2vw;
+}
+
+#transaction, #chemicalPage {
+   margin: 6vw;
 }

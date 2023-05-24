@@ -233,9 +233,11 @@ class ChemicalSearch(ListView):
             new_chemical = Chemical.objects.create(
                 name=chemical_create_form.cleaned_data['name'],
                 cas=chemical_create_form.cleaned_data['cas'],
-                safety=chemical_create_form.cleaned_data['safety'],
-                formula=chemical_create_form.cleaned_data['formula'],
-                molar_mass=chemical_create_form.cleaned_data['molar_mass'])
+                formula=chemical_create_form.cleaned_data['formula'])
+            if chemical_create_form.cleaned_data['safety']:
+                new_chemical.safety=chemical_create_form.cleaned_data['safety']
+            if chemical_create_form.cleaned_data['molar_mass']:
+                new_chemical.molar_mass=chemical_create_form.cleaned_data['molar_mass']
             new_chemical.save()
         return render(request, self.template_name, self.get_context_data(chemical_create_form))
 

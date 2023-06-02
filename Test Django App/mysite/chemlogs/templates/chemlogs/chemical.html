@@ -54,15 +54,15 @@
         {% if warn_delete_chemical %} <!-- this appears after the "Remove" button is pressed -->
         <p>There is data associated with this chemical. Are you sure you want to delete "{{chemical}}" and all its data?</p>
         <input type="submit" id="del" name="delete_chemical_anyway" value="Delete anyway">
-        <input type="submit" id="submit" name="do_nothing" value="Cancel">
+        <input type="submit" id="submit" name="do_nothing" value="Cancel" style="margin-bottom: 2vw; margin-top: 1vw;">
         {% endif %}
     </form> </div>
 
     <div style="display: inline;">
     <!-- sam attempted to make a collapsible. feel free to change if broken -->
     <button type="button" id="editChem" class="collapsible" 
-        style="width: fit-content; height: fit-content; font-size: 4vw; margin-top: -1vw;">
-        <span>Edit Chemical</span>
+        style="width: fit-content; height: fit-content; font-size: 4vw; margin-top: -1vw; position: relative; top: 0.2vw;">
+        <div style="padding: 0.3vw;">Edit Chemical</div>
     </button>
     <div class="content" style="display: block; padding: 1vw; text-align: left;
         ">

@@ -145,6 +145,12 @@ a:link, a:visited, a:hover, a:active{
    height: 2.5em;
 }
 
+#editChem span {
+   padding-bottom: 5vw;
+   border-bottom: 5vw;
+   margin-bottom: 5vw;
+}
+
 #addChem:hover, #editChem:hover {
    background-color: #4b6d72;
 }

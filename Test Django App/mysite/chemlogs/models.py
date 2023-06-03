@@ -70,7 +70,7 @@ class ChemicalState(models.Model):
     
     # human-readable notification for if this is low
     def getNotification(self):
-        notification = "\n\t\u2022 " + self.chemical.name + " " + self.getInfo()
+        notification = "<br>&emsp;&#x2022; " + self.chemical.name + " " + self.getInfo()
         notification += ": Total supply is "
         notification += str(round(self.computeAmount(), 2))
         notification += "g. Minimum threshold is "

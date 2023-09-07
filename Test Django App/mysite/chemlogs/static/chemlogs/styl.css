@@ -131,7 +131,7 @@ a:link, a:visited, a:hover, a:active{
  }
 
 /* chemical entry dropdown attributes */
-#addChem, #editChem {
+#addChem, #editChem, #editState {
    text-align: center;
    font-size: 1em;
    outline-color: none; 
@@ -145,13 +145,13 @@ a:link, a:visited, a:hover, a:active{
    height: 2.5em;
 }
 
-#editChem span {
+#editChem, #editState span {
    padding-bottom: 5vw;
    border-bottom: 5vw;
    margin-bottom: 5vw;
 }
 
-#addChem:hover, #editChem:hover {
+#addChem:hover, #editChem:hover, #editState:hover {
    background-color: #4b6d72;
 }
 

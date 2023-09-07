@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 from django.utils import timezone
 from .models import Chemical, Transaction, TransactionEdit, Container
-from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm
+from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm, StateEditForm
 import itertools
 from django.contrib.auth import get_user_model
 
@@ -21,6 +21,7 @@ def chemical(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
     container_create_form = None
     chemical_edit_form = None
+    state_edit_form = None
     new_container_id = None
     if request.method == 'POST' and 'new_container' in request.POST:
         container_create_form = ContainerCreateForm(request.POST)
@@ -139,11 +140,15 @@ def chemical(request, chemical_id):
             'formula': chemical.formula,
             'molar_mass': chemical.molar_mass
         })
+    if not state_edit_form:
+        # reusing state create form to edit state. form is autopopulated with existing data.
+        state_edit_form = StateEditForm()
 
     return render(request, 'chemlogs/chemical.html',
                   {'chemical': chemical, 'container_create_form': container_create_form,
                    'state_to_delete': state_to_delete, 'warn_delete_chemical': warn_delete_chemical,
-                   'chemical_edit_form': chemical_edit_form, 'new_container_id': new_container_id})
+                   'chemical_edit_form': chemical_edit_form, 'state_edit_form': state_edit_form,
+                   'new_container_id': new_container_id})
 
 def testChem(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
@@ -186,31 +191,61 @@ def container(request, container_id):
         if "transact_add" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
             if transact_form.is_valid():
-                container.transaction_set.create(
-                    amount=transact_form.cleaned_data['trSlide'],
-                    time=timezone.now(),
-                    type="T",
-                    user=request.user)
-                # some kind of confirmation ("you have added/removed this much")
+                delta = transact_form.cleaned_data['trSlide']
+                new_value=container.computeRawAmount() + delta
+                if new_value > 0 and new_value < container.initial_value:
+                    container.transaction_set.create(
+                        amount=transact_form.cleaned_data['trSlide'],
+                        time=timezone.now(),
+                        type="T",
+                        user=request.user)
+                    # some kind of confirmation ("you have added/removed this much")
+                else:
+                    # invalidity message
+                    pass
         elif "transact_remove" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
             if transact_form.is_valid():
-                value = 0 - transact_form.cleaned_data['trSlide']
-                container.transaction_set.create(
-                    amount=value,
-                    time=timezone.now(),
-                    type="T",
-                    user=request.user)
-                # add confirmation
+                delta = 0 - transact_form.cleaned_data['trSlide']
+                new_value=container.computeRawAmount() + delta
+                if new_value > 0 and new_value < container.initial_value:
+                    container.transaction_set.create(
+                        amount=delta,
+                        time=timezone.now(),
+                        type="T",
+                        user=request.user)
+                    # add confirmation
+                else:
+                    # invalidity message
+                    pass
         elif "override" in request.POST:
             override_form = ContainerOverrideForm(request.POST, auto_id='%s')
             if override_form.is_valid():
-                container.transaction_set.create(
-                    amount=override_form.cleaned_data['override_value'],
-                    time=timezone.now(),
-                    type="R",
-                    user=request.user)
-                # add confirmation
+                new_value = override_form.cleaned_data['override_value']
+                if new_value > 0 and new_value < container.initial_value:
+                    container.transaction_set.create(
+                        amount=new_value,
+                        time=timezone.now(),
+                        type="R",
+                        user=request.user)
+                    # add confirmation
+                else:
+                    # invalidity: tell user that the new amount must be within the bottle size and nonnegative
+                    pass
+        elif "transact_fill" in request.POST:
+            container.transaction_set.create(
+                amount=container.initial_value,
+                time=timezone.now(),
+                type="R",
+                user=request.user)
+            # add confirmation
+        elif "transact_empty" in request.POST:
+            container.transaction_set.create(
+                amount=0,
+                time=timezone.now(),
+                type="R",
+                user=request.user)
+            # add confirmation
     if not transact_form:
         transact_form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
     if not override_form:

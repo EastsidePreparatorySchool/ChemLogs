@@ -10,12 +10,25 @@ for (i = 0; i < coll.length; i++) {
     // } else {
     //   content.style.display = "none";
     // }
-    if (content.style.maxHeight){
-      content.style.maxHeight = null;
+    if (content.style.maxHeight && content.style.maxHeight != "0px"){
+      content.style.maxHeight = "0px";
+      //content.style.visibility = "collapse";
     } else {
       content.style.maxHeight = content.scrollHeight + "px";
+      //content.style.visibility = "visible";
     }
   });
+}
+
+// hide a collapsible. not used
+function hide(content) {
+  content.style.maxHeight = "0px";
+}
+
+// hide one very specific collapsible. not used
+function hideChemDeleteForm() {
+  hide(document.getElementById("chemDeleteForm"))
+  alert("hidden")
 }
 
 // Used on page load. Changes how the slider renders.

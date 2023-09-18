@@ -65,17 +65,17 @@ class ChemicalState(models.Model):
         return output
 
     def needMore(self):
-        if self.computeAmount() < self.min_thresh:
+        if self.min_thresh and self.computeAmount() < self.min_thresh:
             return True
         return False
     
     # human-readable notification for if this is low
     def getNotification(self):
-        notification = "\t" + self.chemical.name + " " + self.getInfo()
+        notification = "<br>&emsp;&#x2022; " + self.chemical.name + " " + self.getInfo()
         notification += ": Total supply is "
-        notification += str(self.computeAmount())
-        notification += " (mL or g). Minimum threshold is "
-        notification += str(self.min_thresh) + "."
+        notification += str(round(self.computeAmount(), 2))
+        notification += "g. Minimum threshold is "
+        notification += str(self.min_thresh) + "g."
         return notification
 
 # represents a container of a chemical

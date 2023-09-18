@@ -8,6 +8,7 @@ from django.utils import timezone
 from .models import Chemical, Transaction, TransactionEdit, Container
 from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm
 import itertools
+from django.contrib.auth import get_user_model
 
 
 # unused
@@ -217,6 +218,12 @@ def container(request, container_id):
         override_form = ContainerOverrideForm()
         override_form.fields['override_value'].label += ' (' + container.getUnits() + ')'
     return render(request, 'chemlogs/container.html', {'container': container, 'transact_form': transact_form, 'override_form': override_form})
+
+def delete_account(request, user_id):
+    User = get_user_model()
+    user = get_object_or_404(User, pk=user_id)
+    user.delete()
+    return render(request, 'chemlogs/delete_account.html', {'user': user})
 
 # search for chemicals
 class ChemicalSearch(ListView):

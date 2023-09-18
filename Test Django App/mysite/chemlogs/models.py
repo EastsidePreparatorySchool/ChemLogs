@@ -27,6 +27,7 @@ class Chemical(models.Model):
     name = models.CharField(max_length=50) # later will decide what max length should be
     molar_mass = models.FloatField(default=0, null=True) # in g/mol
     safety = models.TextField(default="", null=True)
+    dangerous = models.BooleanField(default="True")
 
     def __str__(self):
         return self.name

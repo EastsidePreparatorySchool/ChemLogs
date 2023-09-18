@@ -136,7 +136,8 @@ def chemical(request, chemical_id):
             'cas': chemical.cas,
             'safety': chemical.safety,
             'formula': chemical.formula,
-            'molar_mass': chemical.molar_mass
+            'molar_mass': chemical.molar_mass,
+            'dangerous': chemical.dangerous
         })
 
     return render(request, 'chemlogs/chemical.html',

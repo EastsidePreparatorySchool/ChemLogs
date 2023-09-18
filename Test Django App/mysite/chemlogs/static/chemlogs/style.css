@@ -113,6 +113,7 @@ p strong {
 .hoverable:hover {
    text-decoration: underline;
    text-decoration-color: #608a8e;
+   overflow:hidden;
 }
 
 th {
@@ -128,6 +129,7 @@ th {
 
 a:link, a:visited, a:hover, a:active{
    text-decoration: none;
+   overflow:hidden;
  }
 
 /* chemical entry dropdown attributes */
@@ -147,6 +149,7 @@ a:link, a:visited, a:hover, a:active{
 
 #addChem:hover, #editChem:hover {
    background-color: #4b6d72;
+   overflow:hidden;
 }
 
 #addContent {
@@ -179,6 +182,7 @@ a:link, a:visited, a:hover, a:active{
 
 #submit:hover {
    background-color: #456a6d;
+   overflow:hidden;
 }
 
 #del {
@@ -190,10 +194,12 @@ a:link, a:visited, a:hover, a:active{
    font-size: 10;
    border: none;
    border-radius: 2vw;
+   overflow:hidden;
 }
 
 #del:hover {
    background-color: #db7227;
+   overflow:hidden;
 }
 
 #searchDiv {

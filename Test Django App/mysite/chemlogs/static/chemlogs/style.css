@@ -155,7 +155,7 @@ a:link, a:visited, a:hover, a:active{
    background-color: #4b6d72;
 }
 
-#addContent {
+#addContainerForm {
    margin-top: -10px;
    margin-left: 6vw;
    text-align: left;
@@ -248,7 +248,6 @@ label {
 
 .button {
    display: flex;
-   
 }
 
 .content{
@@ -294,4 +293,8 @@ label {
    border: none;
    border-radius: 2vw;
    width: 60vw;
+}
+
+.collapsible {
+
 }

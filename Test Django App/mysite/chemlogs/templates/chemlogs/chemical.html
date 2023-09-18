@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction History for {{chemical.name}}</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/styl.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
     <link rel="icon" type="image/png" href="{% static 'chemlogs/images/icon.png' %}">
 
     <style>
@@ -48,35 +48,35 @@
     <div style="display: flex;">
     
     <div style="display: inline;">
+    
+    <button id="del" class="collapsible" onclick="toggleVisibilityId('chemDeleteForm')">Remove this chemical</button>
+    <button type="button" id="editChem" class="collapsible" onclick="toggleVisibilityId('editChemForm')"
+        style="width: fit-content; height: fit-content; font-size: 4vw;">Edit Chemical
+    </button>
+    
+    <div class="content" id="chemDeleteForm">
     <form method="POST">
         {% csrf_token %}
-        <input type="submit" id="del" name="delete_chemical" value="Remove this chemical">
-        {% if warn_delete_chemical %} <!-- this appears after the "Remove" button is pressed -->
-        <div id="chemDeleteForm">
-        <p>There is data associated with this chemical. Are you sure you want to delete "{{chemical}}" and all its data?</p>
+        <p>Warning: deleting this chemical will delete all its states and containers ({{chemical.chemicalstate_set.count}} states and {{chemical.getContainerCount}} containers). Are you sure you want to delete "{{chemical}}" and all associated data?</p>
         <input type="submit" id="del" name="delete_chemical_anyway" value="Delete anyway">
-        <input type="submit" id="submit" name="do_nothing" value="Cancel" style="margin-bottom: 2vw; margin-top: 1vw;">
-        </div>
-        {% endif %}
-    </form> </div>
+    </form>
+    <button onclick="hideId('chemDeleteForm')" style="margin-bottom: 2vw; margin-top: 1vw;">Cancel</button>
+    </div>
+    </div>
+        
+    </div>
 
-    <div style="display: inline;">
-    <!-- sam attempted to make a collapsible. feel free to change if broken -->
-    <button type="button" id="editChem" class="collapsible" onclick="hideChemDeleteForm()"
-        style="width: fit-content; height: fit-content; font-size: 4vw; margin-top: -1vw; position: relative; top: 0.2vw;">
-        <div style="padding: 0.3vw;">Edit Chemical</div>
-    </button>
-    <div class="content" style="display: block; padding: 1vw; text-align: left;">
+    <div class="content" style="display: block; padding: 1vw; text-align: left;" id="editChemForm">
     <form method="POST">
         {% csrf_token %}
         {{ chemical_edit_form.as_p }}
         <input type="submit" id="submit" name="edit_chemical" value="Save">
-    </form></div></div></div>
+    </form></div></div>
 
-    <button type="button" id="addChem" class="collapsible" style="margin-top: 0vw;">
+    <button type="button" id="addChem" class="collapsible" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">
         <span>New Container</span>
     </button>
-    <div class="content" style="display: block; padding-left: -4vw; text-align:left, margin-top=-2vw">
+    <div id="newContainerForm" class="content" style="display: block; padding-left: -4vw; text-align:left, margin-top=-2vw">
     <form method="POST">
         {% csrf_token %}
         {{ container_create_form.as_p }}
@@ -98,27 +98,24 @@
         <h2 style="margin: 1.5vw;">State: {{state.getInfo|capfirst}}</h2>
     </div>
     <p>{{state.computeAmount|floatformat:2}}g in stock</p>
-    <div style="display: inline;">
+    <button class="collapsible" onclick="toggleVisibilityId('stateDeleteForm{{state.id}}')">Remove this state</button>
+    <button class="collapsible" onclick="toggleVisibilityId('stateEditForm{{state.id}}'); document.getElementById('stateEditForm{{state.id}}').firstChild.childNodes[1].value = {{}}">Edit State</button>
+    <div style="display: block;" class="content" id="stateDeleteForm{{state.id}}">
     <form method="POST">
         {% csrf_token %}
-        <input type="submit" id="submit" name="delete_state_{{state.id}}" value="Remove this state">
-        {% if state_to_delete == state.id %} <!-- this appears below a "delete state" button, after that button was pressed -->
-        <p>There is data associated with this state. Are you sure you want to delete "{{state.getInfo}}" and all its data?</p>
+        <p>Warning: deleting this state will delete all its containers ({{state.container_set.count}} containers). Are you sure you want to delete "{{state.getAllInfo}}" and all associated data?</p>
         <input type="submit" id="submit" name="delete_state_anyway_{{state.id}}" value="Delete anyway">
-        <input type="submit" id="submit" name="do_nothing" value="Cancel">
-        {% endif %}
-    </form></div>
+    </form>
+    <button onclick="hideId('stateDeleteForm{{state.id}}')">Cancel</button>
+    </div>
 
     <div style="display: inline;">
-    <button type="button" id="editState" class="collapsible"
-        style="width: fit-content; height: fit-content; font-size: 4vw; margin-top: -1vw; position: relative; top: 0.2vw;">
-        <div style="padding: 0.3vw;">Edit State</div>
-    </button>
-    <div class="content" style="display: block; padding: 1vw; text-align: left;">
+    
+    <div class="content" style="display: block; padding: 1vw; text-align: left;" id="stateEditForm{{state.id}}">
     <form method="POST">
         {% csrf_token %}
         {{ state_edit_form.as_p }}
-        <input type="submit" id="submit" name="edit_state" value="Save">
+        <input type="submit" id="submit" name="edit_state_{{state.id}}" value="Save">
     </form></div>
 
     <!-- we don't need this if there's no transaction creation on this page
@@ -168,7 +165,7 @@
     
     </div>
 
-    <script src="{% static 'chemlogs/chemS.js' %}">  </script>
+    <script src="{% static 'chemlogs/chemScript.js' %}">  </script>
 
     <!-- from from https://stackoverflow.com/questions/9377951/how-to-remember-scroll-position-and-scroll-back -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

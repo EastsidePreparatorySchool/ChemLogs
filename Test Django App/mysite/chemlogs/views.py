@@ -85,14 +85,6 @@ def chemical(request, chemical_id):
                 user=request.user
             )
             new_container_id = new_container.id
-    warn_delete_chemical = False
-    if request.method == 'POST' and 'delete_chemical' in request.POST:
-        if chemical.chemicalstate_set.count() > 0:
-            # cause message to appear that you can't delete this chemical bc there is associated data
-            warn_delete_chemical = True
-        else:
-            chemical.delete()
-            return redirect('/chemlogs/chemicalSearch/')
     if request.method == 'POST' and 'delete_chemical_anyway' in request.POST:
         chemical.delete()
         return redirect('/chemlogs/chemicalSearch/')
@@ -107,19 +99,18 @@ def chemical(request, chemical_id):
             if chemical_edit_form.cleaned_data['molar_mass']:
                 chemical.molar_mass=chemical_edit_form.cleaned_data['molar_mass']
             chemical.save() # is this line necessary?
-    state_to_delete = None # the id of the state the user is trying to delete and getting warned about
     if request.method == 'POST':
         for state in chemical.chemicalstate_set.all():
-            possible_name = 'delete_state_' + str(state.id)
-            if possible_name in request.POST:
-                if state.container_set.count() > 0:
-                    # show message that you can't delete this state bc there is associated data
-                    state_to_delete = state.id
-                else:
-                    state.delete()
             possible_name = 'delete_state_anyway_' + str(state.id)
             if possible_name in request.POST:
                 state.delete()
+                break
+        for state in chemical.chemicalstate_set.all():
+            possible_name = 'edit_state_' + str(state.id)
+            if possible_name in request.POST:
+                state.state = state_edit_form.cleaned_data['state']
+                state.type = state_edit_form.cleaned_data['type']
+                break
     if not container_create_form:
         ContainerCreateForm.contents_choices = [
             ("N", "Add New")
@@ -146,7 +137,6 @@ def chemical(request, chemical_id):
 
     return render(request, 'chemlogs/chemical.html',
                   {'chemical': chemical, 'container_create_form': container_create_form,
-                   'state_to_delete': state_to_delete, 'warn_delete_chemical': warn_delete_chemical,
                    'chemical_edit_form': chemical_edit_form, 'state_edit_form': state_edit_form,
                    'new_container_id': new_container_id})
 

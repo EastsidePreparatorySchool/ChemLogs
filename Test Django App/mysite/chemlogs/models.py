@@ -30,6 +30,13 @@ class Chemical(models.Model):
 
     def __str__(self):
         return self.name
+
+    # number of containers of this chemical
+    def getContainerCount(self):
+        amount = 0
+        for state in self.chemicalstate_set.all():
+            amount += state.container_set.count()
+        return amount
     
     # def is_valid():
         
@@ -62,6 +69,10 @@ class ChemicalState(models.Model):
         else:
             output += self.state
         return output
+    
+    # getInfo but with chemical name too
+    def getAllInfo(self):
+        return self.chemical.name + ' ' + self.getInfo()
 
     def needMore(self):
         if self.min_thresh and self.computeAmount() < self.min_thresh:
@@ -70,7 +81,7 @@ class ChemicalState(models.Model):
     
     # human-readable notification for if this is low
     def getNotification(self):
-        notification = "<br>&emsp;&#x2022; " + self.chemical.name + " " + self.getInfo()
+        notification = "<br>&emsp;&#x2022; " + self.getAllInfo()
         notification += ": Total supply is "
         notification += str(round(self.computeAmount(), 2))
         notification += "g. Minimum threshold is "

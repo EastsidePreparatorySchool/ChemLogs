@@ -99,7 +99,7 @@
     </div>
     <p>{{state.computeAmount|floatformat:2}}g in stock</p>
     <button class="collapsible" onclick="toggleVisibilityId('stateDeleteForm{{state.id}}')">Remove this state</button>
-    <button class="collapsible" onclick="toggleVisibilityId('stateEditForm{{state.id}}'); document.getElementById('stateEditForm{{state.id}}').firstChild.childNodes[1].value = {{}}">Edit State</button>
+    <button class="collapsible" onclick="toggleVisibilityId('stateEditForm{{state.id}}'); populateStateEditForm('{{state.id}}', '{{state.state}}', '{{state.type}}');">Edit State</button>
     <div style="display: block;" class="content" id="stateDeleteForm{{state.id}}">
     <form method="POST">
         {% csrf_token %}
@@ -178,6 +178,13 @@
             localStorage.setItem("chemlogs-quote-scroll", $(window).scrollTop());
         });
     });
+    </script>
+    <script type="text/javascript">
+        // prepopulate stateEditForm with current state data
+        function populateStateEditForm(id, state, type) {
+            document.getElementById('stateEditForm' + id).firstElementChild.childNodes[3].childNodes[3].value=state;
+            document.getElementById('stateEditForm' + id).firstElementChild.childNodes[5].childNodes[3].value=type;
+        }
     </script>
 </body>
 </html>

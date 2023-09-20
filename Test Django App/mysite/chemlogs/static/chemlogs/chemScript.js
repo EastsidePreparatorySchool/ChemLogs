@@ -46,10 +46,3 @@ function modifySlider(max) {
     slider.value = "0";
     slider.style = "margin: 0vw;";
 }
-
-// Used when "remove" is clicked. Makes slider value negative. Hopefully does not affect frontend.
-/*function negateSliderValue() {  i believe this is unused
-    slider = document.getElementById("trSlide");
-    slider.min = -100; // this is not a great solution to the problem that value can't be less than min
-    slider.value = -slider.value;
-}*/

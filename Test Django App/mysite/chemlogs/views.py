@@ -132,7 +132,8 @@ def chemical(request, chemical_id):
             'cas': chemical.cas,
             'safety': chemical.safety,
             'formula': chemical.formula,
-            'molar_mass': chemical.molar_mass
+            'molar_mass': chemical.molar_mass,
+            'dangerous': chemical.dangerous
         })
     if not state_edit_form:
         # reusing state create form to edit state. form is autopopulated with existing data.

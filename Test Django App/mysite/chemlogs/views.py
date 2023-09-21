@@ -108,8 +108,11 @@ def chemical(request, chemical_id):
         for state in chemical.chemicalstate_set.all():
             possible_name = 'edit_state_' + str(state.id)
             if possible_name in request.POST:
-                state.state = state_edit_form.cleaned_data['state']
-                state.type = state_edit_form.cleaned_data['type']
+                state_edit_form = StateEditForm(request.POST)
+                if state_edit_form.is_valid():
+                    state.state = state_edit_form.cleaned_data['state']
+                    state.type = state_edit_form.cleaned_data['type']
+                    state.save()
                 break
     if not container_create_form:
         ContainerCreateForm.contents_choices = [
@@ -183,7 +186,7 @@ def container(request, container_id):
             if transact_form.is_valid():
                 delta = transact_form.cleaned_data['trSlide']
                 new_value=container.computeRawAmount() + delta
-                if new_value > 0 and new_value < container.initial_value:
+                if new_value >= 0 and new_value <= container.initial_value:
                     container.transaction_set.create(
                         amount=transact_form.cleaned_data['trSlide'],
                         time=timezone.now(),

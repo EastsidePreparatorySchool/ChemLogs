@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction History for {{chemical.name}}</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/style3.css' %}">
     <link rel="icon" type="image/png" href="{% static 'chemlogs/images/icon.png' %}">
 
     <style>
@@ -49,18 +49,16 @@
     
     <div style="display: inline;">
     
-    <button id="del" class="collapsible" onclick="toggleVisibilityId('chemDeleteForm')">Remove this chemical</button>
-    <button type="button" id="editChem" class="collapsible" onclick="toggleVisibilityId('editChemForm')"
-        style="width: fit-content; height: fit-content; font-size: 4vw;">Edit Chemical
-    </button>
+    <button class="del" onclick="toggleVisibilityId('chemDeleteForm')">Remove this chemical</button>
+    <button type="button" class="edit" onclick="toggleVisibilityId('editChemForm')">Edit Chemical</button>
     
     <div class="content" id="chemDeleteForm">
-    <form method="POST">
+    <form method="POST" style="display: inline;">
         {% csrf_token %}
         <p>Warning: deleting this chemical will delete all its states and containers ({{chemical.chemicalstate_set.count}} states and {{chemical.getContainerCount}} containers). Are you sure you want to delete "{{chemical}}" and all associated data?</p>
-        <input type="submit" id="del" name="delete_chemical_anyway" value="Delete anyway">
+        <input type="submit" class="del" name="delete_chemical_anyway" value="Delete anyway">
     </form>
-    <button onclick="hideId('chemDeleteForm')" style="margin-bottom: 2vw; margin-top: 1vw;">Cancel</button>
+    <button onclick="hideId('chemDeleteForm')" class="edit">Cancel</button>
     </div>
     </div>
         
@@ -70,17 +68,17 @@
     <form method="POST">
         {% csrf_token %}
         {{ chemical_edit_form.as_p }}
-        <input type="submit" id="submit" name="edit_chemical" value="Save">
+        <input type="submit" id="submit" name="edit_chemical" value="Save" class="edit">
     </form></div></div>
 
-    <button type="button" id="addChem" class="collapsible" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">
+    <button type="button" id="addChem" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">
         <span>New Container</span>
     </button>
-    <div id="newContainerForm" class="content" style="display: block; padding-left: -4vw; text-align:left, margin-top=-2vw">
+    <div id="newContainerForm" class="content">
     <form method="POST">
         {% csrf_token %}
         {{ container_create_form.as_p }}
-        <input type="submit" id="submit" name="new_container" value="Create">
+        <input type="submit" class="edit" id="submit" name="new_container" value="Create">
     </form></div>
     {% if new_container_id %}
     <!-- tell the user the new container's id -->
@@ -98,15 +96,15 @@
         <h2 style="margin: 1.5vw;">State: {{state.getInfo|capfirst}}</h2>
     </div>
     <p>{{state.computeAmount|floatformat:2}}g in stock</p>
-    <button class="collapsible" onclick="toggleVisibilityId('stateDeleteForm{{state.id}}')">Remove this state</button>
-    <button class="collapsible" onclick="toggleVisibilityId('stateEditForm{{state.id}}'); populateStateEditForm('{{state.id}}', '{{state.state}}', '{{state.type}}');">Edit State</button>
+    <button class="del" onclick="toggleVisibilityId('stateDeleteForm{{state.id}}')">Remove this state</button>
+    <button class="edit" onclick="toggleVisibilityId('stateEditForm{{state.id}}'); populateStateEditForm('{{state.id}}', '{{state.state}}', '{{state.type}}');">Edit State</button>
     <div style="display: block;" class="content" id="stateDeleteForm{{state.id}}">
-    <form method="POST">
+    <form method="POST" style="display: inline;">
         {% csrf_token %}
         <p>Warning: deleting this state will delete all its containers ({{state.container_set.count}} containers). Are you sure you want to delete "{{state.getAllInfo}}" and all associated data?</p>
-        <input type="submit" id="submit" name="delete_state_anyway_{{state.id}}" value="Delete anyway">
+        <input type="submit" class="del" id="submit" name="delete_state_anyway_{{state.id}}" value="Delete anyway">
     </form>
-    <button onclick="hideId('stateDeleteForm{{state.id}}')">Cancel</button>
+    <button onclick="hideId('stateDeleteForm{{state.id}}')" class="edit">Cancel</button>
     </div>
 
     <div style="display: inline;">
@@ -115,7 +113,7 @@
     <form method="POST">
         {% csrf_token %}
         {{ state_edit_form.as_p }}
-        <input type="submit" id="submit" name="edit_state_{{state.id}}" value="Save">
+        <input type="submit" id="submit" name="edit_state_{{state.id}}" value="Save" class="edit">
     </form></div>
 
     <!-- we don't need this if there's no transaction creation on this page

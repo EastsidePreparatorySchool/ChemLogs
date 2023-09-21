@@ -26,7 +26,7 @@ class Chemical(models.Model):
     formula = models.CharField(max_length=20) # will have notation like underscores for subscript, and if subscript>9 then use a=10, etc. Later will decide what max length should be
     name = models.CharField(max_length=50) # later will decide what max length should be
     molar_mass = models.FloatField(default=0, null=True) # in g/mol
-    safety = models.TextField(default="", null=True)
+    safety = models.TextField(default="", null=True) # should probably have null=False
 
     def __str__(self):
         return self.name
@@ -50,7 +50,7 @@ class ChemicalState(models.Model):
         ("AQ", "Aqueous")
     ]
     state = models.CharField(max_length=2, choices=STATE_CHOICES, default="S")
-    type = models.CharField(max_length=40, null=True, blank=True) # ex: strips, powder
+    type = models.CharField(max_length=40, null=True, blank=True) # ex: strips, powder. Should probably make this null=False
     min_thresh = models.IntegerField(null=True, blank=True)
     chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
     # note: chemical and (type or state) should together be able to uniquely identify a chemicalstate

@@ -26,8 +26,8 @@
     <p><strong>Initial Amount: {{container.getInitialDisplayableAmount}}</strong></p>
     <br>
 
-    <button type="button" id="addChem" class="collapsible">Change Amount</button>
-    <div class="content" style="display: block; padding-top: 1em;">
+    <button type="button" id="addChem" onclick="toggleVisibilityId('transactForm')">Change Amount</button>
+    <div class="content" id="transactForm" style="display: block; padding-top: 1em;">
         <form method="POST">
             {% csrf_token %}
             <p>When you add or remove contents from this container, record it here.</p>
@@ -36,8 +36,10 @@
             <p style="display: inline; margin: 0vw;">{{container.initial_value}}{{container.getUnits}}</p>-->
             <p>0{{container.getUnits}}{{ transact_form }}{{container.initial_value}}{{container.getUnits}}</p>
             <br>
-            <input type="submit" id="submit" name="transact_add" value="Add"> 
+            <input type="submit" id="submit" name="transact_add" value="Add">
             <input type="submit" id="submit" name="transact_remove" value="Remove">
+            <input type="submit" id="submit" name="transact_fill" value="Fill">
+            <input type="submit" id="submit" name="transact_empty" value="Empty">
         </form>
     </div>
 

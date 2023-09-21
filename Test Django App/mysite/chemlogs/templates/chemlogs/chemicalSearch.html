@@ -24,10 +24,8 @@
 
     <!-- for unknown reasons the styling for this div wont apply from the stylesheet-->
     <div style="text-align: center;">
-    <button type="button" id="addChem" class="collapsible">
-        Add New Chemical
-        </button>
-    <div class="content" id="addContent">
+    <button type="button" id="addChem" onclick="toggleVisibilityId('addChemForm')" class="collapsible">Add New Chemical</button>
+    <div class="content" id="addChemForm">
     <form method="POST">
         {% csrf_token %}
         {{ chemical_create_form.as_p }}

@@ -31,6 +31,13 @@ class Chemical(models.Model):
 
     def __str__(self):
         return self.name
+
+    # number of containers of this chemical
+    def getContainerCount(self):
+        amount = 0
+        for state in self.chemicalstate_set.all():
+            amount += state.container_set.count()
+        return amount
     
     # get total mass in stock of this chemical, accumulating all states, in grams
     def computeAmount(self):
@@ -51,7 +58,7 @@ class ChemicalState(models.Model):
         ("AQ", "Aqueous")
     ]
     state = models.CharField(max_length=2, choices=STATE_CHOICES, default="S")
-    type = models.CharField(max_length=40, null=True, blank=True) # ex: strips, powder
+    type = models.CharField(max_length=40, null=True, blank=True) # ex: strips, powder. Should probably make this null=False
     min_thresh = models.IntegerField(null=True, blank=True)
     chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
     # note: chemical and (type or state) should together be able to uniquely identify a chemicalstate
@@ -70,6 +77,10 @@ class ChemicalState(models.Model):
         else:
             output += self.state
         return output
+    
+    # getInfo but with chemical name too
+    def getAllInfo(self):
+        return self.chemical.name + ' ' + self.getInfo()
 
     def needMore(self):
         if self.min_thresh and self.computeAmount() < self.min_thresh:
@@ -78,7 +89,7 @@ class ChemicalState(models.Model):
     
     # human-readable notification for if this is low
     def getNotification(self):
-        notification = "<br>&emsp;&#x2022; " + self.chemical.name + " " + self.getInfo()
+        notification = "<br>&emsp;&#x2022; " + self.getAllInfo()
         notification += ": Total supply is "
         notification += str(round(self.computeAmount(), 2))
         notification += "g. Minimum threshold is "

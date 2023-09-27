@@ -129,11 +129,11 @@ th {
 
 a:link, a:visited, a:hover, a:active{
    text-decoration: none;
-   overflow:hidden;
+   overflow: hidden;
  }
 
 /* chemical entry dropdown attributes */
-#addChem, #editChem {
+#addChem {
    text-align: center;
    font-size: 1em;
    outline-color: none; 
@@ -147,19 +147,27 @@ a:link, a:visited, a:hover, a:active{
    height: 2.5em;
 }
 
-#editChem span {
-   padding-bottom: 5vw;
-   border-bottom: 5vw;
-   margin-bottom: 5vw;
+.edit, .del {
+   color: #ffffff;
+   transition-duration: 0.5s;
+   font-size: 10;
+   border: none;
+   margin: 0vw;
+   padding: 0.7vw 1.6vw 0.9vw; /* top right bottom [left] */
+   border-radius: 2vw;
+   background-color: #608a8e;
+   width: fit-content;
+   height: fit-content;
+   display: inline;
 }
 
-#addChem:hover, #editChem:hover {
+#addChem:hover, .edit:hover {
    background-color: #4b6d72;
    overflow:hidden;
 }
 
-#addContent {
-   margin-top: -10px;
+#addChemForm {
+   margin-top: 0px;
    margin-left: 6vw;
    text-align: left;
    border: none;
@@ -175,35 +183,11 @@ a:link, a:visited, a:hover, a:active{
    margin-left: 15%;
 }
 
-#submit {
-   background-color: #608a8e;
-   color: #ffffff;
-   padding-left: 1.5vw;
-   padding-bottom: 1vw;
-   transition-duration: 0.5s;
-   font-size: 10;
-   border: none;
-   border-radius: 2vw;
-}
-
-#submit:hover {
-   background-color: #456a6d;
-   overflow:hidden;
-}
-
-#del {
+.del {
    background-color: #f08a42;
-   color: #ffffff;
-   padding-left: 1.5vw;
-   padding-bottom: 1vw;
-   transition-duration: 0.5s;
-   font-size: 10;
-   border: none;
-   border-radius: 2vw;
-   overflow:hidden;
 }
 
-#del:hover {
+.del:hover {
    background-color: #db7227;
    overflow:hidden;
 }
@@ -254,7 +238,6 @@ label {
 
 .button {
    display: flex;
-   
 }
 
 .content{
@@ -285,7 +268,7 @@ img{
    padding: 2vw;
 }
 
-#login #submit{
+#login {
    display: block; 
    margin: 2vw;
    margin-left: 60vw;

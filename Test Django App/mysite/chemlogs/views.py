@@ -21,6 +21,7 @@ def chemical(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
     container_create_form = None
     chemical_edit_form = None
+    state_edit_form = None
     new_container_id = None
     if request.method == 'POST' and 'new_container' in request.POST:
         container_create_form = ContainerCreateForm(request.POST)
@@ -84,14 +85,6 @@ def chemical(request, chemical_id):
                 user=request.user
             )
             new_container_id = new_container.id
-    warn_delete_chemical = False
-    if request.method == 'POST' and 'delete_chemical' in request.POST:
-        if chemical.chemicalstate_set.count() > 0:
-            # cause message to appear that you can't delete this chemical bc there is associated data
-            warn_delete_chemical = True
-        else:
-            chemical.delete()
-            return redirect('/chemlogs/chemicalSearch/')
     if request.method == 'POST' and 'delete_chemical_anyway' in request.POST:
         chemical.delete()
         return redirect('/chemlogs/chemicalSearch/')
@@ -106,19 +99,21 @@ def chemical(request, chemical_id):
             if chemical_edit_form.cleaned_data['molar_mass']:
                 chemical.molar_mass=chemical_edit_form.cleaned_data['molar_mass']
             chemical.save() # is this line necessary?
-    state_to_delete = None # the id of the state the user is trying to delete and getting warned about
     if request.method == 'POST':
         for state in chemical.chemicalstate_set.all():
-            possible_name = 'delete_state_' + str(state.id)
-            if possible_name in request.POST:
-                if state.container_set.count() > 0:
-                    # show message that you can't delete this state bc there is associated data
-                    state_to_delete = state.id
-                else:
-                    state.delete()
             possible_name = 'delete_state_anyway_' + str(state.id)
             if possible_name in request.POST:
                 state.delete()
+                break
+        for state in chemical.chemicalstate_set.all():
+            possible_name = 'edit_state_' + str(state.id)
+            if possible_name in request.POST:
+                state_edit_form = StateEditForm(request.POST)
+                if state_edit_form.is_valid():
+                    state.state = state_edit_form.cleaned_data['state']
+                    state.type = state_edit_form.cleaned_data['type']
+                    state.save()
+                break
     if not container_create_form:
         ContainerCreateForm.contents_choices = [
             ("N", "Add New")
@@ -140,11 +135,14 @@ def chemical(request, chemical_id):
             'molar_mass': chemical.molar_mass,
             'dangerous': chemical.dangerous
         })
+    if not state_edit_form:
+        # reusing state create form to edit state. form is autopopulated with existing data.
+        state_edit_form = StateEditForm()
 
     return render(request, 'chemlogs/chemical.html',
                   {'chemical': chemical, 'container_create_form': container_create_form,
-                   'state_to_delete': state_to_delete, 'warn_delete_chemical': warn_delete_chemical,
-                   'chemical_edit_form': chemical_edit_form, 'new_container_id': new_container_id})
+                   'chemical_edit_form': chemical_edit_form, 'state_edit_form': state_edit_form,
+                   'new_container_id': new_container_id})
 
 def testChem(request, chemical_id):
     chemical = get_object_or_404(Chemical, pk=chemical_id)
@@ -187,31 +185,61 @@ def container(request, container_id):
         if "transact_add" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
             if transact_form.is_valid():
-                container.transaction_set.create(
-                    amount=transact_form.cleaned_data['trSlide'],
-                    time=timezone.now(),
-                    type="T",
-                    user=request.user)
-                # some kind of confirmation ("you have added/removed this much")
+                delta = transact_form.cleaned_data['trSlide']
+                new_value=container.computeRawAmount() + delta
+                if new_value >= 0 and new_value <= container.initial_value:
+                    container.transaction_set.create(
+                        amount=transact_form.cleaned_data['trSlide'],
+                        time=timezone.now(),
+                        type="T",
+                        user=request.user)
+                    # some kind of confirmation ("you have added/removed this much")
+                else:
+                    # invalidity message
+                    pass
         elif "transact_remove" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
             if transact_form.is_valid():
-                value = 0 - transact_form.cleaned_data['trSlide']
-                container.transaction_set.create(
-                    amount=value,
-                    time=timezone.now(),
-                    type="T",
-                    user=request.user)
-                # add confirmation
+                delta = 0 - transact_form.cleaned_data['trSlide']
+                new_value=container.computeRawAmount() + delta
+                if new_value > 0 and new_value < container.initial_value:
+                    container.transaction_set.create(
+                        amount=delta,
+                        time=timezone.now(),
+                        type="T",
+                        user=request.user)
+                    # add confirmation
+                else:
+                    # invalidity message
+                    pass
         elif "override" in request.POST:
             override_form = ContainerOverrideForm(request.POST, auto_id='%s')
             if override_form.is_valid():
-                container.transaction_set.create(
-                    amount=override_form.cleaned_data['override_value'],
-                    time=timezone.now(),
-                    type="R",
-                    user=request.user)
-                # add confirmation
+                new_value = override_form.cleaned_data['override_value']
+                if new_value > 0 and new_value < container.initial_value:
+                    container.transaction_set.create(
+                        amount=new_value,
+                        time=timezone.now(),
+                        type="R",
+                        user=request.user)
+                    # add confirmation
+                else:
+                    # invalidity: tell user that the new amount must be within the bottle size and nonnegative
+                    pass
+        elif "transact_fill" in request.POST:
+            container.transaction_set.create(
+                amount=container.initial_value,
+                time=timezone.now(),
+                type="R",
+                user=request.user)
+            # add confirmation
+        elif "transact_empty" in request.POST:
+            container.transaction_set.create(
+                amount=0,
+                time=timezone.now(),
+                type="R",
+                user=request.user)
+            # add confirmation
     if not transact_form:
         transact_form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
     if not override_form:

@@ -6,7 +6,7 @@ from . import notify
 import socket
 
 def start():
-    # the try-except fexes the problem of double-scheduling due to django reloading right after it loads initially. This is from:
+    # the try-except fixes the problem of double-scheduling due to django reloading right after it loads initially. This is from:
     # https://stackoverflow.com/questions/16053364/make-sure-only-one-worker-launches-the-apscheduler-event-in-a-pyramid-web-app-ru/27303834#27303834
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

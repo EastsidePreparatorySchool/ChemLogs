@@ -34,6 +34,13 @@ class ContainerCreateForm(forms.Form):
     type = forms.CharField(label="Type", max_length=40, required=False)
     min_thresh = forms.IntegerField(label="Alert Threshold (g)", required=False)
 
+class StateEditForm(forms.Form):
+    # these are all the same as the last three lines of ContainerCreateForm (above). Could possibly
+    # just delete those three lines and use both forms maybe.
+    state = forms.ChoiceField(label="Physical State", choices=ChemicalState.STATE_CHOICES, required=False)
+    type = forms.CharField(label="Type", max_length=40, required=False)
+    min_thresh = forms.IntegerField(label="Alert Threshold (g)", required=False)
+
 class ChemicalCreateForm(forms.Form):
     name = forms.CharField(label="Chemical Name")
     cas = forms.CharField(label="CAS") 

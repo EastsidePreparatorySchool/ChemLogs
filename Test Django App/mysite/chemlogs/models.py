@@ -35,7 +35,7 @@ class Chemical(models.Model):
     # get total mass in stock of this chemical, accumulating all states, in grams
     def computeAmount(self):
         amount = 0
-        for state in self.chemicalstate_set:
+        for state in self.chemicalstate_set.all():
             amount += state.computeAmount()
         return amount
     

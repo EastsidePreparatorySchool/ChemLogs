@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.utils import timezone
 from .models import Chemical, Transaction, TransactionEdit, Container
 from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm
-import itertools
+import itertools, csv
 from django.contrib.auth import get_user_model
 
 
@@ -275,3 +275,23 @@ class ChemicalSearch(ListView):
             if state.computeAmount() > 0:
                 return True
         return False
+    
+# https://studygyaan.com/django/how-to-export-csv-file-with-django#h-export-csv-using-django-views
+def exportCSV(request):
+    data = Chemical.objects.all()
+        #[   
+        #['Name', 'Age', 'Email'],
+        #['John Doe', 30, 'john@example.com'],
+        #['Jane Smith', 25, 'jane@example.com'],
+    #]
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; form-data; filename="chemlogs_data.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Name', 'Amount', 'Formula', 'Dangerous?'])
+
+    for chemical in data:
+        writer.writerow([chemical, chemical.computeAmount(), chemical.formula, chemical.dangerous])
+
+    return response

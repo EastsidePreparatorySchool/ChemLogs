@@ -251,6 +251,11 @@ label {
    transition: max-height 0.2s ease-out;
 }
 
+img{
+   height: 4vw;
+   width: 4vw;
+}
+
 #transactTbl {
    margin: 6vw;
    margin-top: 8vw;
@@ -284,3 +289,4 @@ label {
    border-radius: 2vw;
    width: 60vw;
 }
+

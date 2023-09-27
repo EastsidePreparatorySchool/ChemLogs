@@ -39,6 +39,13 @@ class Chemical(models.Model):
             amount += state.container_set.count()
         return amount
     
+    # get total mass in stock of this chemical, accumulating all states, in grams
+    def computeAmount(self):
+        amount = 0
+        for state in self.chemicalstate_set.all():
+            amount += state.computeAmount()
+        return amount
+    
     # def is_valid():
         
 
@@ -56,7 +63,7 @@ class ChemicalState(models.Model):
     chemical = models.ForeignKey(Chemical, on_delete=models.CASCADE)
     # note: chemical and (type or state) should together be able to uniquely identify a chemicalstate
 
-    # returns the current amount in stock
+    # returns the current amount in stock, in grams
     def computeAmount(self):
         amount = 0
         for container in self.container_set.all():

@@ -279,14 +279,11 @@ class ChemicalSearch(ListView):
 # https://studygyaan.com/django/how-to-export-csv-file-with-django#h-export-csv-using-django-views
 def exportCSV(request):
     data = Chemical.objects.all()
-        #[   
-        #['Name', 'Age', 'Email'],
-        #['John Doe', 30, 'john@example.com'],
-        #['Jane Smith', 25, 'jane@example.com'],
-    #]
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; form-data; filename="chemlogs_data.csv"'
+    #'attachment; form-data; filename="chemlogs_data{% now \'ymd_His\' %}.csv"'
+    # trying to put the datetime into the filename
 
     writer = csv.writer(response)
     writer.writerow(['Name', 'Amount', 'Formula', 'Dangerous?'])

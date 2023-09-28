@@ -26,7 +26,7 @@
     </div>
     <div class="header-bottom"></div>
 
-    <p style="margin: 4vw; margin-bottom: 0vw;"><strong>{{chemical.formula|displayFormula}}&emsp;{{chemical.cas}}&emsp;<a href="{{chemical.safety}}">SDS</a></strong></p>
+    <p style="margin: 4vw; margin-bottom: 0vw;"><strong>{{chemical.formula|displayFormula}}&emsp;{{chemical.cas}}&emsp;<a href="{{chemical.safety}}" target="_blank">SDS</a></strong></p>
     <h1 style="margin: 4vw; margin-top: 1vw; margin-bottom: -8vw;">{{chemical.name}}</h1>
     <!--<ul id="cas-and-amount">
         <li style="text-align: left;">{{chemical.cas}}</li>
@@ -152,7 +152,7 @@
         <tr class="hoverable">
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.user}}</a></td>
         </tr>
         {% endfor %}

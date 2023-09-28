@@ -45,7 +45,9 @@
 
     <div id="results">
     {% if shown_chemicals %}
-    {% if all_shown %}
+    {% if none_filtered %}
+    <h4 id="resultTxt">All chemicals:</h4>
+    {% elif all_shown %}
     <h4 id="resultTxt">Search Results:</h4>
     {% else %}
     <h4 id="resultTxt"> Top search results:</h4>
@@ -78,8 +80,8 @@
             <td><a href="/chemlogs/transaction/{{action.id}}">{{action.time.month}}/{{action.time.day}}</a></td> <!-- don't show time of day -->
             <td><a href="/chemlogs/transaction/{{action.id}}">{{action.container.contents.chemical}} ({{action.container.contents.getInfo}})</a></td>
             <td><a href="/chemlogs/transaction/{{action.id}}">{{action.container.getHeader}}</a></td>
-            <td><a href="/chemlogs/transaction/{{action.id}}">{{action.amount}}</a></td>
-            <td><a href="/chemlogs/transaction/{{action.id}}">{{action.get_type_display}}</a></td><!-- this gets the verbose name of action.type -->
+            <td><a href="/chemlogs/transaction/{{action.id}}">{{action.getAbsoluteAmount}}</a></td>
+            <td><a href="/chemlogs/transaction/{{action.id}}">{% if action.type == "R" %}Reset {% elif action.type == "N" %}New Container{% elif action.amount > 0 %}Added{% else %}Removed{% endif %}</a></td><!-- this gets the verbose name of action.type -->
         </tr>
         {% endfor %}
     </table></div>

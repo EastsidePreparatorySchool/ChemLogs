@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 from django.utils import timezone
 from .models import Chemical, Transaction, TransactionEdit, Container
-from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm
+from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm, StateEditForm
 import itertools, csv
 from django.contrib.auth import get_user_model
 

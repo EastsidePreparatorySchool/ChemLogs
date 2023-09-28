@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 from django.utils import timezone
 from .models import Chemical, Transaction, TransactionEdit, Container
-from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm
+from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm, StateEditForm
 import itertools, csv
 from django.contrib.auth import get_user_model
 
@@ -258,6 +258,7 @@ class ChemicalSearch(ListView):
     model = Chemical
     template_name = 'chemlogs/chemicalSearch.html'
     len_results_displayed = 7 # don't display more results than this
+    
 
     def get(self, request):
         chemical_create_form = ChemicalCreateForm()
@@ -280,8 +281,9 @@ class ChemicalSearch(ListView):
     def get_context_data(self, chemical_create_form):
         shown_chemicals = self.get_queryset()
         all_shown = len(shown_chemicals) <= ChemicalSearch.len_results_displayed # whether there aren't any hidden matching chemicals
+        none_filtered = len(shown_chemicals) == Chemical.objects.count() # whether the search isn't meaningful (i.e. whether all chemicals are displayed in results)
         actions = Transaction.objects.exclude(type="I").order_by('-time')
-        return {'shown_chemicals': shown_chemicals, 'all_shown': all_shown, 'actions': actions, 'chemical_create_form': chemical_create_form}
+        return {'shown_chemicals': shown_chemicals, 'all_shown': all_shown, 'none_filtered': none_filtered, 'actions': actions, 'chemical_create_form': chemical_create_form}
 
     def get_queryset(self):
         nameSearch = self.request.GET.get("name")

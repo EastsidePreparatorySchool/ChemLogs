@@ -121,7 +121,7 @@ class Container(models.Model):
     def getTransactions(self):
         return self.transaction_set.all().order_by('-time')
     
-    # returns transactions, excluding any that are not supposed to be visible (e.g., type new)
+    # returns transactions, excluding any that are not supposed to be visible (i.e., type new or ignored)
     def getTransactionsToDisplay(self):
         return self.getTransactions().exclude(type="N").exclude(type="I")
     

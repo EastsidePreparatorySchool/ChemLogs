@@ -15,8 +15,9 @@
 
 <body>
     <div class="header">
-        <a href="/chemlogs/chemicalSearch"><img src="{% static 'chemlogs/images/icon.png' %}">
+        <a href="/chemlogs/chemicalSearch"><img src="{% static 'chemlogs/images/icon.png' %}" id="title">
             <h4>ChemLogs</h4></a>
+        <a href="{% url 'chemlogs:exportCSV' %}" id="masterExport"><img src="{% static 'chemlogs/images/download.png' %}"></a>
     </div>
     <div class="header-bottom"></div>
 
@@ -64,7 +65,6 @@
 
     <div id="transactTbl">
     <h3>Recent Transaction History</h3> 
-    <a href="{% url 'chemlogs:exportCSV' %}"><img src="{% static 'chemlogs/images/download.png' %}"></a>
     <table>
         <tr>
             <th>Date</th>

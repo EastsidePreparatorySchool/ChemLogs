@@ -25,10 +25,16 @@ body {
    margin-left: -5px;
 }
 
-.header img {
+#title {
    left: 3vw;
    top: 3vw;
    height: 20px;
+}
+
+#masterExport{
+   position: absolute;
+   right: 5vw;
+   height: ;
 }
 
 .header-bottom {
@@ -252,8 +258,8 @@ label {
 }
 
 img{
-   height: 4vw;
-   width: 4vw;
+   height: 4vh;
+   width: 4vh;
 }
 
 #transactTbl {

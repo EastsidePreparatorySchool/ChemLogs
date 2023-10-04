@@ -46,3 +46,16 @@ function modifySlider(max) {
     slider.value = "0";
     slider.style = "margin: 0vw;";
 }
+
+// jquery script that maintains scroll position on page refresh, but not when leaving a page
+$(document).ready(function () {
+  if (localStorage.getItem("chemlogs-quote-scroll") != null) {
+    if (document.title == localStorage.getItem("chemlogs-current-page")) {
+      $(window).scrollTop(localStorage.getItem("chemlogs-quote-scroll"));
+    }
+  }
+  $(window).on("scroll", function() {
+    localStorage.setItem("chemlogs-quote-scroll", $(window).scrollTop());
+  });
+  localStorage.setItem("chemlogs-current-page", document.title);
+});

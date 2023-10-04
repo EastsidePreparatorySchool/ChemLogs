@@ -9,6 +9,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction History for {{chemical.name}}</title>
+    <!-- from from https://stackoverflow.com/questions/9377951/how-to-remember-scroll-position-and-scroll-back -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
     <link rel="icon" type="image/png" href="{% static 'chemlogs/images/icon.png' %}">
 
@@ -163,20 +165,10 @@
     
     </div>
 
+    
+
     <script src="{% static 'chemlogs/chemScript.js' %}">  </script>
 
-    <!-- from from https://stackoverflow.com/questions/9377951/how-to-remember-scroll-position-and-scroll-back -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function () {
-        if (localStorage.getItem("chemlogs-quote-scroll") != null) {
-            $(window).scrollTop(localStorage.getItem("chemlogs-quote-scroll"));
-        }
-        $(window).on("scroll", function() {
-            localStorage.setItem("chemlogs-quote-scroll", $(window).scrollTop());
-        });
-    });
-    </script>
     <script type="text/javascript">
         // prepopulate stateEditForm with current state data
         function populateStateEditForm(id, state, type) {

@@ -61,7 +61,7 @@ h3 {
    margin-bottom: 1vw;
 }
 
-p, p a {
+p, p a, input[type=text], input[type=number] {
    font-size: 4vw;
    color: #608a8e;
    padding: 0vh;

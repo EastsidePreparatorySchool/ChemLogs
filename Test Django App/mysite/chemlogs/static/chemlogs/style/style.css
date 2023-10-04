@@ -34,7 +34,7 @@ body {
 #masterExport{
    position: absolute;
    right: 5vw;
-   height: ;
+   height: 5vh;
 }
 
 .header-bottom {
@@ -258,8 +258,8 @@ label {
 }
 
 img{
-   height: 4vh;
-   width: 4vh;
+   height: 3vh;
+   width: 3vh;
 }
 
 #transactTbl {

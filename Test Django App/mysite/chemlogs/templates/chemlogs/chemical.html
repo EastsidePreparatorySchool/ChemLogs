@@ -17,7 +17,8 @@
             display: inline;
         }
 
-        input[type=text], input[type=number] {
+        /*input[type=text], input[type=number] {
+            width: 40vw;
             padding: 1vw;
             margin: 0.3vw 0vw 0.3vw;
             border: 0.3vw solid #608a8e;
@@ -41,7 +42,7 @@
         form p label {
             position: relative;
             top: 1vw;
-        }
+        }*/
 
     </style>
 </head>
@@ -75,7 +76,6 @@
     <div style="display: flex;">
     
     <div style="display: inline;">
-    
     <button class="del" onclick="toggleVisibilityId('chemDeleteForm')">Remove this chemical</button>
     <button type="button" class="edit" onclick="toggleVisibilityId('editChemForm')">Edit Chemical</button>
     
@@ -88,15 +88,15 @@
     <button onclick="hideId('chemDeleteForm')" class="edit">Cancel</button>
     </div>
     </div>
-        
     </div>
 
     <div class="content" style="display: block; padding: 1vw; text-align: left;" id="editChemForm">
     <form method="POST">
         {% csrf_token %}
         {{ chemical_edit_form.as_p }}
+        <br>
         <input type="submit" id="submit" name="edit_chemical" value="Save" class="edit">
-    </form></div></div>
+    </form></div>
 
     <button type="button" id="addChem" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">
         <span>New Container</span>
@@ -188,7 +188,7 @@
     {% endfor %} <!-- close container loop -->
     {% endfor %} <!-- close state loop -->
     
-    </div>
+    </div></div>
 
     <script src="{% static 'chemlogs/chemScript.js' %}">  </script>
 

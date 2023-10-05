@@ -46,3 +46,21 @@ function modifySlider(max) {
     slider.value = "0";
     slider.style = "margin: 0vw;";
 }
+
+// maintain scroll position when reloading a page
+function setScrollListener() {
+  // from https://stackoverflow.com/questions/9377951/how-to-remember-scroll-position-and-scroll-back
+  $(document).ready(function () {
+    if (localStorage.getItem("chemlogs-quote-scroll") != null) {
+        $(window).scrollTop(localStorage.getItem("chemlogs-quote-scroll"));
+    }
+    $(window).on("scroll", function() {
+        localStorage.setItem("chemlogs-quote-scroll", $(window).scrollTop());
+    });
+  });
+}
+
+// override the autoscroll so that you'll reload at top of page
+function scrollTopOnReload() {
+  localStorage.setItem("chemlogs-quote-scroll", 0);
+}

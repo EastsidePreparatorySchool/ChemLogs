@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction History for {{chemical.name}}</title>
-    <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chemlogs/style/style.css' %}">
     <link rel="icon" type="image/png" href="{% static 'chemlogs/images/icon.png' %}">
 
     <style>
@@ -60,8 +60,7 @@
     </form>
     <button onclick="hideId('chemDeleteForm')" class="edit">Cancel</button>
     </div>
-    </div>
-        
+    </div>  
     </div>
 
     <div class="content" style="display: block; padding: 1vw; text-align: left;" id="editChemForm">
@@ -69,7 +68,7 @@
         {% csrf_token %}
         {{ chemical_edit_form.as_p }}
         <input type="submit" id="submit" name="edit_chemical" value="Save" class="edit">
-    </form></div></div>
+    </form></div>
 
     <button type="button" id="addChem" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">
         <span>New Container</span>

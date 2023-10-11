@@ -13,12 +13,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
     <link rel="icon" type="image/png" href="{% static 'chemlogs/images/icon.png' %}">
-
-    <style>
-        #cas-and-amount li {
-            display: inline;
-        }
-    </style>
 </head>
 
 <body>
@@ -50,28 +44,26 @@
     <div style="display: flex;">
     
     <div style="display: inline;">
-    
     <button class="del" onclick="toggleVisibilityId('chemDeleteForm')">Remove this chemical</button>
     <button type="button" class="edit" onclick="toggleVisibilityId('editChemForm')">Edit Chemical</button>
     
     <div class="content" id="chemDeleteForm">
+    <p>Warning: deleting this chemical will delete all its states and containers ({{chemical.chemicalstate_set.count}} states and {{chemical.getContainerCount}} containers). Are you sure you want to delete "{{chemical}}" and all associated data?</p>
     <form method="POST" style="display: inline;">
         {% csrf_token %}
-        <p>Warning: deleting this chemical will delete all its states and containers ({{chemical.chemicalstate_set.count}} states and {{chemical.getContainerCount}} containers). Are you sure you want to delete "{{chemical}}" and all associated data?</p>
         <input type="submit" class="del" name="delete_chemical_anyway" value="Delete anyway">
     </form>
     <button onclick="hideId('chemDeleteForm')" class="edit">Cancel</button>
     </div>
     </div>
-        
     </div>
 
     <div class="content" style="display: block; padding: 1vw; text-align: left;" id="editChemForm">
     <form method="POST">
         {% csrf_token %}
         {{ chemical_edit_form.as_p }}
-        <input type="submit" id="submit" name="edit_chemical" value="Save" class="edit">
-    </form></div></div>
+        <input type="submit" id="submit" name="edit_chemical" value="Save" class="edit" onclick="scrollTopOnReload()">
+    </form></div>
 
     <button type="button" id="addChem" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">
         <span>New Container</span>
@@ -80,7 +72,7 @@
     <form method="POST">
         {% csrf_token %}
         {{ container_create_form.as_p }}
-        <input type="submit" class="edit" id="submit" name="new_container" value="Create">
+        <input type="submit" class="edit" id="submit" name="new_container" value="Create" scrollTopOnReload()>
     </form></div>
     {% if new_container_id %}
     <!-- tell the user the new container's id -->
@@ -101,9 +93,9 @@
     <button class="del" onclick="toggleVisibilityId('stateDeleteForm{{state.id}}')">Remove this state</button>
     <button class="edit" onclick="toggleVisibilityId('stateEditForm{{state.id}}'); populateStateEditForm('{{state.id}}', '{{state.state}}', '{{state.type}}');">Edit State</button>
     <div style="display: block;" class="content" id="stateDeleteForm{{state.id}}">
+    <p>Warning: deleting this state will delete all its containers ({{state.container_set.count}} containers). Are you sure you want to delete "{{state.getAllInfo}}" and all associated data?</p>
     <form method="POST" style="display: inline;">
         {% csrf_token %}
-        <p>Warning: deleting this state will delete all its containers ({{state.container_set.count}} containers). Are you sure you want to delete "{{state.getAllInfo}}" and all associated data?</p>
         <input type="submit" class="del" id="submit" name="delete_state_anyway_{{state.id}}" value="Delete anyway">
     </form>
     <button onclick="hideId('stateDeleteForm{{state.id}}')" class="edit">Cancel</button>
@@ -115,7 +107,7 @@
     <form method="POST">
         {% csrf_token %}
         {{ state_edit_form.as_p }}
-        <input type="submit" id="submit" name="edit_state_{{state.id}}" value="Save" class="edit">
+        <input type="submit" id="submit" name="edit_state_{{state.id}}" value="Save" class="edit" onclick="scrollTopOnReload()">
     </form></div>
 
     <!-- we don't need this if there's no transaction creation on this page
@@ -163,12 +155,14 @@
     {% endfor %} <!-- close container loop -->
     {% endfor %} <!-- close state loop -->
     
-    </div>
-
-    
+    </div></div>
 
     <script src="{% static 'chemlogs/chemScript.js' %}">  </script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        setScrollListener();
+    </script>
     <script type="text/javascript">
         // prepopulate stateEditForm with current state data
         function populateStateEditForm(id, state, type) {

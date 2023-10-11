@@ -47,15 +47,20 @@ function modifySlider(max) {
     slider.style = "margin: 0vw;";
 }
 
-// jquery script that maintains scroll position on page refresh, but not when leaving a page
-$(document).ready(function () {
-  if (localStorage.getItem("chemlogs-quote-scroll") != null) {
-    if (document.title == localStorage.getItem("chemlogs-current-page")) {
-      $(window).scrollTop(localStorage.getItem("chemlogs-quote-scroll"));
+// maintain scroll position when reloading a page
+function setScrollListener() {
+  // from https://stackoverflow.com/questions/9377951/how-to-remember-scroll-position-and-scroll-back
+  $(document).ready(function () {
+    if (localStorage.getItem("chemlogs-quote-scroll") != null) {
+        $(window).scrollTop(localStorage.getItem("chemlogs-quote-scroll"));
     }
-  }
-  $(window).on("scroll", function() {
-    localStorage.setItem("chemlogs-quote-scroll", $(window).scrollTop());
+    $(window).on("scroll", function() {
+        localStorage.setItem("chemlogs-quote-scroll", $(window).scrollTop());
+    });
   });
-  localStorage.setItem("chemlogs-current-page", document.title);
-});
+}
+
+// override the autoscroll so that you'll reload at top of page
+function scrollTopOnReload() {
+  localStorage.setItem("chemlogs-quote-scroll", 0);
+}

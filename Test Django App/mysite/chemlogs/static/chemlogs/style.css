@@ -61,7 +61,7 @@ h3 {
    margin-bottom: 1vw;
 }
 
-p, p a {
+p, p a, input[type=text], input[type=number], select {
    font-size: 4vw;
    color: #608a8e;
    padding: 0vh;
@@ -217,8 +217,51 @@ a:link, a:visited, a:hover, a:active{
    height: 3vw;
 }
 
-label {
+label, form p {
    font-size: 3vw;
+}
+
+#cas-and-amount li {
+   display: inline;
+}
+
+input[type=text], input[type=number], select {
+   padding: 1vw;
+   margin: 0vw 0vw;
+   border: 0.3vw solid #608a8e;
+   border-radius: 1.4vw;
+   background-color: #f2fbff;
+   outline: none;
+   font-size: 3vw;
+   box-sizing: border-box;
+   width: 100%;
+}
+
+input[type=text]:focus, input[type=number]:focus, select:focus {
+   border-color: #314876;
+}
+
+/*form p label {
+   position: relative;
+   top: 1vw;
+}*/
+
+form p label {
+   display: inline;
+   width: fit-content;
+   padding: 0vw;
+   margin: 1vw;
+   border: 0;
+   white-space: nowrap;
+}
+
+form p {
+   padding: 1vw 0vw 0vw;
+   display: flex;
+   width: 100%;
+   height: 6vw;
+   align-content: space-around;
+   flex-wrap: nowrap;
 }
 
 #resultTxt {
@@ -290,3 +333,14 @@ img{
    width: 60vw;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield; /* this error is not a problem */
+}

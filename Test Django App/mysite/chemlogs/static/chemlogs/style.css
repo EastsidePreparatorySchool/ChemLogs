@@ -241,15 +241,6 @@ input[type=text]:focus, input[type=number]:focus, select:focus {
    border-color: #314876;
 }
 
-form p {
-   padding: 1vw 0vw 0vw;
-   display: flex;
-   width: 100%;
-   height: 6vw;
-   align-content: space-around;
-   flex-wrap: nowrap;
-}
-
 /*form p label {
    position: relative;
    top: 1vw;
@@ -262,6 +253,15 @@ form p label {
    margin: 1vw;
    border: 0;
    white-space: nowrap;
+}
+
+form p {
+   padding: 1vw 0vw 0vw;
+   display: flex;
+   width: 100%;
+   height: 6vw;
+   align-content: space-around;
+   flex-wrap: nowrap;
 }
 
 #resultTxt {

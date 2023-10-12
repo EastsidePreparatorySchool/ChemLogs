@@ -21,14 +21,14 @@
             <h4>ChemLogs</h4></a>
     </div>
     <div class="header-bottom"></div>
+    <br>
 
-    <p style="margin: 4vw; margin-bottom: 0vw;"><strong>{{chemical.formula|displayFormula}}&emsp;{{chemical.cas}}&emsp;<a href="{{chemical.safety}}" target="_blank">SDS</a></strong></p>
-    <h1 style="margin: 4vw; margin-top: 1vw; margin-bottom: -8vw;">{{chemical.name}}</h1>
+    <p style="margin: auto; width: fit-content;"><strong>{{chemical.formula|displayFormula}}&emsp;{{chemical.cas}}&emsp;<a href="{{chemical.safety}}" target="_blank">SDS</a></strong></p>
+    <h1 style="margin: auto; width: fit-content; margin-top: 1vw; margin-bottom: 2vw;">{{chemical.name}}</h1>
     <!--<ul id="cas-and-amount">
         <li style="text-align: left;">{{chemical.cas}}</li>
         <li style="text-align: right;">{{chemical.computeAmount}}[units]</li>
     </ul>-->
-    <br>
     <!-- the following 3 displayed attributes should probably be included 
         with the specific bottle dropdowns if we end up doing that instead of
         at the top, but since we're doing a bottle per page rn they're here;
@@ -39,13 +39,10 @@
     <p><strong>Chemical State: {{chemical.state}}</strong></p>
     <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>-->
     
-    <div id="chemicalPage">
-    
-    <div style="display: flex;">
-    
-    <div style="display: inline;">
-    <button class="del" onclick="toggleVisibilityId('chemDeleteForm')">Remove this chemical</button>
-    <button type="button" class="edit" onclick="toggleVisibilityId('editChemForm')">Edit Chemical</button>
+    <div style="margin: auto; width: fit-content;">
+    <button style="display: inline;" class="del" onclick="toggleVisibilityId('chemDeleteForm')">Remove this chemical</button>
+    <button style="display: inline;" type="button" class="edit" onclick="toggleVisibilityId('editChemForm')">Edit Chemical</button>
+    </div>
     
     <div class="content" id="chemDeleteForm">
     <p>Warning: deleting this chemical will delete all its states and containers ({{chemical.chemicalstate_set.count}} states and {{chemical.getContainerCount}} containers). Are you sure you want to delete "{{chemical}}" and all associated data?</p>
@@ -55,25 +52,25 @@
     </form>
     <button onclick="hideId('chemDeleteForm')" class="edit">Cancel</button>
     </div>
-    </div>
-    </div>
 
-    <div class="content" style="display: block; padding: 1vw; text-align: left;" id="editChemForm">
+    <div class="content" id="editChemForm">
     <form method="POST">
         {% csrf_token %}
         {{ chemical_edit_form.as_p }}
-        <input type="submit" id="submit" name="edit_chemical" value="Save" class="edit" onclick="scrollTopOnReload()">
+        <input type="submit" id="submit" name="edit_chemical" value="Save Changes" class="edit" onclick="scrollTopOnReload()" style="margin-bottom: 2vw;">
     </form></div>
 
-    <button type="button" id="addChem" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">
-        <span>New Container</span>
-    </button>
+    <div style="margin: auto; width: fit-content;">
+    <button type="button" id="addChem" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">New Container</button>
+    </div>
+
     <div id="newContainerForm" class="content">
     <form method="POST">
         {% csrf_token %}
         {{ container_create_form.as_p }}
         <input type="submit" class="edit" id="submit" name="new_container" value="Create" scrollTopOnReload()>
     </form></div>
+
     {% if new_container_id %}
     <!-- tell the user the new container's id -->
     <form method="POST">
@@ -84,10 +81,10 @@
     </form>
     {% endif %}
     
-    <!-- this block needs to be formatted (see discord for sketch) -->
     {% for state in chemical.chemicalstate_set.all %}
     <div class="state">
-        <h2 style="margin: 1.5vw;">State: {{state.getInfo|capfirst}}</h2>
+        <h2 style="margin: 0vw;">State: {{state.getInfo|capfirst}}</h2>
+        <div class="header-bottom"></div>
     </div>
     <p>{{state.computeAmount|floatformat:2}}g in stock</p>
     <button class="del" onclick="toggleVisibilityId('stateDeleteForm{{state.id}}')">Remove this state</button>
@@ -103,7 +100,7 @@
 
     <div style="display: inline;">
     
-    <div class="content" style="display: block; padding: 1vw; text-align: left;" id="stateEditForm{{state.id}}">
+    <div class="content" id="stateEditForm{{state.id}}">
     <form method="POST">
         {% csrf_token %}
         {{ state_edit_form.as_p }}
@@ -117,8 +114,10 @@
     -->
     
     {% for container in state.container_set.all %}
-    <h3 class="hoverable"><a href="/chemlogs/container/{{container.id}}">Container {{container.getHeader}}</a></h3>
-    <p>Current amount: {{container.getDisplayableAmount}}</p>
+    
+    <h3 style="display: inline;" class="hoverable"><a href="/chemlogs/container/{{container.id}}">Container {{container.getHeader}}</a></h3>
+    <p style="display: inline; float: right;">{{container.getDisplayableAmount}} in stock</p>
+
     <!-- we don't necessarily need the add transaction button on this page
     <button type="button" id="addChem" class="collapsible" onclick="down()"> 
         Add chemical <span id="addDropdown">&#9660;</span>
@@ -134,12 +133,11 @@
     {% if container.noDisplayableTransactions %}
     <p>No transactions to display</p>
     {% else %}
-    <p>Transaction history:</p>
     <table class="indented">
         <tr>
             <th>Date/Time</th>
             <th>Amount ({{container.getUnits}})</th>
-            <th>Added or Removed</th>
+            <th>Type</th>
             <th>User</th>
         </tr>
         {% for transaction in container.getRecentDisplayableTransactions %}
@@ -155,7 +153,7 @@
     {% endfor %} <!-- close container loop -->
     {% endfor %} <!-- close state loop -->
     
-    </div></div>
+    </div>
 
     <script src="{% static 'chemlogs/chemScript.js' %}">  </script>
 

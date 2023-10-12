@@ -6,6 +6,16 @@
 body {
    font-family: Arial, Helvetica, sans-serif;
    background-color: #f2fbff;
+   margin: 2vw;
+   width: 96vw;
+   overflow-x: hidden;
+   -ms-overflow-style: none;  /* hide scrollbar for IE and Edge */
+   scrollbar-width: none;  /* hide scrollbar for Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar {
+    display: none;
 }
 
 /* header bar on all pages */
@@ -33,10 +43,13 @@ body {
 
 .header-bottom {
    height: 3vw;
-   width: 100vw;
-   margin: 1vw;
+   width: 105vw; /* extra wide so that position doesn't need to be exact */
+   position: absolute;
+   left: -4vw;
    background-image: linear-gradient(rgba(150, 150, 150, 0.2), rgba(255, 255, 255, 0));
 }
+
+
 /* standard text tags */
 
 h1 {
@@ -107,7 +120,7 @@ p strong {
    position: sticky;
    top: 0vw;
    background: #f2fbff;
-   padding: 1.5vw 1.5vw 1.5vw 0vw;
+   padding: 1.5vw 1.5vw 4vw 0vw;
 }
 
 .hoverable:hover {
@@ -286,7 +299,7 @@ form p {
 .content{
    display: block; 
    margin: 1vw;
-   padding-left: 10vw;
+   padding: 0vw 10vw;
    text-align:left;
    background-color: #f2fbff;
    max-height: 0;
@@ -318,7 +331,7 @@ img{
    padding: 2vw;
 }
 
-#transaction, #chemicalPage {
+#transaction {
    margin: 6vw;
 }
 

@@ -282,7 +282,7 @@ class ChemicalSearch(ListView):
         shown_chemicals = self.get_queryset()
         all_shown = len(shown_chemicals) <= ChemicalSearch.len_results_displayed # whether there aren't any hidden matching chemicals
         none_filtered = len(shown_chemicals) == Chemical.objects.count() # whether the search isn't meaningful (i.e. whether all chemicals are displayed in results)
-        actions = Transaction.objects.exclude(type="I").order_by('-time')
+        actions = Transaction.objects.exclude(type="I").order_by('-time')[:39]
         return {'shown_chemicals': shown_chemicals, 'all_shown': all_shown, 'none_filtered': none_filtered, 'actions': actions, 'chemical_create_form': chemical_create_form}
 
     def get_queryset(self):

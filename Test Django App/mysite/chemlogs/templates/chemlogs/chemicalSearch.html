@@ -20,12 +20,13 @@
             <h4>ChemLogs</h4></a>
     </div>
     <div class="header-bottom"></div>
+    <br>
 
     <!-- from https://learndjango.com/tutorials/django-search-tutorial -->
 
     <!-- for unknown reasons the styling for this div wont apply from the stylesheet-->
     <div style="text-align: center;">
-    <button type="button" id="addChem" onclick="toggleVisibilityId('addChemForm')" class="collapsible">Add New Chemical</button>
+    <button type="button" id="addChem" onclick="toggleVisibilityId('addChemForm')">Add New Chemical</button>
     <div class="content" id="addChemForm">
     <form method="POST">
         {% csrf_token %}

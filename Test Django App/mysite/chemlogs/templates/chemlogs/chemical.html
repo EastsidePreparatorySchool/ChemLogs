@@ -13,6 +13,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
     <link rel="icon" type="image/png" href="{% static 'chemlogs/images/icon.png' %}">
+
+    <style>
+        table {
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
@@ -135,14 +141,14 @@
     {% else %}
     <table class="indented">
         <tr>
-            <th>Date/Time</th>
-            <th>Amount ({{container.getUnits}})</th>
+            <th>Time</th>
+            <th>Amt ({{container.getUnits}})</th>
             <th>Type</th>
             <th>User</th>
         </tr>
         {% for transaction in container.getRecentDisplayableTransactions %}
         <tr class="hoverable">
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time|date:"m/d/Y, H:i"}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.user}}</a></td>

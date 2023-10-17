@@ -47,7 +47,7 @@
 
     <br>
     <p>Something looks off? Override the current volume/mass.</p>
-    <form method="post">
+    <form method="POST" class="small-form">
         {% csrf_token %}
         {{ override_form }}
         <input type="submit" id="submit" name="override" value="Reset">
@@ -59,14 +59,14 @@
     {% else %}
     <table class="indented">
         <tr>
-            <th>Date/Time</th>
-            <th>Amount ({{container.getUnits}})</th>
+            <th>Time</th>
+            <th>Amt ({{container.getUnits}})</th>
             <th>Type</th>
             <th>User</th>
         </tr>
         {% for transaction in container.getTransactionsToDisplay %}
         <tr class="hoverable">
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time}}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time|date:"m/d/Y, H:i"}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.user}}</a></td>

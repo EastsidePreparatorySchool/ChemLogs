@@ -160,7 +160,7 @@ a:link, a:visited, a:hover, a:active{
    height: 2.5em;
 }
 
-.edit, .del {
+.edit, .del, input[type=submit] {
    color: #ffffff;
    transition-duration: 0.5s;
    font-size: 10;
@@ -168,7 +168,6 @@ a:link, a:visited, a:hover, a:active{
    margin: 0vw;
    padding: 0.7vw 1.6vw 0.9vw; /* top right bottom [left] */
    border-radius: 2vw;
-   background-color: #608a8e;
    width: fit-content;
    height: fit-content;
    display: inline;
@@ -194,6 +193,10 @@ a:link, a:visited, a:hover, a:active{
    background-color: #608a8e; 
    opacity: 0.6; 
    margin-left: 15%;
+}
+
+.edit {
+   background-color: #608a8e;
 }
 
 .del {
@@ -356,4 +359,12 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield; /* this error is not a problem */
+}
+
+.small-form input {
+   max-width: 20vw;
+}
+
+table {
+   width: 100%;
 }

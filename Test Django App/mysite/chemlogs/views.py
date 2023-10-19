@@ -6,15 +6,10 @@ from django.views.generic import ListView
 from django.db.models import Q
 from django.utils import timezone
 from .models import Chemical, Transaction, TransactionEdit, Container
-from .forms import TransactionEditForm, TransactionCreateForm, ContainerOverrideForm, ContainerCreateForm, ChemicalCreateForm, StateEditForm
+from .forms import TransactionEditForm, TransactionCreateForm, ContainerCreateForm, ChemicalCreateForm, StateEditForm
 import itertools, csv
 from django.contrib.auth import get_user_model
 
-
-# unused
-def testPage(request, chemical_id):
-    chemical = get_object_or_404(Chemical, pk=chemical_id)
-    return render(request, 'chemlogs/testPage.html', {'chemical': chemical})
 
 # main page for a chemical
 def chemical(request, chemical_id):
@@ -154,6 +149,7 @@ def transaction(request, transaction_id):
     edit_form = None
     if request.method == 'POST':
         edit_form = TransactionEditForm(request.POST)
+        edit_form.fields['amount'].label += ' (' + transaction.container.getUnits() + ')'
         if edit_form.is_valid():
             new_amount = edit_form.cleaned_data['amount']
             new_type = edit_form.cleaned_data['type']
@@ -180,7 +176,6 @@ def transaction(request, transaction_id):
 def container(request, container_id):
     container = get_object_or_404(Container, pk=container_id)
     transact_form = None
-    override_form = None
     if request.method == 'POST':
         if "transact_add" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
@@ -213,9 +208,9 @@ def container(request, container_id):
                     # invalidity message
                     pass
         elif "override" in request.POST:
-            override_form = ContainerOverrideForm(request.POST, auto_id='%s')
-            if override_form.is_valid():
-                new_value = override_form.cleaned_data['override_value']
+            transact_form = TransactionCreateForm(request.POST, auto_id='%s')
+            if transact_form.is_valid():
+                new_value = transact_form.cleaned_data['trSlide']
                 if new_value > 0 and new_value < container.initial_value:
                     container.transaction_set.create(
                         amount=new_value,
@@ -242,10 +237,7 @@ def container(request, container_id):
             # add confirmation
     if not transact_form:
         transact_form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
-    if not override_form:
-        override_form = ContainerOverrideForm()
-        override_form.fields['override_value'].label += ' (' + container.getUnits() + ')'
-    return render(request, 'chemlogs/container.html', {'container': container, 'transact_form': transact_form, 'override_form': override_form})
+    return render(request, 'chemlogs/container.html', {'container': container, 'transact_form': transact_form})
 
 def delete_account(request, user_id):
     User = get_user_model()

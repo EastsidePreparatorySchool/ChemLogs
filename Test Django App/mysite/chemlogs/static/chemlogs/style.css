@@ -6,7 +6,7 @@
 body {
    font-family: Arial, Helvetica, sans-serif;
    background-color: #f2fbff;
-   margin: 2vw;
+   margin: 2vw 2vw;
    width: 96vw;
    overflow-x: hidden;
    -ms-overflow-style: none;  /* hide scrollbar for IE and Edge */
@@ -21,24 +21,22 @@ body::-webkit-scrollbar {
 /* header bar on all pages */
 
 .header {
-   font-size: calc(22px + 0.5vw);
-   margin-top: 2vw;
    padding: 2vw;
    font-family: Arial, Helvetica, sans-serif;
    color: #314876;
-   display: float;
+   display: float; /*what does this do here*/
+   margin-bottom: 0.5vw;
 }
 
 .header h4 {
    display: inline;
    color: #314876;
-   margin-left: -5px;
+   font-size: 7vw;
+   line-height: 0vw;
 }
 
 .header img {
-   left: 3vw;
-   top: 3vw;
-   height: 20px;
+   height: 5vw;
 }
 
 .header-bottom {
@@ -84,7 +82,7 @@ p, p a, input[type=text], input[type=number], select {
 }
 
 td, td a {
-   font-size: 3vw;
+   font-size: 4vw;
    color: #608a8e;
    padding-bottom: 0.5vh;
    margin: 0vh;
@@ -145,7 +143,7 @@ a:link, a:visited, a:hover, a:active{
    overflow: hidden;
  }
 
-/* chemical entry dropdown attributes */
+/* chemical entry dropdown attributes */ /* WHAT IS GOING ON HERE*/
 #addChem {
    text-align: center;
    font-size: 1em;
@@ -153,7 +151,7 @@ a:link, a:visited, a:hover, a:active{
    margin: 3vw;
    padding-bottom: -2vw;
    background-color: #608a8e;
-   color: #ffffff; 
+   color: #f2fbff; 
    border-width: 0px; 
    border-radius: 2vw; 
    width: 15em; 
@@ -161,9 +159,9 @@ a:link, a:visited, a:hover, a:active{
 }
 
 .edit, .del, input[type=submit] {
-   color: #ffffff;
+   color: #f2fbff;
    transition-duration: 0.5s;
-   font-size: 10;
+   font-size: 4vw;
    border: none;
    margin: 0vw;
    padding: 0.7vw 1.6vw 0.9vw; /* top right bottom [left] */
@@ -189,13 +187,13 @@ a:link, a:visited, a:hover, a:active{
    appearance: none; 
    width: 60%; 
    height: 5px; 
-   color: #ffffff;
+   color: #f2fbff;
    background-color: #608a8e; 
    opacity: 0.6; 
    margin-left: 15%;
 }
 
-.edit {
+.edit, input[type=submit] {
    background-color: #608a8e;
 }
 
@@ -233,8 +231,8 @@ a:link, a:visited, a:hover, a:active{
    height: 3vw;
 }
 
-label, form p {
-   font-size: 3vw;
+label {
+   font-size: 4vw;
 }
 
 #cas-and-amount li {
@@ -243,12 +241,12 @@ label, form p {
 
 input[type=text], input[type=number], select {
    padding: 1vw;
-   margin: 0vw 0vw;
+   margin: auto;
    border: 0.3vw solid #608a8e;
    border-radius: 1.4vw;
    background-color: #f2fbff;
    outline: none;
-   font-size: 3vw;
+   font-size: 4vw;
    box-sizing: border-box;
    width: 100%;
 }
@@ -265,9 +263,8 @@ input[type=text]:focus, input[type=number]:focus, select:focus {
 form p label {
    display: inline;
    width: fit-content;
-   padding: 0vw;
-   margin: 1vw;
-   border: 0;
+   margin: auto;
+   margin-right: 1vw;
    white-space: nowrap;
 }
 
@@ -275,7 +272,7 @@ form p {
    padding: 1vw 0vw 0vw;
    display: flex;
    width: 100%;
-   height: 6vw;
+   height: 7vw;
    align-content: space-around;
    flex-wrap: nowrap;
 }
@@ -318,7 +315,6 @@ img{
 #transactTbl {
    margin: 6vw;
    margin-top: 8vw;
-   font-size: 3.5vw;
 }
 
 #login {
@@ -340,10 +336,10 @@ img{
 
 #modifyTransaction p select {
    background-color: #608a8e;
-   color: #ffffff;
+   color: #f2fbff;
    padding-left: 1.5vw;
    padding-bottom: 1vw;
-   font-size: 10;
+   font-size: 4vw;
    border: none;
    border-radius: 2vw;
    width: 60vw;

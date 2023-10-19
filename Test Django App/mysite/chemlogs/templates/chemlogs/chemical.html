@@ -17,8 +17,10 @@
 
 <body>
     <div class="header">
-        <a href="/chemlogs/chemicalSearch"><img src="{% static 'chemlogs/images/icon.png' %}">
-            <h4>ChemLogs</h4></a>
+        <a href="/chemlogs/chemicalSearch">
+            <img src="{% static 'chemlogs/images/icon.png' %}">
+            <h4>ChemLogs</h4>
+        </a>
     </div>
     <div class="header-bottom"></div>
     <br>
@@ -40,7 +42,7 @@
     <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>-->
     
     <div style="margin: auto; width: fit-content;">
-    <button style="display: inline;" class="del" onclick="toggleVisibilityId('chemDeleteForm')">Remove this chemical</button>
+    <button style="display: inline;" class="del" onclick="toggleVisibilityId('chemDeleteForm')">Delete Chemical</button>
     <button style="display: inline;" type="button" class="edit" onclick="toggleVisibilityId('editChemForm')">Edit Chemical</button>
     </div>
     
@@ -54,11 +56,13 @@
     </div>
 
     <div class="content" id="editChemForm">
-    <form method="POST">
+    <form method="POST" style="display: inline;">
         {% csrf_token %}
         {{ chemical_edit_form.as_p }}
         <input type="submit" id="submit" name="edit_chemical" value="Save Changes" class="edit" onclick="scrollTopOnReload()" style="margin-bottom: 2vw;">
-    </form></div>
+    </form>
+    <button onclick="hideId('editChemForm')" class="edit">Cancel</button>
+    </div>
 
     <div style="margin: auto; width: fit-content;">
     <button type="button" id="addChem" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">New Container</button>
@@ -87,7 +91,7 @@
         <div class="header-bottom"></div>
     </div>
     <p>{{state.computeAmount|floatformat:2}}g in stock</p>
-    <button class="del" onclick="toggleVisibilityId('stateDeleteForm{{state.id}}')">Remove this state</button>
+    <button class="del" onclick="toggleVisibilityId('stateDeleteForm{{state.id}}')">Delete State</button>
     <button class="edit" onclick="toggleVisibilityId('stateEditForm{{state.id}}'); populateStateEditForm('{{state.id}}', '{{state.state}}', '{{state.type}}');">Edit State</button>
     <div style="display: block;" class="content" id="stateDeleteForm{{state.id}}">
     <p>Warning: deleting this state will delete all its containers ({{state.container_set.count}} containers). Are you sure you want to delete "{{state.getAllInfo}}" and all associated data?</p>
@@ -101,11 +105,13 @@
     <div style="display: inline;">
     
     <div class="content" id="stateEditForm{{state.id}}">
-    <form method="POST">
+    <form method="POST" style="display: inline;">
         {% csrf_token %}
         {{ state_edit_form.as_p }}
         <input type="submit" id="submit" name="edit_state_{{state.id}}" value="Save" class="edit" onclick="scrollTopOnReload()">
-    </form></div>
+    </form>
+    <button onclick="hideId('stateEditForm{{state.id}}')" class="edit">Cancel</button>
+    </div>
 
     <!-- we don't need this if there's no transaction creation on this page
     <button type="button" id="addChem" class="collapsible" onclick="down()"> 
@@ -142,7 +148,7 @@
         </tr>
         {% for transaction in container.getRecentDisplayableTransactions %}
         <tr class="hoverable">
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time|date:"m/d/Y, H:i"}}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time|date:"m-d-Y, H:i"}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.user}}</a></td>

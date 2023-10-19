@@ -16,10 +16,6 @@ class TransactionEditForm(forms.Form):
 class TransactionCreateForm(forms.Form):
     trSlide = forms.IntegerField(label="")
 
-# set a new amount for a container
-class ContainerOverrideForm(forms.Form):
-    override_value = forms.IntegerField(label="New Amount")
-
 class ContainerCreateForm(forms.Form):
     contents_choices = []
     def get_contents_choices(): # we need this function -- otherwise choices won't be dynamic

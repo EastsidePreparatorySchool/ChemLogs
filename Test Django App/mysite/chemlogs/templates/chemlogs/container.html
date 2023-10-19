@@ -29,29 +29,24 @@
     <br>
 
     <button type="button" id="addChem" onclick="toggleVisibilityId('transactForm')">Change Amount</button>
+    <p class="indented">When you add or remove contents from this container, record it here.</p>
     <div class="content" id="transactForm" style="display: block; padding-top: 1em;">
         <form method="POST">
             {% csrf_token %}
-            <p>When you add or remove contents from this container, record it here.</p>
             <!--<span style="display: inline; margin: 0vw; border: 0vw;">0{{container.getUnits}}</span>
             {{ transact_form }}
             <p style="display: inline; margin: 0vw;">{{container.initial_value}}{{container.getUnits}}</p>-->
-            <p>0{{container.getUnits}}{{ transact_form }}{{container.initial_value}}{{container.getUnits}}</p>
-            <br>
+            <p style="display: inline;">0{{container.getUnits}}</p>
+            {{ transact_form }}
+            <p style="display: inline;">{{container.initial_value}}{{container.getUnits}}</p>
+            <br><br>
             <input type="submit" id="submit" name="transact_add" value="Add">
             <input type="submit" id="submit" name="transact_remove" value="Remove">
             <input type="submit" id="submit" name="transact_fill" value="Fill">
             <input type="submit" id="submit" name="transact_empty" value="Empty">
+            <input type="submit" id="submit" name="override" value="Reset">
         </form>
     </div>
-
-    <br>
-    <p>Something looks off? Override the current volume/mass.</p>
-    <form method="POST" class="small-form">
-        {% csrf_token %}
-        {{ override_form }}
-        <input type="submit" id="submit" name="override" value="Reset">
-    </form>
 
     <h3>Transaction History</h3>
     {% if container.noDisplayableTransactions %}
@@ -66,7 +61,7 @@
         </tr>
         {% for transaction in container.getTransactionsToDisplay %}
         <tr class="hoverable">
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time|date:"m/d/Y, H:i"}}</a></td>
+            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time|date:"m-d-Y, H:i"}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
             <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.user}}</a></td>

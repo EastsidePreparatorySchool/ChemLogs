@@ -1,4 +1,5 @@
 from django import forms
+from django.core.validators import RegexValidator
 from .models import Container, ChemicalState
 
 class TransactionEditForm(forms.Form):
@@ -48,3 +49,10 @@ class ChemicalCreateForm(forms.Form):
 class SignInForm(forms.Form): # can also be used to create a user (sign up) (is this used?)
     email = forms.EmailField(label="Email")
     password = forms.PasswordInput()
+
+# the form to jump to a container page. Used in chemicalSearch page.
+class GoToContainerForm(forms.Form):
+    # container id
+    container = forms.CharField(max_length=2, min_length=2, label="", widget=forms.TextInput(
+        attrs={'placeholder': 'Enter ID'} # this text displays when input is empty
+    ))

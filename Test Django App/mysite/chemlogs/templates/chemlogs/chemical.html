@@ -25,23 +25,10 @@
     <div class="header-bottom"></div>
     <br>
 
-    <p style="margin: auto; width: fit-content;"><strong>{{chemical.formula|displayFormula}}&emsp;{{chemical.cas}}&emsp;<a href="{{chemical.safety}}" target="_blank">SDS</a></strong></p>
-    <h1 style="margin: auto; width: fit-content; margin-top: 1vw; margin-bottom: 2vw;">{{chemical.name}}</h1>
-    <!--<ul id="cas-and-amount">
-        <li style="text-align: left;">{{chemical.cas}}</li>
-        <li style="text-align: right;">{{chemical.computeAmount}}[units]</li>
-    </ul>-->
-    <!-- the following 3 displayed attributes should probably be included 
-        with the specific bottle dropdowns if we end up doing that instead of
-        at the top, but since we're doing a bottle per page rn they're here;
-        I dont think the threshold needs to be displayed - if the notif page 
-        works they can just check that-->
-    <!-- they have been moved to container.html
-    <p><strong>Storage Location: {{chemical.loc}}</strong></p>
-    <p><strong>Chemical State: {{chemical.state}}</strong></p>
-    <p><strong>Initial Amount: {{chemical.init_vol}}</strong></p>-->
+    <p class="center"><strong>{{chemical.formula|displayFormula}}&emsp;{{chemical.cas}}&emsp;<a href="{{chemical.safety}}" target="_blank">SDS</a></strong></p>
+    <h1 class="center" style="margin-top: 1vw; margin-bottom: 2vw;">{{chemical.name}}</h1>
     
-    <div style="margin: auto; width: fit-content;">
+    <div class="center">
     <button style="display: inline;" class="del" onclick="toggleVisibilityId('chemDeleteForm')">Delete Chemical</button>
     <button style="display: inline;" type="button" class="edit" onclick="toggleVisibilityId('editChemForm')">Edit Chemical</button>
     </div>
@@ -64,7 +51,7 @@
     <button onclick="hideId('editChemForm')" class="edit">Cancel</button>
     </div>
 
-    <div style="margin: auto; width: fit-content;">
+    <div class="center">
     <button type="button" id="addChem" onclick="toggleVisibilityId('newContainerForm')" style="margin-top: 0vw;">New Container</button>
     </div>
 

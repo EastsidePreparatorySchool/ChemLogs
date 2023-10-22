@@ -31,12 +31,13 @@ body::-webkit-scrollbar {
 .header h4 {
    display: inline;
    color: #314876;
-   font-size: 7vw;
+   font-size: 7vw; /* this should be 1.4x the img's height, so they match heights*/
    line-height: 0vw;
 }
 
 .header img {
    height: 5vw;
+   width: auto;
 }
 
 .header-bottom {
@@ -93,11 +94,14 @@ td, td a {
 li, li a {
    font-size: 4vw;
    color: #608a8e;
-   padding: 0vw;
+   padding: 0vw 0vw 1vw;
    margin: 0vw;
-   margin-left: -3vw;
    text-decoration: none;
    list-style-type: none;
+}
+
+ul {
+   padding-left: 4vw; /* if this property is not set, list items will be indented significanly */
 }
 
 td {
@@ -143,19 +147,17 @@ a:link, a:visited, a:hover, a:active{
    overflow: hidden;
  }
 
-/* chemical entry dropdown attributes */ /* WHAT IS GOING ON HERE*/
+/* chemical entry dropdown attributes */
 #addChem {
    text-align: center;
-   font-size: 1em;
-   outline-color: none; 
+   font-size: 5vw;
    margin: 3vw;
-   padding-bottom: -2vw;
+   padding: 3vw;
    background-color: #608a8e;
    color: #f2fbff; 
-   border-width: 0px; 
+   border: none;
    border-radius: 2vw; 
-   width: 15em; 
-   height: 2.5em;
+   width: 75vw;
 }
 
 .edit, .del, input[type=submit] {
@@ -177,16 +179,16 @@ a:link, a:visited, a:hover, a:active{
 }
 
 #addChemForm {
-   margin-top: 0px;
+   margin-top: 0vw;
    margin-left: 6vw;
    text-align: left;
    border: none;
 }
 
 #trSlide {
-   appearance: none; 
-   width: 60%; 
-   height: 5px; 
+   appearance: none;
+   width: 60%;
+   height: 1.3vw;
    color: #f2fbff;
    background-color: #608a8e; 
    opacity: 0.6; 
@@ -220,10 +222,9 @@ a:link, a:visited, a:hover, a:active{
    border-bottom: 0.5vw solid #314876;
 }
 
-#search {
+#search-button {
    width: 4vw; 
-   height: 9vw;
-   margin-bottom: -4px;
+   height: 4vw;
 }
 
 #requireSomeInStock {
@@ -235,13 +236,8 @@ label {
    font-size: 4vw;
 }
 
-#cas-and-amount li {
-   display: inline;
-}
-
 input[type=text], input[type=number], select {
    padding: 1vw;
-   margin: auto;
    border: 0.3vw solid #608a8e;
    border-radius: 1.4vw;
    background-color: #f2fbff;
@@ -263,7 +259,6 @@ input[type=text]:focus, input[type=number]:focus, select:focus {
 form p label {
    display: inline;
    width: fit-content;
-   margin: auto;
    margin-right: 1vw;
    white-space: nowrap;
 }
@@ -274,18 +269,20 @@ form p {
    width: 100%;
    height: 7vw;
    align-content: space-around;
+   align-items: center;
    flex-wrap: nowrap;
 }
 
+/* header text with #results. On main page. */
 #resultTxt {
-   margin: -2vw;
+   margin: 0vw;
    color: #314876;
    font-size: 4vw;
 }
 
+/* Box of search results. On main page. */
 #results {
-   padding: 8vw;
-   padding-bottom: 2vw;
+   padding: 6vw 7vw 1vw;
    margin: 6vw;
    margin-top: 2vw;
    background-color: #cededd;
@@ -296,18 +293,18 @@ form p {
    display: flex;
 }
 
-.content{
+.content {
    display: block; 
    margin: 1vw;
    padding: 0vw 10vw;
-   text-align:left;
+   text-align: left;
    background-color: #f2fbff;
    max-height: 0;
    overflow: hidden;
    transition: max-height 0.2s ease-out;
 }
 
-img{
+img {
    height: 4vw;
    width: 4vw;
 }
@@ -339,7 +336,6 @@ img{
    color: #f2fbff;
    padding-left: 1.5vw;
    padding-bottom: 1vw;
-   font-size: 4vw;
    border: none;
    border-radius: 2vw;
    width: 60vw;
@@ -361,6 +357,21 @@ input[type=number] {
    max-width: 20vw;
 }
 
+.small-input input[type=text] {
+   max-width: 20vw;
+}
+
 table {
    width: 100%;
+}
+
+/* used for divs whose purpose it to center their content, or for centered content */
+.center {
+   margin: auto;
+   width: fit-content;
+}
+
+/* text shown in empty inputs */
+::placeholder {
+   color: #608a8e;
 }

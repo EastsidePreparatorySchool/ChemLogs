@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from django.db.models import Q
 from django.utils import timezone
 from .models import Chemical, Transaction, TransactionEdit, Container
-from .forms import TransactionEditForm, TransactionCreateForm, ContainerCreateForm, ChemicalCreateForm, StateEditForm
+from .forms import TransactionEditForm, TransactionCreateForm, ContainerCreateForm, ChemicalCreateForm, StateEditForm, GoToContainerForm
 import itertools, csv
 from django.contrib.auth import get_user_model
 
@@ -254,28 +254,42 @@ class ChemicalSearch(ListView):
 
     def get(self, request):
         chemical_create_form = ChemicalCreateForm()
-        return render(request, self.template_name, self.get_context_data(chemical_create_form))
+        go_to_container_form = GoToContainerForm()
+        return render(request, self.template_name, self.get_context_data(chemical_create_form, go_to_container_form))
     
     def post(self, request):
         chemical_create_form = ChemicalCreateForm(self.request.POST)
-        if chemical_create_form.is_valid():
-            new_chemical = Chemical.objects.create(
-                name=chemical_create_form.cleaned_data['name'],
-                cas=chemical_create_form.cleaned_data['cas'],
-                formula=chemical_create_form.cleaned_data['formula'])
-            if chemical_create_form.cleaned_data['safety']:
-                new_chemical.safety=chemical_create_form.cleaned_data['safety']
-            if chemical_create_form.cleaned_data['molar_mass']:
-                new_chemical.molar_mass=chemical_create_form.cleaned_data['molar_mass']
-            new_chemical.save()
-        return render(request, self.template_name, self.get_context_data(chemical_create_form))
+        go_to_container_form = GoToContainerForm(self.request.POST)
+        container_not_exist = False # whether the container that you searched for does not exist
+        if 'new_chemical' in request.POST:
+            if chemical_create_form.is_valid():
+                new_chemical = Chemical.objects.create(
+                    name=chemical_create_form.cleaned_data['name'],
+                    cas=chemical_create_form.cleaned_data['cas'],
+                    formula=chemical_create_form.cleaned_data['formula'])
+                if chemical_create_form.cleaned_data['safety']:
+                    new_chemical.safety=chemical_create_form.cleaned_data['safety']
+                if chemical_create_form.cleaned_data['molar_mass']:
+                    new_chemical.molar_mass=chemical_create_form.cleaned_data['molar_mass']
+                new_chemical.save()
+        elif 'go_to_container' in request.POST:
+            if go_to_container_form.is_valid():
+                id = go_to_container_form.cleaned_data['container'].upper()
+                try:
+                    container = Container.objects.get(id=id)
+                    return redirect('/chemlogs/container/' + id)
+                except:
+                    container_not_exist = True
 
-    def get_context_data(self, chemical_create_form):
+        return render(request, self.template_name, self.get_context_data(chemical_create_form, go_to_container_form, container_not_exist))
+
+    def get_context_data(self, chemical_create_form, go_to_container_form, container_not_exist=False):
         shown_chemicals = self.get_queryset()
         all_shown = len(shown_chemicals) <= ChemicalSearch.len_results_displayed # whether there aren't any hidden matching chemicals
         none_filtered = len(shown_chemicals) == Chemical.objects.count() # whether the search isn't meaningful (i.e. whether all chemicals are displayed in results)
-        actions = Transaction.objects.exclude(type="I").order_by('-time')[:39]
-        return {'shown_chemicals': shown_chemicals, 'all_shown': all_shown, 'none_filtered': none_filtered, 'actions': actions, 'chemical_create_form': chemical_create_form}
+        actions = Transaction.objects.exclude(type="I").order_by('-time')[:39] # show the 40 most recent not-deleted transactions
+        
+        return {'shown_chemicals': shown_chemicals, 'all_shown': all_shown, 'none_filtered': none_filtered, 'actions': actions, 'chemical_create_form': chemical_create_form, 'go_to_container_form': go_to_container_form, 'container_not_exist': container_not_exist}
 
     def get_queryset(self):
         nameSearch = self.request.GET.get("name")

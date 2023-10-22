@@ -22,50 +22,67 @@
     <div class="header-bottom"></div>
     <br>
 
+    <form method="POST" style="margin: auto; width: fit-content; height: fit-content;" class="small-input" autocapitalize="on">
+        {% csrf_token %}
+        <div style="display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 2vw;" autocapitalize="off">
+        <!--<input type="text" maxlength="2" minlength="2" style="display: inline; width: 20vw;">-->
+
+        {{ go_to_container_form }}
+        <input type=submit value="... jump to container" name="go_to_container">
+        </div>
+        {% if container_not_exist %}
+        <p>There is no container with this id.</p>
+        {% endif %}
+    </form><br>
+
     <!-- from https://learndjango.com/tutorials/django-search-tutorial -->
 
-    <!-- for unknown reasons the styling for this div wont apply from the stylesheet-->
-    <div style="text-align: center;">
-    <button type="button" id="addChem" onclick="toggleVisibilityId('addChemForm')">Add New Chemical</button>
+    <div class="center">
+    <button type="button" id="addChem" onclick="toggleVisibilityId('addChemForm')">Create New Chemical</button>
+    </div>
     <div class="content" id="addChemForm">
     <form method="POST">
         {% csrf_token %}
         {{ chemical_create_form.as_p }}
         <input type="submit" id="submit" name="new_chemical" value="Create">
-    </form></div></div>
+    </form></div>
+
+    <div class="header-bottom"></div>
 
     <div id="searchDiv">
     <form action="/chemlogs/chemicalSearch/" method="GET">
-        {% csrf_token %}
-            <input name="name" type="text" id="searchbar" placeholder=" Search by chemical name, formula, or CAS #">
-            <input type="image" id="search" src="/static/chemlogs/images/search.png"
-            style="height: 5vw;">
-            <br> </div>
-            <input type="checkbox" id="requireSomeInStock" name="requireSomeInStock" value="true">
-            <label for="requireSomeInStock">Only show chemicals that are in stock</label><br>
+        <h3>Chemical Search</h3>
+        <div style="display: flex; align-items: center; padding: 0;">
+        <input name="name" type="text" id="searchbar" placeholder="Enter name, formula, or CAS" style="padding: 2vw;">
+        <input type="image" id="search-button" src='{% static "chemlogs/images/search.png" %}' style="height: 5vw; margin: auto;">
+        </div>
+        <br> </div>
+        <input type="checkbox" id="requireSomeInStock" name="requireSomeInStock" value="true">
+        <label for="requireSomeInStock">Only show chemicals that are in stock</label><br>
     </form><br>
 
     <div id="results">
-    {% if shown_chemicals %}
+    <h4 id="resultTxt">
     {% if none_filtered %}
-    <h4 id="resultTxt">All chemicals:</h4>
+    All chemicals:
     {% elif all_shown %}
-    <h4 id="resultTxt">Search Results:</h4>
+    Search Results:
     {% else %}
-    <h4 id="resultTxt"> Top search results:</h4>
+    Top search results:
     {% endif %}
+    </h4>
     <ul>
         {% for chemical in shown_chemicals %}
         <li class="hoverable"><a href="/chemlogs/chemical/{{chemical.id}}/">
         {{ chemical }}
         </a></li>
+        {% empty %}
+        <p>No results</p>
         {% endfor %}
     </ul>
-    {% else %}
-    <p>No results</p>
-    {% endif %}
     </div>
 
+    <div class="header-bottom"></div>
     <div id="transactTbl">
     <h3>Recent Transaction History</h3> 
     <a href="{% url 'chemlogs:exportCSV' %}"><img src="{% static 'chemlogs/images/download.png' %}"></a>

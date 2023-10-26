@@ -37,16 +37,6 @@ function show(content) {
   content.style.maxHeight = content.scrollHeight + "px";
 }
 
-// Used on page load. Changes how the slider renders.
-function modifySlider(max) {
-    slider = document.getElementById("trSlide");
-    slider.type = "range";
-    slider.min = "0";
-    slider.max = max;
-    slider.value = "0";
-    slider.style = "margin: 0vw;";
-}
-
 // maintain scroll position when reloading a page
 function setScrollListener() {
   // from https://stackoverflow.com/questions/9377951/how-to-remember-scroll-position-and-scroll-back

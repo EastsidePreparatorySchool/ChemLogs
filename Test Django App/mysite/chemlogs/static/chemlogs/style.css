@@ -185,16 +185,6 @@ a:link, a:visited, a:hover, a:active{
    border: none;
 }
 
-#trSlide {
-   appearance: none;
-   width: 60%;
-   height: 1.3vw;
-   color: #f2fbff;
-   background-color: #608a8e; 
-   opacity: 0.6; 
-   margin-left: 15%;
-}
-
 .edit, input[type=submit] {
    background-color: #608a8e;
 }
@@ -374,4 +364,8 @@ table {
 /* text shown in empty inputs */
 ::placeholder {
    color: #608a8e;
+}
+
+#new_amount {
+   display: none;
 }

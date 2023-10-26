@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'chemlogs/style.css' %}">
     <link rel="icon" type="image/png" href="{% static 'chemlogs/images/icon.png' %}">
 </head>
-<body onload="modifySlider('{{container.initial_value}}')">
+<body onload="setAmount('{{container.computeRawAmount}}')">
     <div class="header">
         <a href="/chemlogs/chemicalSearch"><img src="{% static 'chemlogs/images/icon.png' %}">
             <h4>ChemLogs</h4></a>
@@ -28,25 +28,24 @@
     <p><strong>Initial Amount: {{container.getInitialDisplayableAmount}}</strong></p>
     <br>
 
-    <button type="button" id="addChem" onclick="toggleVisibilityId('transactForm')">Change Amount</button>
-    <p class="indented">When you add or remove contents from this container, record it here.</p>
-    <div class="content" id="transactForm" style="display: block; padding-top: 1em;">
-        <form method="POST">
-            {% csrf_token %}
-            <!--<span style="display: inline; margin: 0vw; border: 0vw;">0{{container.getUnits}}</span>
-            {{ transact_form }}
-            <p style="display: inline; margin: 0vw;">{{container.initial_value}}{{container.getUnits}}</p>-->
-            <p style="display: inline;">0{{container.getUnits}}</p>
-            {{ transact_form }}
-            <p style="display: inline;">{{container.initial_value}}{{container.getUnits}}</p>
-            <br><br>
-            <input type="submit" id="submit" name="transact_add" value="Add">
-            <input type="submit" id="submit" name="transact_remove" value="Remove">
-            <input type="submit" id="submit" name="transact_fill" value="Fill">
-            <input type="submit" id="submit" name="transact_empty" value="Empty">
-            <input type="submit" id="submit" name="override" value="Reset">
-        </form>
+    <br>
+    <!-- this mess is the bottle appearance that can be slid to create a transaction -->
+    <div id="slider-bottle" style="height: 35vw; width: 20vw; border: 2vw #314876 solid; border-radius: 4vw; margin: auto; position: relative;">
+        <div style="height: 5vw; width: 12vw; border: 2vw #314876 solid; border-radius: 2vw; border-bottom: none; margin: auto; position: relative; bottom: 7vw;"></div>
+        <div id="slider-contents" style="background-color: #608a8e; width: 100%; height: 10vw; position: absolute; bottom: 0vw; z-index: -1;">
+            <div style="position: relative; left: 23.5vw; bottom: 2.3vw; display: flex; align-items: center; gap: 1.5vw;">
+                <div style="height: 1vw; width: 4vw; background-color: #608a8e;"></div>
+                <p id="slider-amount">{{container.computeAmount}}</p>
+            </div>
+        </div>
     </div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ transact_form }}
+        <div class="center" style="padding-top: 2vw;">
+            <input type="submit" name="transact" value="Save Transaction">
+        </div>
+    </form>
 
     <h3>Transaction History</h3>
     {% if container.noDisplayableTransactions %}
@@ -71,6 +70,50 @@
     {% endif %}
 
     <script src="{% static 'chemlogs/chemScript.js' %}"> </script>
+
+    <script type="text/javascript"> // slider control for creating a transaction
+    slider = document.getElementById("slider-bottle");
+    contents = document.getElementById("slider-contents")
+    maxAmount = '{{container.initial_value}}';
+    function vwToPx() { // 1vw but in px
+        return document.documentElement.clientWidth / 100;
+    }
+    function getOffset() { // adjust for the 2vw bottom border
+        return 2 * vwToPx();
+    }
+    function getBottleHeightPx() {
+        bottleHeightVw = 35; // vw height of bottle
+        return bottleHeightVw * vwToPx();
+    }
+    slider.onclick = function(event) {
+        var rect = slider.getBoundingClientRect();
+        var y = rect.bottom - event.clientY;  // cursor y distance from bottom of bottle
+        newAmount = (y-getOffset()) * maxAmount / (getBottleHeightPx());
+        newAmount = Math.min(newAmount, maxAmount);
+        newAmount = Math.max(newAmount, 0);
+        newAmount = Math.round(newAmount);
+        setAmount(newAmount, y);
+    }
+
+    // show the value that the user is changing container amount to.
+    // (also used to show current amount)
+    function setAmount(newAmount, y) {
+        if (!y) {
+            // find y from newAmount (whereas above we do the opposite)
+            y = newAmount * getBottleHeightPx() / maxAmount + getOffset();
+        }
+        document.getElementById("slider-amount").innerHTML = newAmount;
+        document.getElementById("new_amount").value = newAmount; // views.py reads this element
+
+        // adjust height of contents + label
+        if (newAmount == maxAmount) {
+            contents.style.height = "100%"; // don't appear to overflow container
+        } else {
+            contents.style.height = "calc(" + y + "px - 2vw)";
+        }
+    }
+
+    </script>
 
 </body>
 </html>

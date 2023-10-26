@@ -15,7 +15,7 @@ class TransactionEditForm(forms.Form):
 
 
 class TransactionCreateForm(forms.Form):
-    trSlide = forms.IntegerField(label="")
+    new_amount = forms.FloatField(label="")
 
 class ContainerCreateForm(forms.Form):
     contents_choices = []

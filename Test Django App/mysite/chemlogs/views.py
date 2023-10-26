@@ -177,66 +177,17 @@ def container(request, container_id):
     container = get_object_or_404(Container, pk=container_id)
     transact_form = None
     if request.method == 'POST':
-        if "transact_add" in request.POST:
+        if "transact" in request.POST:
             transact_form = TransactionCreateForm(request.POST, auto_id='%s')
             if transact_form.is_valid():
-                delta = transact_form.cleaned_data['trSlide']
-                new_value=container.computeRawAmount() + delta
-                if new_value >= 0 and new_value <= container.initial_value:
-                    container.transaction_set.create(
-                        amount=transact_form.cleaned_data['trSlide'],
-                        time=timezone.now(),
-                        type="T",
-                        user=request.user)
-                    # some kind of confirmation ("you have added/removed this much")
-                else:
-                    # invalidity message
-                    pass
-        elif "transact_remove" in request.POST:
-            transact_form = TransactionCreateForm(request.POST, auto_id='%s')
-            if transact_form.is_valid():
-                delta = 0 - transact_form.cleaned_data['trSlide']
-                new_value=container.computeRawAmount() + delta
-                if new_value > 0 and new_value < container.initial_value:
-                    container.transaction_set.create(
-                        amount=delta,
-                        time=timezone.now(),
-                        type="T",
-                        user=request.user)
-                    # add confirmation
-                else:
-                    # invalidity message
-                    pass
-        elif "override" in request.POST:
-            transact_form = TransactionCreateForm(request.POST, auto_id='%s')
-            if transact_form.is_valid():
-                new_value = transact_form.cleaned_data['trSlide']
-                if new_value > 0 and new_value < container.initial_value:
-                    container.transaction_set.create(
-                        amount=new_value,
-                        time=timezone.now(),
-                        type="R",
-                        user=request.user)
-                    # add confirmation
-                else:
-                    # invalidity: tell user that the new amount must be within the bottle size and nonnegative
-                    pass
-        elif "transact_fill" in request.POST:
-            container.transaction_set.create(
-                amount=container.initial_value,
-                time=timezone.now(),
-                type="R",
-                user=request.user)
-            # add confirmation
-        elif "transact_empty" in request.POST:
-            container.transaction_set.create(
-                amount=0,
-                time=timezone.now(),
-                type="R",
-                user=request.user)
-            # add confirmation
+                delta = transact_form.cleaned_data['new_amount'] - container.computeRawAmount()
+                container.transaction_set.create(
+                    amount=delta,
+                    time=timezone.now(),
+                    type="T",
+                    user=request.user)
     if not transact_form:
-        transact_form = TransactionCreateForm(auto_id='%s') # this argument makes the input's id "trSlide" rather than "id_trSlide"
+        transact_form = TransactionCreateForm(auto_id='%s') # auto_id makes the input's id "new_amount" rather than "id_new_amount"
     return render(request, 'chemlogs/container.html', {'container': container, 'transact_form': transact_form})
 
 def delete_account(request, user_id):

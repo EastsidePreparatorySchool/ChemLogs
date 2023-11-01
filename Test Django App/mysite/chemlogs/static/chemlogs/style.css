@@ -154,9 +154,9 @@ a:link, a:visited, a:hover, a:active{
    margin: 3vw;
    padding: 3vw;
    background-color: #608a8e;
-   color: #f2fbff; 
+   color: #f2fbff;
    border: none;
-   border-radius: 2vw; 
+   border-radius: 2vw;
    width: 75vw;
 }
 
@@ -241,11 +241,6 @@ input[type=text]:focus, input[type=number]:focus, select:focus {
    border-color: #314876;
 }
 
-/*form p label {
-   position: relative;
-   top: 1vw;
-}*/
-
 form p label {
    display: inline;
    width: fit-content;
@@ -324,11 +319,8 @@ img {
 #modifyTransaction p select {
    background-color: #608a8e;
    color: #f2fbff;
-   padding-left: 1.5vw;
-   padding-bottom: 1vw;
+   text-align: center;
    border: none;
-   border-radius: 2vw;
-   width: 60vw;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -347,7 +339,7 @@ input[type=number] {
    max-width: 20vw;
 }
 
-.small-input input[type=text] {
+.small-input input[type=text], .small-input input[type=number] {
    max-width: 20vw;
 }
 
@@ -368,4 +360,11 @@ table {
 
 #new_amount {
    display: none;
+}
+
+/* style the options that drop down when choosing a transaction type on transaction.html.
+   Note: there's a weird behavior on mobile when if font-size=4vw then font becomes way too big. */
+select option {
+   font-size: 3vw;
+   color: #f2fbff;
 }

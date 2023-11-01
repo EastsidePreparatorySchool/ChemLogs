@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="header">
-        <a href="/chemlogs/chemicalSearch"><img src="{% static 'chemlogs/images/icon.png' %}">
+        <a href="{% url 'chemlogs:chemicalSearch' %}"><img src="{% static 'chemlogs/images/icon.png' %}">
             <h4>ChemLogs</h4></a>
     </div>
     <div class="header-bottom"></div>
@@ -32,21 +32,42 @@
     </form>-->
 
     <div id="transaction">
-    <form method="POST" id="modifyTransaction">
+    <h2>Modify Transaction</h2>
+    <div style="line-height: 7vw;">
+    <p><a href="{% url 'chemlogs:chemical' chemical_id=transaction.container.contents.chemical.id %}">
+        Chemical: {{transaction.container.contents.chemical.name}} ({{transaction.container.contents.getInfo}})
+    </a></p>
+    <p><a href="{% url 'chemlogs:container' container_id=transaction.container.id %}">
+        Container: {{transaction.container.getHeader}}
+    </a></p>
+    <p>Date: {{transaction.time.date}}</p>
+    <p>Time: {{transaction.time.time}}</p>
+    <p>Actual transaction.time for reference: {{transaction.time}}</p>
+    <p>User: {{transaction.user}}</p>
+    </div>
+
+    <br>
+    <p><strong>If this transaction was recorded incorrectly, fix it here. Note: this will affect the current bottle contents.</strong></p>
+    <form method="POST" id="modifyTransaction" class="small-input">
         {% csrf_token %}
-        <legend><h2>Modify Transaction</h2></legend>
-        <p>Chemical: {{transaction.container.contents.chemical.name}} ({{transaction.container.contents.getInfo}})</p>
-        <p>Container: {{transaction.container.getHeader}}</p>
-        <p>Date: {{transaction.time.date}}</p>
-        <p>Time: {{transaction.time.time}}</p>
-        <p>User: {{transaction.user}}</p>
-        <br>
-        <p><strong>If this transaction was recorded incorrectly, fix it here.</strong></p>
-        {{ edit_form.as_p }}
-        <input type="submit" value="Save Changes">
+        <p>
+            {{ edit_form.type.errors }}
+            {{ edit_form.type.label_tag }}
+            {{ edit_form.type }}
+        </p>
+        <p>
+            {{ edit_form.amount.errors }}
+            {{ edit_form.amount.label_tag }}
+            {{ edit_form.amount }}
+            <input type="submit" value="Save Changes" style="margin-left: 1vw; width: 100%;">
+        </p>
     </form>
     <br>
-    <p class="hoverable"><a href="/chemlogs/container/{{transaction.container.id}}/">Return to Container Page</a></p>
+    <p class="hoverable">
+        <a href="{% url 'chemlogs:container' container_id=transaction.container.id %}">
+            Return to Container Page
+        </a>
+    </p>
     </div>
 </body>
 </html>

@@ -17,7 +17,7 @@
 
 <body>
     <div class="header">
-        <a href="/chemlogs/chemicalSearch">
+        <a href="{% url 'chemlogs:chemicalSearch' %}">
             <img src="{% static 'chemlogs/images/icon.png' %}">
             <h4>ChemLogs</h4>
         </a>
@@ -108,7 +108,7 @@
     
     {% for container in state.container_set.all %}
     
-    <h3 style="display: inline;" class="hoverable"><a href="/chemlogs/container/{{container.id}}">Container {{container.getHeader}}</a></h3>
+    <h3 style="display: inline;" class="hoverable"><a href="{% url 'chemlogs:container' container_id=container.id %}">Container {{container.getHeader}}</a></h3>
     <p style="display: inline; float: right;">{{container.getDisplayableAmount}} in stock</p>
 
     <!-- we don't necessarily need the add transaction button on this page
@@ -135,10 +135,10 @@
         </tr>
         {% for transaction in container.getRecentDisplayableTransactions %}
         <tr class="hoverable">
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time|date:"m-d-Y, H:i"}}</a></td>
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.user}}</a></td>
+            <td><a href="{% url 'chemlogs:transaction' transaction_id=transaction.id %}">{{transaction.time|date:"m-d-Y, H:i"}}</a></td>
+            <td><a href="{% url 'chemlogs:transaction' transaction_id=transaction.id %}">{{transaction.getAbsoluteAmount}}<!--{{chemical.unit}}--></a></td>
+            <td><a href="{% url 'chemlogs:transaction' transaction_id=transaction.id %}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
+            <td><a href="{% url 'chemlogs:transaction' transaction_id=transaction.id %}">{{transaction.user}}</a></td>
         </tr>
         {% endfor %}
     </table>

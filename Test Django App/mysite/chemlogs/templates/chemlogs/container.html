@@ -13,13 +13,13 @@
 </head>
 <body onload="setAmount('{{container.computeRawAmount}}')">
     <div class="header">
-        <a href="/chemlogs/chemicalSearch"><img src="{% static 'chemlogs/images/icon.png' %}">
+        <a href="{% url 'chemlogs:chemicalSearch' %}"><img src="{% static 'chemlogs/images/icon.png' %}">
             <h4>ChemLogs</h4></a>
     </div>
     <div class="header-bottom"></div>
     <br>
 
-    <p class="hoverable"><a href="/chemlogs/chemical/{{container.contents.chemical.id}}/">{{container.contents.chemical}} {{container.getHeader}}</a></p>
+    <p class="hoverable"><a href="{% url 'chemlogs:chemical' chemical_id=container.contents.chemical.id %}">{{container.contents.chemical}} {{container.getHeader}}</a></p>
     <p style="position: absolute;">{{container.contents.chemical.cas}}</p>
     <p style="position: absolute; right: 6vw;">{{container.getDisplayableAmount}} in stock</p>
     <br>
@@ -30,14 +30,14 @@
 
     <br>
     <!-- this mess is the bottle appearance that can be slid to create a transaction -->
-    <div id="slider-bottle" style="height: 35vw; width: 20vw; border: 2vw #314876 solid; border-radius: 4vw; margin: auto; position: relative;">
-        <div style="height: 5vw; width: 12vw; border: 2vw #314876 solid; border-radius: 2vw; border-bottom: none; margin: auto; position: relative; bottom: 7vw;"></div>
-        <div id="slider-contents" style="background-color: #608a8e; width: 100%; height: 10vw; position: absolute; bottom: 0vw; z-index: -1;">
-            <div style="position: relative; left: 23.5vw; bottom: 2.3vw; display: flex; align-items: center; gap: 1.5vw;">
+    <div id="slider-bottle" style="height: 35vw; width: 20vw; border: 2vw #314876 solid; border-radius: 4vw; margin: auto; position: relative;"> <!-- bottle body -->
+        <div id="slider-contents" style="background-color: #608a8e; width: 100%; height: 10vw; position: absolute; bottom: 0vw; z-index: -1;"> <!-- stuff inside bottle -->
+            <div style="position: relative; left: 23.5vw; bottom: 2.3vw; display: flex; align-items: center; gap: 1.5vw;"> <!-- marker/label of amount -->
                 <div style="height: 1vw; width: 4vw; background-color: #608a8e;"></div>
                 <p id="slider-amount">{{container.computeAmount}}</p>
             </div>
         </div>
+        <div style="height: 5vw; width: 12vw; border: 2vw #314876 solid; border-radius: 2vw; border-bottom: none; margin: auto; position: relative; bottom: 7vw;"></div> <!-- bottle neck/top -->
     </div>
     <form method="POST">
         {% csrf_token %}
@@ -60,10 +60,10 @@
         </tr>
         {% for transaction in container.getTransactionsToDisplay %}
         <tr class="hoverable">
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.time|date:"m-d-Y, H:i"}}</a></td>
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.getAbsoluteAmount}}</a></td>
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
-            <td><a href="/chemlogs/transaction/{{transaction.id}}">{{transaction.user}}</a></td>
+            <td><a href="{% url 'chemlogs:transaction' transaction_id=transaction.id %}">{{transaction.time|date:"m-d-Y, H:i"}}</a></td>
+            <td><a href="{% url 'chemlogs:transaction' transaction_id=transaction.id %}">{{transaction.getAbsoluteAmount}}</a></td>
+            <td><a href="{% url 'chemlogs:transaction' transaction_id=transaction.id %}">{% if transaction.type == "R" %}Reset{% elif transaction.amount > 0 %}Added{% else %}Removed{% endif %}</a></td>
+            <td><a href="{% url 'chemlogs:transaction' transaction_id=transaction.id %}">{{transaction.user}}</a></td>
         </tr>
         {% endfor %}
     </table>

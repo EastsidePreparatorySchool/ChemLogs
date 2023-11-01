@@ -6,12 +6,11 @@ class TransactionEditForm(forms.Form):
     type_choices = [ # N should not be an option
         ("T", "Standard (Add/Remove)"),
         ("R", "Reset (Override Container Amount)"),
-        ("I", "Mistake (Transaction Will be Deleted)")
+        ("I", "Mistake (Transaction will be Deleted)")
     ]
 
-    amount = forms.IntegerField(max_value=9999, label="Amount")
-    #type = forms.CharField(max_length=10, label="Type")
     type = forms.ChoiceField(choices=type_choices, label="Type")
+    amount = forms.IntegerField(max_value=9999, label="Amount")
 
 
 class TransactionCreateForm(forms.Form):

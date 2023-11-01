@@ -93,6 +93,10 @@ def chemical(request, chemical_id):
             chemical.formula=chemical_edit_form.cleaned_data['formula']
             if chemical_edit_form.cleaned_data['molar_mass']:
                 chemical.molar_mass=chemical_edit_form.cleaned_data['molar_mass']
+            if chemical_edit_form.cleaned_data['dangerous']:
+                chemical.dangerous=chemical_edit_form.cleaned_data['dangerous']
+            else:
+                chemical.dangerous=False
             chemical.save() # is this line necessary?
     if request.method == 'POST':
         for state in chemical.chemicalstate_set.all():
@@ -218,7 +222,12 @@ class ChemicalSearch(ListView):
                     new_chemical.safety=chemical_create_form.cleaned_data['safety']
                 if chemical_create_form.cleaned_data['molar_mass']:
                     new_chemical.molar_mass=chemical_create_form.cleaned_data['molar_mass']
+                if chemical_create_form.cleaned_data['dangerous']:
+                    new_chemical.dangerous=chemical_create_form.cleaned_data['dangerous']
+                else:
+                    new_chemical.dangerous=False
                 new_chemical.save()
+                return redirect('/chemlogs/chemical/' + str(new_chemical.id))
         elif 'go_to_container' in request.POST:
             if go_to_container_form.is_valid():
                 id = go_to_container_form.cleaned_data['container'].upper()

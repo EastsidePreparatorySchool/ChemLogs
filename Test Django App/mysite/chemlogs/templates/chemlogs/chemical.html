@@ -28,6 +28,7 @@
 
     <p style="margin: 4vw; margin-bottom: 0vw;"><strong>{{chemical.formula|displayFormula}}&emsp;{{chemical.cas}}&emsp;<a href="{{chemical.safety}}">SDS</a></strong></p>
     <h1 style="margin: 4vw; margin-top: 1vw; margin-bottom: -8vw;">{{chemical.name}}</h1>
+    <a href="/chemlogs/exportCSV/{{chemical.id}}" id="masterExport"><img src="{% static 'chemlogs/images/download.png' %}"></a>
     <!--<ul id="cas-and-amount">
         <li style="text-align: left;">{{chemical.cas}}</li>
         <li style="text-align: right;">{{chemical.computeAmount}}[units]</li>

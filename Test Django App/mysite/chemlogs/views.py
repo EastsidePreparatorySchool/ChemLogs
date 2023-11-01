@@ -305,10 +305,13 @@ class ChemicalSearch(ListView):
         return False
     
 # https://studygyaan.com/django/how-to-export-csv-file-with-django#h-export-csv-using-django-views
-def exportCSV(type):
-    data = Chemical.objects.all()
+def exportCSV(request, export_type):
+    if not export_type:
+        export_type = None 
 
-    #toDisplay = toDisplay.filter(Q(name__icontains=nameSearch) 
+    data = Chemical.objects.all()
+    if export_type:
+        data = data.filter(Q(id__icontains=export_type)) 
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; form-data; filename="chemlogs_data.csv"'
@@ -316,9 +319,22 @@ def exportCSV(type):
     # trying to put the datetime into the filename
 
     writer = csv.writer(response)
-    writer.writerow(['Name', 'Amount', 'Formula', 'Dangerous?'])
-
+    # if the chemicals haven't been filtered down to one chemical
+    # (if request was not for one chemical set, but the whole database)
+    """writer.writerow(['Name', 'Amount (g)', 'Formula', 'Dangerous?'])
     for chemical in data:
-        writer.writerow([chemical, chemical.computeAmount(), chemical.formula, chemical.dangerous])
+        writer.writerow([chemical, chemical.computeAmount(), chemical.formula, chemical.dangerous])"""
+    if len(data) > 1:
+        writer.writerow(['Name', 'Amount (g)', 'Formula', 'Dangerous?'])
+        for chemical in data:
+            writer.writerow([chemical, chemical.computeAmount(), chemical.formula, chemical.dangerous])
+    else:
+        writer.writerow(chemical.data)
+        for state in state.chemical.data:
+            writer.writerow()
+            writer.writerow([state])
+            writer.writerow(['Time', 'Amount', 'User'])
+            for transaction in transaction.state:
+                writer.writerow([transaction.time, transaction.computeAmount(), chemical.user])
 
     return response

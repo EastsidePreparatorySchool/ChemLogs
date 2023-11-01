@@ -17,6 +17,7 @@
     </div>
     <div class="header-bottom"></div>
 
+    <div class="container-header">
     <p class="hoverable"><a href="/chemlogs/chemical/{{container.contents.chemical.id}}/">{{container.contents.chemical}} {{container.getHeader}}</a></p>
     <p style="position: absolute;">{{container.contents.chemical.cas}}</p>
     <p style="position: absolute; right: 6vw;">{{container.getDisplayableAmount}} in stock</p>
@@ -24,7 +25,7 @@
     <p><strong>Storage Location: {{container.loc}}</strong></p>
     <p><strong>Chemical State: {{container.contents.getInfo}}{% if container.molarity is True %} {{container.molarity}}{% endif %}</strong></p>
     <p><strong>Initial Amount: {{container.getInitialDisplayableAmount}}</strong></p>
-    <br>
+    <br></div>
 
     <button type="button" id="addChem" onclick="toggleVisibilityId('transactForm')">Change Amount</button>
     <div class="content" id="transactForm" style="display: block; padding-top: 1em;">
@@ -43,7 +44,6 @@
         </form>
     </div>
 
-    <br>
     <p>Something looks off? Override the current volume/mass.</p>
     <form method="post">
         {% csrf_token %}

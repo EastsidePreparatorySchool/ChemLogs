@@ -42,7 +42,8 @@ class Chemical(models.Model):
     # get total mass in stock of this chemical, accumulating all states, in grams
     def computeAmount(self):
         amount = 0
-        for state in self.chemicalstate_set.all():
+        chemical_set = self.chemicalstate_set.all()
+        for state in chemical_set:
             amount += state.computeAmount()
         return amount
     
@@ -191,6 +192,9 @@ class Transaction(models.Model):
     # return absolute value of amount field, i.e. how much was taken or how much was added
     def getAbsoluteAmount(self):
         return abs(self.amount)
+    
+    def computeAmount(self):
+        return self.amount
 
 # this might not be necessary (not really used i think)
 class TransactionEdit(models.Model): # table of historical user actions to modify a transaction

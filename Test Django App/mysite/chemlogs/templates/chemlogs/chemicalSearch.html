@@ -99,7 +99,7 @@
             <td><a href="{% url 'chemlogs:transaction' transaction_id=action.id %}">{{action.time|date:"m-d"}}</a></td>
             <td><a href="{% url 'chemlogs:transaction' transaction_id=action.id %}">{{action.container.contents.chemical}} ({{action.container.contents.getInfo}})</a></td>
             <td><a href="{% url 'chemlogs:transaction' transaction_id=action.id %}">{{action.container.getHeader}}</a></td>
-            <td><a href="{% url 'chemlogs:transaction' transaction_id=action.id %}">{{action.getAbsoluteAmount}}</a></td>
+            <td><a href="{% url 'chemlogs:transaction' transaction_id=action.id %}">{{action.getAbsoluteAmount}}{{action.container.getUnits}}</a></td>
             <td><a href="{% url 'chemlogs:transaction' transaction_id=action.id %}">{% if action.type == "R" %}Reset {% elif action.type == "N" %}New Container{% elif action.amount > 0 %}Added{% else %}Removed{% endif %}</a></td><!-- this gets the verbose name of action.type -->
         </tr>
         {% endfor %}

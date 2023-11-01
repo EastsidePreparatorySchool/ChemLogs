@@ -15,11 +15,13 @@ def displayFormula(raw):
             readable += "<sub>"
             closeTag = True
             continue
+        if closeTag and not c.isnumeric():
+            readable += "</sub>"
+            closeTag = False
         if c == '*':
             readable += ' &#8226; '
         else:
             readable += c
-        if closeTag:
-            readable += "</sub>"
-            closeTag = False
+    if closeTag:
+        readable += "</sub>"
     return mark_safe(readable)

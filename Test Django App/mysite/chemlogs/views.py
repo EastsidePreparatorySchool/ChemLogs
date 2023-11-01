@@ -139,10 +139,6 @@ def chemical(request, chemical_id):
                    'chemical_edit_form': chemical_edit_form, 'state_edit_form': state_edit_form,
                    'new_container_id': new_container_id})
 
-def testChem(request, chemical_id):
-    chemical = get_object_or_404(Chemical, pk=chemical_id)
-    return render(request, 'chemlogs/testChem.html', {'chemical': chemical})
-
 # view and modify a transaction
 def transaction(request, transaction_id):
     transaction = get_object_or_404(Transaction, pk=transaction_id)

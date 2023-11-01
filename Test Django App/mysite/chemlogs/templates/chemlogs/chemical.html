@@ -99,30 +99,12 @@
     </form>
     <button onclick="hideId('stateEditForm{{state.id}}')" class="edit">Cancel</button>
     </div>
-
-    <!-- we don't need this if there's no transaction creation on this page
-    <button type="button" id="addChem" class="collapsible" onclick="down()"> 
-        Add chemical <span id="addDropdown">&#9660;</span>
-    </button>
-    -->
     
     {% for container in state.container_set.all %}
     
     <h3 style="display: inline;" class="hoverable"><a href="{% url 'chemlogs:container' container_id=container.id %}">Container {{container.getHeader}}</a></h3>
     <p style="display: inline; float: right;">{{container.getDisplayableAmount}} in stock</p>
 
-    <!-- we don't necessarily need the add transaction button on this page
-    <button type="button" id="addChem" class="collapsible" onclick="down()"> 
-        Add chemical <span id="addDropdown">&#9660;</span>
-        </button>
-    <div class="content" style="display: none; padding-top: 1em;">
-        <form method="post">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" id="submit" class="content" value="Add">
-            <input onclick="negateSliderValue()" type="submit" id="submit" class="content" value="Remove">
-        </form>
-    </div>-->
     {% if container.noDisplayableTransactions %}
     <p>No transactions to display</p>
     {% else %}

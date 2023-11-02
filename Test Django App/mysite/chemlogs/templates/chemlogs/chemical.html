@@ -66,7 +66,7 @@
     <!-- tell the user the new container's id -->
     <form method="POST">
         {% csrf_token %}
-    <p>You have made a new container. Its id is {{new_container_id}}. Please mark it physically
+    <p style="height: fit-content; display: inline;">You have made a new container. Its id is {{new_container_id}}. Please mark it physically
         with this id.</p>
     <input type="submit" id="submit" name="do_nothing" value="Understood">
     </form>

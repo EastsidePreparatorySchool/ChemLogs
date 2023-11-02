@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.generic import ListView
 from django.db.models import Q
 from django.utils import timezone
-from .models import Chemical, Transaction, TransactionEdit, Container
+from .models import Chemical, Transaction, Container
 from .forms import TransactionEditForm, TransactionCreateForm, ContainerCreateForm, ChemicalCreateForm, StateEditForm, GoToContainerForm
 import itertools, csv
 from django.contrib.auth import get_user_model
@@ -55,7 +55,9 @@ def chemical(request, chemical_id):
                 # confusion with location
                 "MS", "US",
                 # confusion with chemical formula
-                "HF", "HI", "KH", "KF", "KI"
+                "HF", "HI", "KH", "KF", "KI",
+                # miscellaneous confusion
+                "ID"
             ]
             for i, j in itertools.product(letters_ascii, letters_ascii): # this avoids nested for loops
                 potential_id = chr(i) + chr(j)
@@ -153,21 +155,11 @@ def transaction(request, transaction_id):
         if edit_form.is_valid():
             new_amount = edit_form.cleaned_data['amount']
             new_type = edit_form.cleaned_data['type']
-            # record the change (or don't i guess)
-            edit = transaction.transactionedit_set.create(
-                date=timezone.now(),
-                old_amount=transaction.amount,
-                new_amount=new_amount,
-                old_type=transaction.type,
-                new_type=new_type,
-                user=request.user
-            )
-
+            
             # make the change
             transaction.amount = new_amount
             transaction.type = new_type
             transaction.save()
-            # there should be a confirmation "are you sure?"
     if not edit_form:
         edit_form = TransactionEditForm(initial={'amount': transaction.amount, 'type': transaction.type})
         edit_form.fields['amount'].label += ' (' + transaction.container.getUnits() + ')'

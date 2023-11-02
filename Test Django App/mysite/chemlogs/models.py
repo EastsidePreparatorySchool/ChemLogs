@@ -3,24 +3,6 @@ from django.utils import timezone
 
 # Create your models here.
 
-# class Question(models.Model):
-#     question_text = models.CharField(max_length=200)
-#     pub_date = models.DateTimeField('date published')
-
-#     def __str__(self):
-#         return self.question_text
-    
-#     def was_published_recently(self):
-#         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
-
-
-# class Choice(models.Model):
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-#     choice_text = models.CharField(max_length=200)
-#     votes = models.IntegerField(default=0)
-#     def __str__(self):
-#         return self.choice_text
-
 class Chemical(models.Model):
     cas = models.CharField(max_length=12) # includes hyphens
     formula = models.CharField(max_length=20) # will have notation like underscores for subscript, and if subscript>9 then use a=10, etc. Later will decide what max length should be
@@ -178,8 +160,6 @@ class Transaction(models.Model):
     TYPE_CHOICES = [
         ("T", "TRANSACT"), # normal transaction
         ("N", "NEW"), # auto-generated "transaction" when a new bottle is added to inventory
-        ("R", "RESET"), # override previous transactions; set new current amount
-        ("I", "IGNORED") # basically deleted, except it can be restored
     ]
 
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default="T")
@@ -191,14 +171,3 @@ class Transaction(models.Model):
     # return absolute value of amount field, i.e. how much was taken or how much was added
     def getAbsoluteAmount(self):
         return abs(self.amount)
-
-# this might not be necessary (not really used i think)
-class TransactionEdit(models.Model): # table of historical user actions to modify a transaction
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    # what is was changed from and to
-    old_amount = models.IntegerField()
-    new_amount = models.IntegerField()
-    old_type = models.CharField(max_length=1, choices=Transaction.TYPE_CHOICES)
-    new_type = models.CharField(max_length=1, choices=Transaction.TYPE_CHOICES)
-    user = models.CharField(max_length=50) # username

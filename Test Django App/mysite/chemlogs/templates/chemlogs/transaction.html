@@ -20,28 +20,22 @@
 
     <div id="transaction">
     <h2>Modify Transaction</h2>
-    <div style="line-height: 7vw;">
     <p><a href="{% url 'chemlogs:chemical' chemical_id=transaction.container.contents.chemical.id %}">
         Chemical: {{transaction.container.contents.chemical.name}} ({{transaction.container.contents.getInfo}})
-    </a></p>
+    </a></p><br>
     <p><a href="{% url 'chemlogs:container' container_id=transaction.container.id %}">
         Container: {{transaction.container.getHeader}}
-    </a></p>
-    <p>Date: {{transaction.time.date}}</p>
-    <p>Time: {{transaction.time.time}}</p>
-    <p>Actual transaction.time for reference: {{transaction.time}}</p>
+    </a></p><br>
+    <p>Time: {{transaction.time}}</p><br>
     <p>User: {{transaction.user}}</p>
-    </div>
+    {% if transaction.type == 'N' %}
+    <br><p>This is the initial transaction that created the container.</p>
+    {% endif %}
 
     <br>
     <p><strong>If this transaction was recorded incorrectly, fix it here. Note: this will affect the current bottle contents.</strong></p>
     <form method="POST" id="modifyTransaction" class="small-input">
         {% csrf_token %}
-        <p>
-            {{ edit_form.type.errors }}
-            {{ edit_form.type.label_tag }}
-            {{ edit_form.type }}
-        </p>
         <p>
             {{ edit_form.amount.errors }}
             {{ edit_form.amount.label_tag }}

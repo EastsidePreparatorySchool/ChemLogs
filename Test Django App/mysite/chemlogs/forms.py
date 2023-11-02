@@ -3,15 +3,7 @@ from django.core.validators import RegexValidator
 from .models import Container, ChemicalState
 
 class TransactionEditForm(forms.Form):
-    type_choices = [ # N should not be an option
-        ("T", "Standard (Add/Remove)"),
-        ("R", "Reset (Override Container Amount)"),
-        ("I", "Mistake (Transaction will be Deleted)")
-    ]
-
-    type = forms.ChoiceField(choices=type_choices, label="Type")
     amount = forms.IntegerField(max_value=9999, label="Amount")
-
 
 class TransactionCreateForm(forms.Form):
     new_amount = forms.FloatField(label="")
